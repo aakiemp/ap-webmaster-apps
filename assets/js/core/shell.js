@@ -7,7 +7,7 @@
 import { html, raw, el, esc, icon, on, $, $$, debounce, isPhone, mqPhone } from './dom.js';
 import * as store from './store.js';
 import * as router from './router.js';
-import { menu, popover, openPanel, toast, confirmDialog, closeMenu } from './ui.js';
+import { menu, popover, openPanel, toast, confirmDialog, closeMenu, overlayRoot } from './ui.js';
 import { avatar, emptyState, button } from './components.js';
 
 const CONFIG = window.APWA_CONFIG || {};
@@ -82,8 +82,9 @@ function sidebar() {
         ${soon.map((a) => html`<a class="apwa-nav__item is-soon" data-nav="app:${a.slug}" href="${router.href(`${a.slug}/`)}" title="${a.name} (coming soon)">${icon(a.icon)}<span>${a.shortName || a.name}</span><em class="apwa-soon">Soon</em></a>`)}` : ''}
     </nav>
     <div class="apwa-sidebar__foot">
-      <a class="apwa-nav__item" href="${CONFIG.marketplace || '#'}" data-external title="Browse all apps">${icon('grid')}<span>Browse all apps</span></a>
+      <button type="button" class="apwa-nav__item" data-action="launcher" aria-haspopup="dialog" title="Browse all apps">${icon('grid')}<span>Browse all apps</span></button>
       <button type="button" class="apwa-nav__item" data-action="reset" title="Reset demo data">${icon('refresh')}<span>Reset demo data</span></button>
+      <a class="apwa-nav__item apwa-nav__item--exit" href="${suiteUrl()}" title="Exit demo">${icon('log-out')}<span>Exit demo</span></a>
     </div>
   </aside>`;
 }
@@ -301,7 +302,7 @@ function bindGlobal() {
     if (act === 'demo-info') demoInfo(btn);
     if (act === 'user-menu') userMenu(btn);
     if (act === 'search') openSearchSheet();
-    if (act === 'apps-sheet') appsSheet();
+    if (act === 'apps-sheet' || act === 'launcher') launcher();
   });
 
   // Desktop search.
@@ -390,38 +391,88 @@ function userMenu(btn) {
     { label: 'About this demo', icon: 'info', onClick: () => demoInfo(btn) },
     { label: 'Reset demo data', icon: 'refresh', onClick: resetDemo },
     { divider: true },
-    { label: 'Browse all apps', icon: 'grid', href: CONFIG.marketplace },
-    { label: `Back to ${CONFIG.siteName || 'website'}`, icon: 'log-out', href: CONFIG.siteUrl },
+    { label: 'Browse all apps', icon: 'grid', onClick: launcher },
+    { label: 'Exit demo', icon: 'log-out', href: suiteUrl() },
   ], { minWidth: 230 });
 }
 
-function appsSheet() {
+/** Where "exit" and "all apps" links land: the suite section on /apps/. */
+function suiteUrl() {
+  return `${CONFIG.marketplace || '/'}#apps`;
+}
+
+let launcherOpen = null;
+
+/** Full-screen app grid, like a laptop launcher or a phone home screen. */
+function launcher() {
+  if (launcherOpen) { launcherOpen(); return; }
   const apps = CONFIG.apps || [];
-  const body = el(html`<div class="apwa-appsheet">
-    <div class="apwa-appsheet__grid">
-      ${apps.map((a) => html`<a class="apwa-appsheet__app ${a.status !== 'demo' ? 'is-soon' : ''}" href="${router.href(`${a.slug}/`)}">
-        <span class="apwa-appsheet__icon apwa-tone--${a.color}">${icon(a.icon)}</span>
-        <span class="apwa-appsheet__name">${a.shortName || a.name}</span>
-        ${a.status !== 'demo' ? html`<em class="apwa-soon">Soon</em>` : ''}
-      </a>`)}
-    </div>
-    <div class="apwa-sheetmenu">
-      <button type="button" class="apwa-menu__item" data-sheet="new">${icon('plus')}<span class="apwa-menu__label">Create new…</span></button>
-      <button type="button" class="apwa-menu__item" data-sheet="demo">${icon('info')}<span class="apwa-menu__label">About this demo</span></button>
-      <button type="button" class="apwa-menu__item" data-sheet="reset">${icon('refresh')}<span class="apwa-menu__label">Reset demo data</span></button>
-      <a class="apwa-menu__item" href="${CONFIG.marketplace}">${icon('grid')}<span class="apwa-menu__label">Browse all apps</span></a>
-      <a class="apwa-menu__item" href="${CONFIG.siteUrl}">${icon('log-out')}<span class="apwa-menu__label">Back to ${CONFIG.siteName || 'website'}</span></a>
+  const live = apps.filter((a) => a.status === 'demo').length;
+  const prevFocus = document.activeElement;
+  const wrap = el(html`<div class="apwa-lp" role="dialog" aria-modal="true" aria-label="All apps">
+    <div class="apwa-lp__backdrop" data-lp-close></div>
+    <div class="apwa-lp__inner">
+      <div class="apwa-lp__top">
+        <div class="apwa-lp__search">${icon('search')}<input type="search" placeholder="Search apps" aria-label="Search apps" data-lp-q></div>
+        <button type="button" class="apwa-lp__close" data-lp-close aria-label="Close">${icon('x')}</button>
+      </div>
+      <p class="apwa-lp__sub">${live} live demos · ${apps.length - live} more on the way</p>
+      <div class="apwa-lp__grid" data-lp-grid>
+        ${apps.map((a, i) => html`<a class="apwa-lp__app ${a.status !== 'demo' ? 'is-soon' : ''}" href="${router.href(`${a.slug}/`)}" style="--i:${i}" data-name="${(a.name + ' ' + (a.shortName || '')).toLowerCase()}">
+          <span class="apwa-lp__icon apwa-lp--${a.color}">${icon(a.icon)}${a.status !== 'demo' ? html`<em>Soon</em>` : ''}</span>
+          <span class="apwa-lp__name">${a.shortName || a.name}</span>
+        </a>`)}
+      </div>
+      <p class="apwa-lp__empty" data-lp-empty hidden>No apps match that search.</p>
+      <div class="apwa-lp__foot">
+        <button type="button" class="apwa-lp__chip" data-lp="demo">${icon('info')}<span>About this demo</span></button>
+        <button type="button" class="apwa-lp__chip" data-lp="reset">${icon('refresh')}<span>Reset demo data</span></button>
+        <a class="apwa-lp__chip apwa-lp__chip--exit" href="${suiteUrl()}">${icon('log-out')}<span>Exit demo</span></a>
+      </div>
     </div>
   </div>`);
-  const p = openPanel({ title: 'Apps', body, size: 'md' });
-  body.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-sheet], a');
-    if (!t) return;
-    p.close();
-    if (t.dataset.sheet === 'new') setTimeout(() => menu($('.apwa-fab', root) || t, quickActions().map((q) => ({ label: q.label, icon: q.icon, onClick: q.run })), { title: 'Create new' }), 230);
-    if (t.dataset.sheet === 'demo') setTimeout(() => demoInfo(t), 230);
-    if (t.dataset.sheet === 'reset') setTimeout(resetDemo, 230);
+  const close = (after) => {
+    if (!launcherOpen) return;
+    launcherOpen = null;
+    document.removeEventListener('keydown', onKey, true);
+    wrap.classList.remove('is-open');
+    wrap.classList.add('is-leaving');
+    setTimeout(() => { wrap.remove(); document.documentElement.classList.remove('apwa-noscroll'); if (typeof after === 'function') after(); }, 220);
+    if (prevFocus && prevFocus.focus) prevFocus.focus({ preventScroll: true });
+  };
+  const onKey = (e) => {
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
+    if (e.key !== 'Tab') return;
+    const items = $$('input, a, button', wrap).filter((n) => n.offsetParent !== null);
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
+  launcherOpen = close;
+  document.addEventListener('keydown', onKey, true);
+  wrap.addEventListener('click', (e) => {
+    if (e.target.closest('[data-lp-close]')) { close(); return; }
+    const app = e.target.closest('.apwa-lp__app');
+    if (app) { close(); return; }
+    const act = e.target.closest('[data-lp]');
+    if (act && act.dataset.lp === 'demo') close(() => demoInfo($('[data-action="demo-info"]', root) || act));
+    if (act && act.dataset.lp === 'reset') close(resetDemo);
   });
+  const q = $('[data-lp-q]', wrap);
+  q.addEventListener('input', () => {
+    const v = q.value.trim().toLowerCase();
+    let shown = 0;
+    $$('.apwa-lp__app', wrap).forEach((n) => { const ok = !v || n.dataset.name.includes(v); n.hidden = !ok; if (ok) shown += 1; });
+    $('[data-lp-empty]', wrap).hidden = shown > 0;
+  });
+  overlayRoot().appendChild(wrap);
+  document.documentElement.classList.add('apwa-noscroll');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    wrap.classList.add('is-open');
+    if (!isPhone()) q.focus({ preventScroll: true });
+    else $('.apwa-lp__close', wrap).focus({ preventScroll: true });
+  }));
 }
 
 async function resetDemo() {

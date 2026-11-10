@@ -152,12 +152,20 @@ endif;
 		<section class="apwa-mkt-hero" aria-labelledby="apwa-mkt-hero-title">
 			<div class="apwa-mkt-wrap apwa-mkt-hero__inner">
 				<?php if ( $apwa_featured ) : ?>
-				<a class="apwa-mkt-pill" href="<?php echo esc_url( Router::url( 'demo/' . $apwa_featured['slug'] . '/' ) ); ?>">
+				<a class="apwa-mkt-pill" href="<?php echo esc_url( 1 === count( $apwa_live_apps ) ? Router::url( 'demo/' . $apwa_featured['slug'] . '/' ) : $demo_url ); ?>">
 					<span class="apwa-mkt-pill__tag"><?php esc_html_e( 'Live', 'ap-webmaster-apps' ); ?></span>
 					<span>
 					<?php
-					/* translators: %s: app name. */
-					printf( esc_html__( 'The %s demo is ready to try', 'ap-webmaster-apps' ), esc_html( $apwa_featured['name'] ) );
+					$apwa_live_names = array_map(
+						static function ( $a ) {
+							return strlen( $a['name'] ) <= 16 ? $a['name'] : $a['shortName'];
+						},
+						$apwa_live_apps
+					);
+					$apwa_last_name  = array_pop( $apwa_live_names );
+					$apwa_live_list  = $apwa_live_names ? implode( ', ', $apwa_live_names ) . ' ' . __( 'and', 'ap-webmaster-apps' ) . ' ' . $apwa_last_name : $apwa_last_name;
+					/* translators: %s: list of app names. */
+					printf( esc_html__( 'Try the %s demos', 'ap-webmaster-apps' ), esc_html( $apwa_live_list ) );
 					?>
 					</span>
 					<?php echo Renderer::icon( 'arrow-right' ); ?>
@@ -283,6 +291,28 @@ endif;
 					<?php endforeach; ?>
 				</div>
 				<?php endif; ?>
+
+				<ul class="apwa-mkt-tiles" data-apwa-tiles hidden>
+					<?php foreach ( $apps as $apwa_app ) : ?>
+					<?php
+					$apwa_state = 'demo' === $apwa_app['status'] ? 'live' : ( 'building' === $apwa_app['stage'] ? 'building' : 'soon' );
+					$apwa_state_labels = array(
+						'live'     => __( 'Live demo', 'ap-webmaster-apps' ),
+						'building' => __( 'In progress', 'ap-webmaster-apps' ),
+						'soon'     => __( 'Coming soon', 'ap-webmaster-apps' ),
+					);
+					?>
+					<li data-category="<?php echo esc_attr( $apwa_app['category'] ); ?>">
+						<button type="button" class="apwa-mkt-tile apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?>" data-app="<?php echo esc_attr( $apwa_app['slug'] ); ?>" aria-haspopup="dialog">
+							<span class="apwa-mkt-tile__icon" aria-hidden="true"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></span>
+							<span class="apwa-mkt-tile__state apwa-mkt-tile__state--<?php echo esc_attr( $apwa_state ); ?>"><i aria-hidden="true"></i><?php echo esc_html( $apwa_state_labels[ $apwa_state ] ); ?></span>
+							<strong class="apwa-mkt-tile__name"><?php echo esc_html( $apwa_app['name'] ); ?></strong>
+							<span class="apwa-mkt-tile__line"><?php echo esc_html( $apwa_app['tagline'] ); ?></span>
+							<span class="apwa-mkt-tile__more"><?php esc_html_e( 'View details', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'arrow-right' ); ?></span>
+						</button>
+					</li>
+					<?php endforeach; ?>
+				</ul>
 
 				<div class="apwa-mkt-grid">
 					<?php
@@ -546,7 +576,98 @@ endif;
 			var cat = btn.getAttribute('data-cat');
 			bar.querySelectorAll('[data-cat]').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
 			cards.forEach(function (c) { c.hidden = cat !== 'all' && c.getAttribute('data-category') !== cat; });
+			root.querySelectorAll('[data-apwa-tiles] > li').forEach(function (c) { c.hidden = cat !== 'all' && c.getAttribute('data-category') !== cat; });
 		});
+	}
+
+	// Compact app grid: each tile opens its full card in a dialog.
+	var tiles = root.querySelector('[data-apwa-tiles]');
+	if (tiles) {
+		tiles.hidden = false;
+		root.classList.add('apwa-mkt--compact');
+		var modal = null;
+		var current = null;
+		var lastTile = null;
+		var visibleTiles = function () {
+			return Array.prototype.slice.call(tiles.querySelectorAll('li:not([hidden]) [data-app]'));
+		};
+		var closeModal = function () {
+			if (!modal) { return; }
+			var m = modal;
+			modal = null;
+			m.classList.remove('is-open');
+			document.removeEventListener('keydown', onKey, true);
+			setTimeout(function () { m.remove(); document.documentElement.classList.remove('apwa-mkt-lock'); }, 220);
+			if (lastTile) { lastTile.focus({ preventScroll: true }); }
+		};
+		var show = function (slug) {
+			var src = root.querySelector('#app-' + slug);
+			if (!src || !modal) { return; }
+			current = slug;
+			var card = src.cloneNode(true);
+			card.removeAttribute('id');
+			card.hidden = false;
+			var det = card.querySelector('details');
+			if (det) { det.open = true; }
+			var slot = modal.querySelector('[data-slot]');
+			slot.innerHTML = '';
+			slot.appendChild(card);
+			slot.scrollTop = 0;
+			var title = card.querySelector('.apwa-mkt-card__title');
+			modal.querySelector('[role=dialog]').setAttribute('aria-label', title ? title.textContent : 'App details');
+			var list = visibleTiles();
+			var i = list.findIndex(function (t) { return t.getAttribute('data-app') === slug; });
+			modal.querySelector('[data-nav=prev]').disabled = i <= 0;
+			modal.querySelector('[data-nav=next]').disabled = i < 0 || i >= list.length - 1;
+		};
+		var step = function (d) {
+			var list = visibleTiles();
+			var i = list.findIndex(function (t) { return t.getAttribute('data-app') === current; });
+			var next = list[i + d];
+			if (next) { lastTile = next; show(next.getAttribute('data-app')); }
+		};
+		var onKey = function (e) {
+			if (e.key === 'Escape') { e.preventDefault(); closeModal(); }
+			else if (e.key === 'ArrowRight') { step(1); }
+			else if (e.key === 'ArrowLeft') { step(-1); }
+			else if (e.key === 'Tab' && modal) {
+				var f = Array.prototype.slice.call(modal.querySelectorAll('a[href], button:not([disabled]), summary')).filter(function (n) { return n.offsetParent !== null; });
+				if (!f.length) { return; }
+				if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+				else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+			}
+		};
+		tiles.addEventListener('click', function (e) {
+			var t = e.target.closest('[data-app]');
+			if (!t) { return; }
+			lastTile = t;
+			modal = document.createElement('div');
+			modal.className = 'apwa-mkt-modal';
+			modal.innerHTML = '<div class="apwa-mkt-modal__backdrop" data-close></div>' +
+				'<div class="apwa-mkt-modal__panel" role="dialog" aria-modal="true">' +
+				'<div class="apwa-mkt-modal__bar">' +
+				'<button type="button" class="apwa-mkt-modal__btn" data-nav="prev" aria-label="Previous app">' + chev(180) + '</button>' +
+				'<button type="button" class="apwa-mkt-modal__btn" data-nav="next" aria-label="Next app">' + chev(0) + '</button>' +
+				'<button type="button" class="apwa-mkt-modal__btn apwa-mkt-modal__close" data-close aria-label="Close">' + xIcon + '</button>' +
+				'</div><div class="apwa-mkt-modal__slot" data-slot></div></div>';
+			root.appendChild(modal);
+			document.documentElement.classList.add('apwa-mkt-lock');
+			modal.addEventListener('click', function (ev) {
+				if (ev.target.closest('[data-close]')) { closeModal(); return; }
+				var n = ev.target.closest('[data-nav]');
+				if (n) { step(n.getAttribute('data-nav') === 'next' ? 1 : -1); }
+			});
+			document.addEventListener('keydown', onKey, true);
+			show(t.getAttribute('data-app'));
+			requestAnimationFrame(function () { requestAnimationFrame(function () {
+				if (!modal) { return; }
+				modal.classList.add('is-open');
+				modal.querySelector('.apwa-mkt-modal__close').focus({ preventScroll: true });
+			}); });
+		});
+		var svg = function (inner, rot) { return '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + (rot ? ' style="transform:rotate(' + rot + 'deg)"' : '') + '>' + inner + '</svg>'; };
+		var chev = function (rot) { return svg('<path d="m9 18 6-6-6-6"/>', rot); };
+		var xIcon = svg('<path d="M18 6 6 18M6 6l12 12"/>', 0);
 	}
 
 	// Screenshot tabs.

@@ -269,7 +269,7 @@ export function popover(anchor, { title, body, width = 320 }) {
   return { close: closeMenu, body: node };
 }
 
-export { closeMenu };
+export { closeMenu, overlayRoot };
 
 /** Read a form into a plain object (trimmed strings). */
 export function formData(form) {
