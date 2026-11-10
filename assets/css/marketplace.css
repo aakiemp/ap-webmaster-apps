@@ -463,6 +463,12 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { tr
 .apwa-mk .ck2 i { width: 10px; height: 10px; flex: none; border: 1.5px solid #cbd4df; border-radius: 3px; }
 .apwa-mk .ck2 p.on i { border-color: var(--a); background: var(--a); }
 .apwa-mk .ck2 p.on span { color: #8796aa; text-decoration: line-through; }
+.apwa-mk .ai { display: grid; gap: 5px; }
+.apwa-mk .ai p { max-width: 86%; margin: 0; padding: 5px 7px; border-radius: 8px; font-size: 7.5px; line-height: 1.35; }
+.apwa-mk .ai .me { justify-self: end; color: #fff; background: var(--a); border-bottom-right-radius: 2px; }
+.apwa-mk .ai .bot { color: var(--apwa-navy-800); background: #f3f0fb; border-bottom-left-radius: 2px; }
+.apwa-mk .ai .typ { display: inline-flex; gap: 3px; padding: 5px 7px; border-radius: 8px; background: #f3f0fb; justify-self: start; }
+.apwa-mk .ai .typ i { width: 4px; height: 4px; border-radius: 50%; background: #9b7bea; }
 .apwa-mk .qr { display: grid; gap: 6px; }
 .apwa-mk .est { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 6px; border-radius: 5px; background: var(--b); }
 .apwa-mk .est span { font-size: 7px; color: var(--apwa-navy-500); }

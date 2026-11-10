@@ -313,6 +313,7 @@ endif;
 					'client-portal'       => '<div class="gt"><div class="gh"><span>Wk 1</span><span>Wk 2</span><span>Wk 3</span><span>Wk 4</span></div><p><em>Design</em><span class="tk"><b style="left:0;width:40%"></b></span></p><p><em>Build</em><span class="tk"><b class="c" style="left:30%;width:45%"></b></span></p><p><em>Review</em><span class="tk"><b style="left:66%;width:22%"></b><i style="left:90%"></i></span></p><span class="ok2">&#10003; Approved by client</span></div>',
 					'customer-support'    => '<div class="tk2"><p><i class="av3">JM</i><span>Leak under sink</span><em class="op">Open</em></p><p><i class="av3 c">AR</i><span>Move my visit</span><em class="pe">Pending</em></p><p><i class="av3">KT</i><span>Invoice question</span><em class="so">Solved</em></p></div>',
 					'business-operations' => '<div class="ck2"><p class="on"><i></i><span>Open the shop</span><b>JM</b></p><p class="on"><i></i><span>Check van stock</span><b class="c">AR</b></p><p><i></i><span>Filter change</span><b>KT</b></p><p><i></i><span>Order parts</span><b class="c">SL</b></p></div>',
+					'ai-assistant'        => '<div class="ai"><p class="me">Which quotes need a follow-up?</p><p class="bot"><b>3 quotes</b> have waited over a week. Want a reminder drafted?</p><span class="typ"><i></i><i></i><i></i></span></div>',
 					'quote-recovery'      => '<div class="qr"><div class="est"><span>Estimate #318</span><b>$4,250</b></div><ol><li>Day 1: email sent</li><li>Day 3: text reminder</li><li class="ok3">Accepted</li></ol></div>',
 				);
 				$apwa_tile_tints = array(
@@ -322,6 +323,7 @@ endif;
 					'document-processor'  => array( '#8f2aa6', '#dc3ff0' ),
 					'email-automation'    => array( '#b92ccd', '#f0a3f7' ),
 					'analytics-reporting' => array( '#0f1b2d', '#3a5577' ),
+					'ai-assistant'        => array( '#5a2a9e', '#a77be6' ),
 					'client-portal'       => array( '#237592', '#6cbdd7' ),
 					'customer-support'    => array( '#2c8dac', '#b92ccd' ),
 					'business-operations' => array( '#3f5873', '#8ea3bb' ),

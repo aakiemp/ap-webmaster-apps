@@ -1,0 +1,53 @@
+{
+  "slug": "ai-assistant",
+  "name": "AI Assistant",
+  "shortName": "AI Assistant",
+  "icon": "sparkles",
+  "color": "purple",
+  "category": "documents",
+  "status": "coming-soon",
+  "priority": "medium",
+  "order": 110,
+  "tagline": "Ask your business anything, in plain English.",
+  "description": "A chat built into your apps that knows your customers, deals, bookings and invoices, so you can get answers, drafts and summaries without digging through screens.",
+  "problem": "The answers are in your apps, but finding them means clicking through five screens and building reports by hand.",
+  "audience": [
+    "Owners who want answers fast",
+    "Busy teams juggling several apps",
+    "Anyone who would rather ask than search"
+  ],
+  "benefits": [
+    "Get answers from all your apps in one chat",
+    "Draft reminders and replies in seconds",
+    "Gets more useful with every app you add"
+  ],
+  "demoFeatures": [
+    "Ask about quotes, bookings and invoices",
+    "Draft a payment reminder or follow-up",
+    "Monthly sales summary on request",
+    "Suggested questions to get started",
+    "Links straight to the record it talks about"
+  ],
+  "productionOptions": [
+    "Connected to the AI provider of your choice",
+    "Works across every app you have installed",
+    "Asks before it sends or changes anything"
+  ],
+  "customization": [
+    "Tone and business details",
+    "Which apps it can read",
+    "Suggested questions"
+  ],
+  "related": [
+    "crm",
+    "booking-manager",
+    "invoice-automation"
+  ],
+  "module": "",
+  "styles": [],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": []
+  }
+}
