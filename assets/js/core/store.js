@@ -7,7 +7,7 @@
  * - If storage is unavailable (private mode, blocked), state lives in memory.
  */
 import { uid } from './dom.js';
-import { createSeed } from './seed.js';
+import { createSeed, bookingSeed } from './seed.js';
 import { SCHEMA_VERSION } from './schema.js';
 
 const KEY = 'apwa.demo';
@@ -15,7 +15,8 @@ export const SCHEMA = SCHEMA_VERSION;
 
 /** from-version -> function(state) returning the next version's state. */
 const MIGRATIONS = {
-  // 1: (s) => ({ ...s, schema: 2, quotes: [] }),
+  // 1 -> 2: Booking Manager settings and sample appointments.
+  1: (s) => ({ ...s, ...bookingSeed(s.contacts || []), schema: 2 }),
 };
 
 let state = null;
