@@ -1,0 +1,51 @@
+{
+  "slug": "booking-manager",
+  "name": "Booking Manager",
+  "icon": "calendar-check",
+  "color": "purple",
+  "category": "scheduling",
+  "status": "coming-soon",
+  "order": 30,
+  "tagline": "Appointments, availability and reminders in one calendar your customers can book into.",
+  "description": "A booking calendar with requests, rescheduling, cancellations and reminder settings.",
+  "problem": "Back-and-forth messages to find a time, double bookings and no-shows cost hours every week.",
+  "audience": [
+    "Cleaning services",
+    "Pet sitters",
+    "Consultants",
+    "Salons",
+    "Tutors"
+  ],
+  "benefits": [
+    "Let customers pick open times",
+    "Cut no-shows with reminders",
+    "See the whole week at a glance"
+  ],
+  "demoFeatures": [
+    "Calendar views",
+    "Appointment requests",
+    "Rescheduling and cancellations",
+    "Reminder settings"
+  ],
+  "productionOptions": [
+    "Online booking page",
+    "Calendar sync",
+    "Deposits and payments",
+    "SMS reminders"
+  ],
+  "customization": [
+    "Services and durations",
+    "Staff and availability",
+    "Booking rules"
+  ],
+  "related": [
+    "crm"
+  ],
+  "module": "",
+  "styles": [],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": []
+  }
+}

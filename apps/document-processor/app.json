@@ -1,0 +1,49 @@
+{
+  "slug": "document-processor",
+  "name": "AI Document Processor",
+  "icon": "scan",
+  "color": "amber",
+  "category": "documents",
+  "status": "coming-soon",
+  "order": 40,
+  "tagline": "Turn invoices, forms and paperwork into clean, organized data without retyping it.",
+  "description": "A document inbox that extracts key fields, lets staff review and correct them, and exports the result.",
+  "problem": "Staff spend hours copying numbers and names from documents into other systems.",
+  "audience": [
+    "Offices handling invoices and forms",
+    "Medical practices",
+    "Property managers",
+    "Bookkeepers"
+  ],
+  "benefits": [
+    "Eliminate repetitive data entry",
+    "Catch missing or wrong fields before they cause problems",
+    "Find any document fast"
+  ],
+  "demoFeatures": [
+    "Document inbox",
+    "Simulated extraction on sample files",
+    "Field review and correction",
+    "Export"
+  ],
+  "productionOptions": [
+    "Real AI extraction",
+    "Email inbox import",
+    "Accounting and EHR integrations"
+  ],
+  "customization": [
+    "Document types and fields",
+    "Review steps",
+    "Export formats"
+  ],
+  "related": [
+    "crm"
+  ],
+  "module": "",
+  "styles": [],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": []
+  }
+}

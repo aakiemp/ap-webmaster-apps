@@ -1,0 +1,51 @@
+{
+  "slug": "quote-recovery",
+  "name": "Quote Recovery",
+  "icon": "receipt",
+  "color": "green",
+  "category": "sales",
+  "status": "coming-soon",
+  "order": 20,
+  "tagline": "Follow up on every open estimate automatically, and win back jobs you would have lost to silence.",
+  "description": "Track outstanding estimates, schedule follow-ups and see how much revenue follow-ups recover.",
+  "problem": "Most estimates never get a second follow-up, so jobs go to whoever calls back first.",
+  "audience": [
+    "HVAC",
+    "Roofers",
+    "Plumbers",
+    "Electricians",
+    "Remodelers",
+    "Other service contractors"
+  ],
+  "benefits": [
+    "Never forget to follow up on a quote",
+    "See every open estimate and its value",
+    "Measure revenue recovered by follow-ups"
+  ],
+  "demoFeatures": [
+    "Estimates dashboard",
+    "Follow-up sequences",
+    "Simulated follow-up messages",
+    "Recovered revenue metrics"
+  ],
+  "productionOptions": [
+    "Email and SMS follow-ups",
+    "Estimate tool integrations",
+    "E-signature acceptance"
+  ],
+  "customization": [
+    "Follow-up timing and wording",
+    "Estimate statuses",
+    "Branding"
+  ],
+  "related": [
+    "crm"
+  ],
+  "module": "",
+  "styles": [],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": []
+  }
+}
