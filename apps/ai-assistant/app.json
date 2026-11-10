@@ -5,7 +5,7 @@
   "icon": "sparkles",
   "color": "purple",
   "category": "documents",
-  "status": "coming-soon",
+  "status": "demo",
   "priority": "medium",
   "order": 110,
   "tagline": "Ask your business anything, in plain English.",
@@ -43,11 +43,14 @@
     "booking-manager",
     "invoice-automation"
   ],
-  "module": "",
-  "styles": [],
+  "module": "assistant.js",
+  "styles": [
+    "assistant.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
     "addons": []
-  }
+  },
+  "launched": 10
 }
