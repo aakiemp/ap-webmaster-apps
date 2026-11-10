@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       AP Webmaster Apps
  * Plugin URI:        https://apwebmaster.com/apps/
- * Description:       Interactive business software demos (CRM, Quote Recovery, Booking, Document Processing) served at /apps/. Demo data lives only in each visitor's browser.
+ * Description:       Interactive business software demos (CRM, Smart Follow-Ups, Booking, Document Processing) served at /apps/. Demo data lives only in each visitor's browser.
  * Version:           0.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4

@@ -3,7 +3,7 @@
 In build order from the brief.
 
 ## Next
-- Quote Recovery demo: open estimates, follow-up sequences (simulated),
+- Smart Follow-Ups demo: open estimates, follow-up sequences (simulated),
   recovered revenue.
 - Booking Manager demo: calendar views, requests, reschedule and cancel,
   reminder settings.
