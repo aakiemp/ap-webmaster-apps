@@ -281,44 +281,37 @@ endif;
 				<?php endif; ?>
 
 <?php
-				$apwa_ln = static function ( $w, $t = false ) {
-					return '<i class="ln' . ( $t ? ' t' : '' ) . '" style="width:' . (int) $w . '%"></i>';
-				};
-				$apwa_rows = static function ( $rows ) {
-					return implode( '', $rows );
-				};
-				$apwa_cal = '';
-				foreach ( range( 0, 14 ) as $apwa_i ) {
-					$apwa_cal .= '<b class="' . ( in_array( $apwa_i, array( 1, 6, 8, 12 ), true ) ? 'a' : ( in_array( $apwa_i, array( 3, 10 ), true ) ? 'c' : ( in_array( $apwa_i, array( 5, 13 ), true ) ? 's' : '' ) ) ) . '"></b>';
-				}
-				$apwa_mocks = array(
-					'crm'                 => '<div class="cols"><div><span></span><b class="a"></b><b></b><b></b></div><div><span></span><b></b><b class="c"></b></div><div><span></span><b class="s"></b></div></div>',
-					'booking-manager'     => '<div class="r">' . $apwa_ln( 40, true ) . '<span class="pl"></span></div><div class="cal">' . $apwa_cal . '</div>',
-					'invoice-automation'  => '<div class="kpis"><b></b><b class="c"></b></div>' . $apwa_rows( array( '<div class="r"><span class="av"></span>' . $apwa_ln( 45 ) . '<span class="pl a"></span></div>', '<div class="r"><span class="av"></span>' . $apwa_ln( 55 ) . '<span class="pl c"></span></div>', '<div class="r"><span class="av"></span>' . $apwa_ln( 38 ) . '<span class="pl a"></span></div>' ) ),
-					'document-processor'  => '<div class="split"><div class="paper"><i></i><i style="width:70%"></i><i></i><i style="width:55%"></i><i></i></div><div class="fields"><span class="pl a"></span><span class="pl"></span><span class="pl c"></span><span class="pl"></span></div></div>',
-					'email-automation'    => $apwa_ln( 55, true ) . '<span class="box"></span>' . $apwa_ln( 75 ) . '<span class="btn"></span>',
-					'analytics-reporting' => '<div class="r">' . $apwa_ln( 40, true ) . '<span class="pl"></span></div><div class="bars"><b style="height:40%"></b><b style="height:62%"></b><b style="height:48%"></b><b style="height:80%"></b><b style="height:66%"></b><b style="height:96%"></b></div>',
-					'client-portal'       => '<div class="r">' . $apwa_ln( 22 ) . '<span class="pg"><b style="width:80%"></b></span></div><div class="r">' . $apwa_ln( 30 ) . '<span class="pg"><b style="width:45%"></b></span></div><div class="r">' . $apwa_ln( 18 ) . '<span class="pg"><b class="c" style="width:100%"></b></span></div><span class="btn"></span>',
-					'customer-support'    => '<div class="r"><span class="dot a"></span>' . $apwa_ln( 62 ) . '<span class="pl a"></span></div><div class="r"><span class="dot c"></span>' . $apwa_ln( 50 ) . '<span class="pl c"></span></div><div class="r"><span class="dot"></span>' . $apwa_ln( 58 ) . '<span class="pl"></span></div><div class="r"><span class="dot a"></span>' . $apwa_ln( 42 ) . '<span class="pl"></span></div>',
-					'business-operations' => '<div class="r"><span class="ck on"></span>' . $apwa_ln( 70 ) . '</div><div class="r"><span class="ck on"></span>' . $apwa_ln( 50 ) . '</div><div class="r"><span class="ck"></span>' . $apwa_ln( 62 ) . '</div><div class="r"><span class="ck"></span>' . $apwa_ln( 40 ) . '</div>',
-					'quote-recovery'      => '<div class="r">' . $apwa_ln( 45, true ) . '<span class="pl c"></span></div><span class="bub"></span><span class="bub me"></span><span class="bub ok"></span>',
+				// Drawn previews and tints for the suite tiles (static markup, no user data).
+				$apwa_tile_mocks = array(
+					'crm'                 => '<div class="kb"><div><em>New</em><p><i></i><b>$4.2k</b></p><p><i></i><b>$1.8k</b></p></div><div class="q"><em>Quoted</em><p class="hot"><i></i><b>$9.5k</b></p><p><i></i><b>$2.1k</b></p></div><div class="w"><em>Won</em><p class="won"><i></i><b>$6.0k</b></p></div></div>',
+					'booking-manager'     => '<div class="cal2"><span></span><span>M</span><span class="td">T</span><span>W</span><span>T</span><span>F</span><span class="tm" style="grid-row:2">9</span><span class="tm" style="grid-row:3">10</span><span class="tm" style="grid-row:4">11</span><span class="tm" style="grid-row:5">12</span><b class="ev" style="grid-column:2;grid-row:2/4">Ana 9:00</b><b class="ev c" style="grid-column:3;grid-row:3/4">Lee</b><b class="ev s" style="grid-column:4;grid-row:2/3">Max</b><b class="ev" style="grid-column:5;grid-row:4/6">Rosa</b><b class="ev c" style="grid-column:6;grid-row:2/4">Kim</b><b class="ev s" style="grid-column:3;grid-row:5/6">Jo</b></div>',
+					'invoice-automation'  => '<div class="inv"><div class="r"><b class="ttl">INVOICE</b><span class="no">#1042</span></div><p><i style="width:55%"></i><span>$320</span></p><p><i style="width:40%"></i><span>$180</span></p><p><i style="width:48%"></i><span>$95</span></p><div class="tot"><span>Total</span><b>$595.00</b></div><em class="stamp">PAID</em></div>',
+					'document-processor'  => '<div class="doc"><div class="pg2"><i></i><i></i><i style="width:60%"></i><i></i><i style="width:70%"></i><i></i><u></u></div><span class="arw">&rsaquo;</span><div class="fx2"><p><em>Vendor</em><b>Acme Supply</b></p><p><em>Total</em><b>$1,240</b></p><p><em>Due</em><b>Nov 30</b></p></div></div>',
+					'email-automation'    => '<div class="em"><div class="r"><i class="av2"></i><div><b>Fall tune-up special</b><span>To 248 customers</span></div></div><div class="hero"></div><div class="r"><span class="cta">Book now</span><span class="kpi2">48% opened</span></div></div>',
+					'analytics-reporting' => '<div class="an"><div class="kp"><p><em>Visits</em><b>12.4k</b></p><p><em>Leads</em><b>318</b></p><p><em>Calls</em><b class="up">+18%</b></p></div><svg viewBox="0 0 120 40" preserveAspectRatio="none"><path class="ar" d="M0 34 L20 28 L40 30 L60 18 L80 22 L100 10 L120 6 L120 40 L0 40Z"/><path class="lp" d="M0 34 L20 28 L40 30 L60 18 L80 22 L100 10 L120 6"/></svg></div>',
+					'client-portal'       => '<div class="gt"><div class="gh"><span>Wk 1</span><span>Wk 2</span><span>Wk 3</span><span>Wk 4</span></div><p><em>Design</em><span class="tk"><b style="left:0;width:40%"></b></span></p><p><em>Build</em><span class="tk"><b class="c" style="left:30%;width:45%"></b></span></p><p><em>Review</em><span class="tk"><b style="left:66%;width:22%"></b><i style="left:90%"></i></span></p><span class="ok2">&#10003; Approved by client</span></div>',
+					'customer-support'    => '<div class="tk2"><p><i class="av3">JM</i><span>Leak under sink</span><em class="op">Open</em></p><p><i class="av3 c">AR</i><span>Move my visit</span><em class="pe">Pending</em></p><p><i class="av3">KT</i><span>Invoice question</span><em class="so">Solved</em></p></div>',
+					'business-operations' => '<div class="ck2"><p class="on"><i></i><span>Open the shop</span><b>JM</b></p><p class="on"><i></i><span>Check van stock</span><b class="c">AR</b></p><p><i></i><span>Filter change</span><b>KT</b></p><p><i></i><span>Order parts</span><b class="c">SL</b></p></div>',
+					'quote-recovery'      => '<div class="qr"><div class="est"><span>Estimate #318</span><b>$4,250</b></div><ol><li>Day 1: email sent</li><li>Day 3: text reminder</li><li class="ok3">Accepted</li></ol></div>',
+				);
+				$apwa_tile_tints = array(
+					'crm'                 => array( '#1d6f8c', '#40a3c3' ),
+					'booking-manager'     => array( '#2c8dac', '#9fd6e7' ),
+					'invoice-automation'  => array( '#15374d', '#2c6f8f' ),
+					'document-processor'  => array( '#8f2aa6', '#dc3ff0' ),
+					'email-automation'    => array( '#b92ccd', '#f0a3f7' ),
+					'analytics-reporting' => array( '#0f1b2d', '#3a5577' ),
+					'client-portal'       => array( '#237592', '#6cbdd7' ),
+					'customer-support'    => array( '#2c8dac', '#b92ccd' ),
+					'business-operations' => array( '#3f5873', '#8ea3bb' ),
+					'quote-recovery'      => array( '#1d5f77', '#dc3ff0' ),
 				);
 				?>
 				<ul class="apwa-mkt-tiles" data-apwa-tiles hidden>
 					<?php foreach ( $apps as $apwa_app ) : ?>
 					<?php
 					$apwa_state = 'demo' === $apwa_app['status'] ? 'live' : ( 'building' === $apwa_app['stage'] ? 'building' : 'soon' );
-					$apwa_tints = array(
-						'sales'      => '#237592',
-						'scheduling' => '#2c8dac',
-						'billing'    => '#194e62',
-						'documents'  => '#b92ccd',
-						'marketing'  => '#a63bb8',
-						'reporting'  => '#22354f',
-						'clients'    => '#1d5f77',
-						'operations' => '#3f5873',
-					);
-					$apwa_tint = isset( $apwa_tints[ $apwa_app['category'] ] ) ? $apwa_tints[ $apwa_app['category'] ] : '#237592';
+					$apwa_tint = isset( $apwa_tile_tints[ $apwa_app['slug'] ] ) ? $apwa_tile_tints[ $apwa_app['slug'] ] : array( '#237592', '#6cbdd7' );
 					$apwa_state_labels = array(
 						'live'     => __( 'Live demo', 'ap-webmaster-apps' ),
 						'building' => __( 'In progress', 'ap-webmaster-apps' ),
@@ -326,10 +319,10 @@ endif;
 					);
 					?>
 					<li data-category="<?php echo esc_attr( $apwa_app['category'] ); ?>">
-						<div class="apwa-mkt-tile apwa-mkt-tile--<?php echo esc_attr( $apwa_state ); ?>" style="--t: <?php echo esc_attr( $apwa_tint ); ?>">
+						<div class="apwa-mkt-tile apwa-mkt-tile--<?php echo esc_attr( $apwa_state ); ?>" style="--t: <?php echo esc_attr( $apwa_tint[0] ); ?>; --t2: <?php echo esc_attr( $apwa_tint[1] ); ?>">
 							<div class="apwa-mkt-tile__media" aria-hidden="true">
 								<span class="apwa-mkt-tile__icon"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></span>
-								<div class="apwa-mkt-tile__win"><div class="apwa-mk"><?php echo isset( $apwa_mocks[ $apwa_app['slug'] ] ) ? $apwa_mocks[ $apwa_app['slug'] ] : $apwa_ln( 70, true ) . $apwa_ln( 90 ) . $apwa_ln( 55 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static markup built above. ?></div></div>
+								<div class="apwa-mkt-tile__win"><div class="apwa-mk"><?php echo isset( $apwa_tile_mocks[ $apwa_app['slug'] ] ) ? $apwa_tile_mocks[ $apwa_app['slug'] ] : ''; // phpcs:ignore WordPress.Security.EscapeOutput -- static markup defined above. ?></div></div>
 								<span class="apwa-mkt-tile__state apwa-mkt-tile__state--<?php echo esc_attr( $apwa_state ); ?>"><i></i><?php echo esc_html( $apwa_state_labels[ $apwa_state ] ); ?></span>
 							</div>
 							<div class="apwa-mkt-tile__body">
