@@ -51,6 +51,14 @@ $apwa_shots = array(
 	),
 );
 
+// Small drawn previews for apps that have no demo screenshot yet.
+$apwa_mocks = array(
+	'quote-recovery'     => 'list',
+	'booking-manager'    => 'calendar',
+	'document-processor' => 'doc',
+	'email-automation'   => 'chart',
+);
+
 $apwa_nav = array(
 	'#apps' => __( 'Apps', 'ap-webmaster-apps' ),
 	'#why'  => __( 'Why us', 'ap-webmaster-apps' ),
@@ -59,12 +67,12 @@ $apwa_nav = array(
 );
 
 $apwa_features = array(
-	array( 'sliders', __( 'Shaped around your process', 'ap-webmaster-apps' ), __( 'Your stages, fields, lead sources and reports, so the software follows how you already sell and schedule.', 'ap-webmaster-apps' ) ),
-	array( 'smartphone', __( 'Just as good on a phone', 'ap-webmaster-apps' ), __( 'Every screen is built for phones, tablets and desktops, and it can be added to a home screen like an app.', 'ap-webmaster-apps' ) ),
-	array( 'building', __( 'Lives on your website', 'ap-webmaster-apps' ), __( 'Installed on your own website under your domain, with your logo and colors.', 'ap-webmaster-apps' ) ),
-	array( 'repeat', __( 'Works with your tools', 'ap-webmaster-apps' ), __( 'Connect website forms, email, Google Workspace, Microsoft 365 or QuickBooks when you need them.', 'ap-webmaster-apps' ) ),
-	array( 'users', __( 'One view for the whole team', 'ap-webmaster-apps' ), __( 'Team logins and permissions, so everyone works from the same up-to-date picture.', 'ap-webmaster-apps' ) ),
-	array( 'award', __( 'Set up and supported for you', 'ap-webmaster-apps' ), __( 'We install it, set it up with you and keep it running month to month.', 'ap-webmaster-apps' ) ),
+	array( 'process', 'sliders', __( 'Shaped around your process', 'ap-webmaster-apps' ), __( 'Your stages, fields, lead sources and reports, so the software follows how you already sell and schedule.', 'ap-webmaster-apps' ) ),
+	array( 'phone', 'smartphone', __( 'Just as good on a phone', 'ap-webmaster-apps' ), __( 'Every screen is built for phones, tablets and desktops, and it can be added to a home screen like an app.', 'ap-webmaster-apps' ) ),
+	array( 'site', 'building', __( 'Lives on your website', 'ap-webmaster-apps' ), __( 'Installed on your own website under your domain, with your logo and colors.', 'ap-webmaster-apps' ) ),
+	array( 'tools', 'repeat', __( 'Works with your tools', 'ap-webmaster-apps' ), __( 'Connect website forms, email, Google Workspace, Microsoft 365 or QuickBooks when you need them.', 'ap-webmaster-apps' ) ),
+	array( 'team', 'users', __( 'One view for the whole team', 'ap-webmaster-apps' ), __( 'Team logins and permissions, so everyone works from the same up-to-date picture.', 'ap-webmaster-apps' ) ),
+	array( 'support', 'award', __( 'Set up and supported for you', 'ap-webmaster-apps' ), __( 'We install it, set it up with you and keep it running month to month.', 'ap-webmaster-apps' ) ),
 );
 
 $apwa_faq = array(
@@ -258,29 +266,35 @@ endif;
 						$apwa_is_demo = 'demo' === $apwa_app['status'];
 						$apwa_ask     = add_query_arg( 'app', $apwa_app['slug'], $inquiry );
 						?>
-					<article class="apwa-mkt-card<?php echo $apwa_is_demo ? ' apwa-mkt-card--live' : ''; ?>" id="app-<?php echo esc_attr( $apwa_app['slug'] ); ?>" data-category="<?php echo esc_attr( $apwa_app['category'] ); ?>">
-						<div class="apwa-mkt-card__head">
-							<span class="apwa-mkt-card__icon apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?>"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></span>
-							<?php if ( $apwa_is_demo ) : ?>
-							<span class="apwa-mkt-badge apwa-mkt-badge--live"><i aria-hidden="true"></i><?php esc_html_e( 'Live demo', 'ap-webmaster-apps' ); ?></span>
+					<article class="apwa-mkt-card apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?><?php echo $apwa_is_demo ? ' apwa-mkt-card--live' : ''; ?>" id="app-<?php echo esc_attr( $apwa_app['slug'] ); ?>" data-category="<?php echo esc_attr( $apwa_app['category'] ); ?>">
+						<div class="apwa-mkt-card__media" aria-hidden="true">
+							<span class="apwa-mkt-card__icon"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></span>
+							<?php if ( isset( $apwa_shots[ $apwa_app['slug'] ] ) ) : ?>
+							<img class="apwa-mkt-card__shot" src="<?php echo esc_url( $apwa_img( $apwa_shots[ $apwa_app['slug'] ][1][1] ) ); ?>" width="1600" height="1000" alt="" loading="lazy">
 							<?php else : ?>
-							<span class="apwa-mkt-badge"><?php esc_html_e( 'Coming soon', 'ap-webmaster-apps' ); ?></span>
+							<span class="apwa-mkt-mock apwa-mkt-mock--<?php echo esc_attr( isset( $apwa_mocks[ $apwa_app['slug'] ] ) ? $apwa_mocks[ $apwa_app['slug'] ] : 'list' ); ?>"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></span>
 							<?php endif; ?>
 						</div>
+						<div class="apwa-mkt-card__body">
+						<?php if ( $apwa_is_demo ) : ?>
+						<span class="apwa-mkt-badge apwa-mkt-badge--live"><i aria-hidden="true"></i><?php esc_html_e( 'Live demo', 'ap-webmaster-apps' ); ?></span>
+						<?php else : ?>
+						<span class="apwa-mkt-badge"><?php esc_html_e( 'Coming soon', 'ap-webmaster-apps' ); ?></span>
+						<?php endif; ?>
 						<p class="apwa-mkt-card__cat"><?php echo esc_html( isset( $categories[ $apwa_app['category'] ] ) ? $categories[ $apwa_app['category'] ] : '' ); ?></p>
 						<h3 class="apwa-mkt-card__title"><?php echo esc_html( $apwa_app['name'] ); ?></h3>
 						<p class="apwa-mkt-card__tagline"><?php echo esc_html( $apwa_app['tagline'] ); ?></p>
 
 						<?php if ( $apwa_app['benefits'] ) : ?>
 						<ul class="apwa-mkt-checks">
-							<?php foreach ( array_slice( $apwa_app['benefits'], 0, 3 ) as $apwa_item ) : ?>
+							<?php foreach ( array_slice( $apwa_app['benefits'], 0, 2 ) as $apwa_item ) : ?>
 							<li><?php echo Renderer::icon( 'check' ); ?><span><?php echo esc_html( $apwa_item ); ?></span></li>
 							<?php endforeach; ?>
 						</ul>
 						<?php endif; ?>
 
 						<details class="apwa-mkt-more">
-							<summary><?php esc_html_e( 'What it solves and what is included', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'chevron-down', 'apwa-mkt-more__chev' ); ?></summary>
+							<summary><?php esc_html_e( 'Details and what is included', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'chevron-down', 'apwa-mkt-more__chev' ); ?></summary>
 							<div class="apwa-mkt-more__body">
 								<?php if ( $apwa_app['problem'] ) : ?>
 								<p><strong><?php esc_html_e( 'The problem:', 'ap-webmaster-apps' ); ?></strong> <?php echo esc_html( $apwa_app['problem'] ); ?></p>
@@ -328,6 +342,7 @@ endif;
 							<?php endif; ?>
 							<a class="apwa-mkt-btn apwa-mkt-btn--secondary" href="<?php echo esc_url( $apwa_ask ); ?>"><span><?php esc_html_e( 'Ask about it', 'ap-webmaster-apps' ); ?></span></a>
 						</div>
+						</div>
 					</article>
 					<?php endforeach; ?>
 				</div>
@@ -343,10 +358,44 @@ endif;
 				</div>
 				<ul class="apwa-mkt-why__grid">
 					<?php foreach ( $apwa_features as $apwa_feature ) : ?>
-					<li class="apwa-mkt-why__item">
-						<span class="apwa-mkt-why__icon"><?php echo Renderer::icon( $apwa_feature[0] ); ?></span>
-						<h3><?php echo esc_html( $apwa_feature[1] ); ?></h3>
-						<p><?php echo esc_html( $apwa_feature[2] ); ?></p>
+					<li class="apwa-mkt-why__item apwa-mkt-why__item--<?php echo esc_attr( $apwa_feature[0] ); ?>">
+						<span class="apwa-mkt-why__icon"><?php echo Renderer::icon( $apwa_feature[1] ); ?></span>
+						<h3><?php echo esc_html( $apwa_feature[2] ); ?></h3>
+						<p><?php echo esc_html( $apwa_feature[3] ); ?></p>
+						<?php
+						switch ( $apwa_feature[0] ) {
+							case 'process':
+								echo '<div class="apwa-mkt-why__viz apwa-mkt-stages" aria-hidden="true">';
+								foreach ( array( __( 'New lead', 'ap-webmaster-apps' ), __( 'Site visit', 'ap-webmaster-apps' ), __( 'Quote sent', 'ap-webmaster-apps' ), __( 'Won', 'ap-webmaster-apps' ) ) as $apwa_i => $apwa_stage ) {
+									echo '<span class="apwa-mkt-stages__s' . (int) $apwa_i . '">' . esc_html( $apwa_stage ) . '</span>';
+								}
+								echo '</div>';
+								break;
+							case 'phone':
+								echo '<img class="apwa-mkt-why__viz apwa-mkt-why__phone" src="' . esc_url( $apwa_img( 'product-phone-dashboard.webp' ) ) . '" width="600" height="1298" alt="" loading="lazy">';
+								break;
+							case 'site':
+								echo '<div class="apwa-mkt-why__viz apwa-mkt-urlbar" aria-hidden="true"><i></i><i></i><i></i><span>' . Renderer::icon( 'lock' ) . esc_html__( 'yourbusiness.com/apps', 'ap-webmaster-apps' ) . '</span></div>';
+								break;
+							case 'tools':
+								echo '<div class="apwa-mkt-why__viz apwa-mkt-chips" aria-hidden="true">';
+								foreach ( array( 'Web forms', 'Gmail', 'Outlook', 'Google', 'Microsoft 365', 'QuickBooks' ) as $apwa_tool ) {
+									echo '<span>' . esc_html( $apwa_tool ) . '</span>';
+								}
+								echo '</div>';
+								break;
+							case 'support':
+								echo '<div class="apwa-mkt-why__viz apwa-mkt-stages" aria-hidden="true">';
+								foreach ( array( __( 'Setup call', 'ap-webmaster-apps' ), __( 'Your data brought in', 'ap-webmaster-apps' ), __( 'Team training', 'ap-webmaster-apps' ), __( 'Monthly care', 'ap-webmaster-apps' ) ) as $apwa_stage ) {
+									echo '<span>' . esc_html( $apwa_stage ) . '</span>';
+								}
+								echo '</div>';
+								break;
+							case 'team':
+								echo '<div class="apwa-mkt-why__viz apwa-mkt-avatars" aria-hidden="true"><span>JM</span><span>AR</span><span>KT</span><span>SL</span><em>+6</em></div>';
+								break;
+						}
+						?>
 					</li>
 					<?php endforeach; ?>
 				</ul>
