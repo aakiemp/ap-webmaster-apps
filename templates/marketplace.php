@@ -197,38 +197,20 @@ endif;
 		<section class="apwa-mkt-trust" aria-label="<?php esc_attr_e( 'Highlights', 'ap-webmaster-apps' ); ?>">
 			<div class="apwa-mkt-wrap">
 				<ul class="apwa-mkt-trust__list">
+					<?php
+					$apwa_trust = array(
+						array( 'grid', count( $apps ), __( 'Business apps in one suite', 'ap-webmaster-apps' ) ),
+						array( 'zap', count( $apwa_live_apps ), _n( 'Live demo you can try right now', 'Live demos you can try right now', count( $apwa_live_apps ), 'ap-webmaster-apps' ) ),
+						array( 'users', 1, __( 'Customer list shared by every app, so nothing is typed twice', 'ap-webmaster-apps' ) ),
+						array( 'lock', 1, __( 'Home for it all: your own website, under your name', 'ap-webmaster-apps' ) ),
+					);
+					foreach ( $apwa_trust as $apwa_t ) :
+						?>
 					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'grid' ); ?></span>
-						<strong><?php echo esc_html( count( $apps ) ); ?></strong>
-						<span class="apwa-mkt-trust__label"><?php esc_html_e( 'Business apps in one suite', 'ap-webmaster-apps' ); ?></span>
-						<span class="apwa-mkt-trust__glyphs" aria-hidden="true">
-							<?php foreach ( $apps as $apwa_app ) : ?>
-							<i><?php echo Renderer::icon( $apwa_app['icon'] ); ?></i>
-							<?php endforeach; ?>
-						</span>
+						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( $apwa_t[0] ); ?></span>
+						<span class="apwa-mkt-trust__text"><strong><?php echo esc_html( $apwa_t[1] ); ?></strong><span class="apwa-mkt-trust__label"><?php echo esc_html( $apwa_t[2] ); ?></span></span>
 					</li>
-					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'zap' ); ?></span>
-						<strong><?php echo esc_html( count( $apwa_live_apps ) ); ?></strong>
-						<span class="apwa-mkt-trust__label"><?php echo esc_html( _n( 'Live demo you can try right now', 'Live demos you can try right now', count( $apwa_live_apps ), 'ap-webmaster-apps' ) ); ?></span>
-						<span class="apwa-mkt-trust__chips" aria-hidden="true">
-							<?php foreach ( $apwa_live_apps as $apwa_app ) : ?>
-							<i><b></b><?php echo esc_html( $apwa_app['shortName'] ); ?></i>
-							<?php endforeach; ?>
-						</span>
-					</li>
-					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'users' ); ?></span>
-						<strong>1</strong>
-						<span class="apwa-mkt-trust__label"><?php esc_html_e( 'Customer list shared by every app, so nothing is typed twice', 'ap-webmaster-apps' ); ?></span>
-						<span class="apwa-mkt-trust__faces" aria-hidden="true"><i>JM</i><i>AR</i><i>KT</i><i>SL</i><i>+</i></span>
-					</li>
-					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'lock' ); ?></span>
-						<strong>1</strong>
-						<span class="apwa-mkt-trust__label"><?php esc_html_e( 'Home for it all: your own website, under your name', 'ap-webmaster-apps' ); ?></span>
-						<span class="apwa-mkt-trust__url" aria-hidden="true"><?php echo Renderer::icon( 'lock' ); ?><span>yoursite.com<b>/apps</b></span></span>
-					</li>
+					<?php endforeach; ?>
 				</ul>
 			</div>
 		</section>
@@ -298,10 +280,45 @@ endif;
 				</div>
 				<?php endif; ?>
 
+<?php
+				$apwa_ln = static function ( $w, $t = false ) {
+					return '<i class="ln' . ( $t ? ' t' : '' ) . '" style="width:' . (int) $w . '%"></i>';
+				};
+				$apwa_rows = static function ( $rows ) {
+					return implode( '', $rows );
+				};
+				$apwa_cal = '';
+				foreach ( range( 0, 14 ) as $apwa_i ) {
+					$apwa_cal .= '<b class="' . ( in_array( $apwa_i, array( 1, 6, 8, 12 ), true ) ? 'a' : ( in_array( $apwa_i, array( 3, 10 ), true ) ? 'c' : ( in_array( $apwa_i, array( 5, 13 ), true ) ? 's' : '' ) ) ) . '"></b>';
+				}
+				$apwa_mocks = array(
+					'crm'                 => '<div class="cols"><div><span></span><b class="a"></b><b></b><b></b></div><div><span></span><b></b><b class="c"></b></div><div><span></span><b class="s"></b></div></div>',
+					'booking-manager'     => '<div class="r">' . $apwa_ln( 40, true ) . '<span class="pl"></span></div><div class="cal">' . $apwa_cal . '</div>',
+					'invoice-automation'  => '<div class="kpis"><b></b><b class="c"></b></div>' . $apwa_rows( array( '<div class="r"><span class="av"></span>' . $apwa_ln( 45 ) . '<span class="pl a"></span></div>', '<div class="r"><span class="av"></span>' . $apwa_ln( 55 ) . '<span class="pl c"></span></div>', '<div class="r"><span class="av"></span>' . $apwa_ln( 38 ) . '<span class="pl a"></span></div>' ) ),
+					'document-processor'  => '<div class="split"><div class="paper"><i></i><i style="width:70%"></i><i></i><i style="width:55%"></i><i></i></div><div class="fields"><span class="pl a"></span><span class="pl"></span><span class="pl c"></span><span class="pl"></span></div></div>',
+					'email-automation'    => $apwa_ln( 55, true ) . '<span class="box"></span>' . $apwa_ln( 75 ) . '<span class="btn"></span>',
+					'analytics-reporting' => '<div class="r">' . $apwa_ln( 40, true ) . '<span class="pl"></span></div><div class="bars"><b style="height:40%"></b><b style="height:62%"></b><b style="height:48%"></b><b style="height:80%"></b><b style="height:66%"></b><b style="height:96%"></b></div>',
+					'client-portal'       => '<div class="r">' . $apwa_ln( 22 ) . '<span class="pg"><b style="width:80%"></b></span></div><div class="r">' . $apwa_ln( 30 ) . '<span class="pg"><b style="width:45%"></b></span></div><div class="r">' . $apwa_ln( 18 ) . '<span class="pg"><b class="c" style="width:100%"></b></span></div><span class="btn"></span>',
+					'customer-support'    => '<div class="r"><span class="dot a"></span>' . $apwa_ln( 62 ) . '<span class="pl a"></span></div><div class="r"><span class="dot c"></span>' . $apwa_ln( 50 ) . '<span class="pl c"></span></div><div class="r"><span class="dot"></span>' . $apwa_ln( 58 ) . '<span class="pl"></span></div><div class="r"><span class="dot a"></span>' . $apwa_ln( 42 ) . '<span class="pl"></span></div>',
+					'business-operations' => '<div class="r"><span class="ck on"></span>' . $apwa_ln( 70 ) . '</div><div class="r"><span class="ck on"></span>' . $apwa_ln( 50 ) . '</div><div class="r"><span class="ck"></span>' . $apwa_ln( 62 ) . '</div><div class="r"><span class="ck"></span>' . $apwa_ln( 40 ) . '</div>',
+					'quote-recovery'      => '<div class="r">' . $apwa_ln( 45, true ) . '<span class="pl c"></span></div><span class="bub"></span><span class="bub me"></span><span class="bub ok"></span>',
+				);
+				?>
 				<ul class="apwa-mkt-tiles" data-apwa-tiles hidden>
 					<?php foreach ( $apps as $apwa_app ) : ?>
 					<?php
 					$apwa_state = 'demo' === $apwa_app['status'] ? 'live' : ( 'building' === $apwa_app['stage'] ? 'building' : 'soon' );
+					$apwa_tints = array(
+						'sales'      => '#237592',
+						'scheduling' => '#2c8dac',
+						'billing'    => '#194e62',
+						'documents'  => '#b92ccd',
+						'marketing'  => '#a63bb8',
+						'reporting'  => '#22354f',
+						'clients'    => '#1d5f77',
+						'operations' => '#3f5873',
+					);
+					$apwa_tint = isset( $apwa_tints[ $apwa_app['category'] ] ) ? $apwa_tints[ $apwa_app['category'] ] : '#237592';
 					$apwa_state_labels = array(
 						'live'     => __( 'Live demo', 'ap-webmaster-apps' ),
 						'building' => __( 'In progress', 'ap-webmaster-apps' ),
@@ -309,12 +326,16 @@ endif;
 					);
 					?>
 					<li data-category="<?php echo esc_attr( $apwa_app['category'] ); ?>">
-						<div class="apwa-mkt-tile apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?> apwa-mkt-tile--<?php echo esc_attr( $apwa_state ); ?>">
+						<div class="apwa-mkt-tile apwa-mkt-tile--<?php echo esc_attr( $apwa_state ); ?>" style="--t: <?php echo esc_attr( $apwa_tint ); ?>">
 							<div class="apwa-mkt-tile__media" aria-hidden="true">
 								<span class="apwa-mkt-tile__icon"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></span>
+								<div class="apwa-mkt-tile__win"><div class="apwa-mk"><?php echo isset( $apwa_mocks[ $apwa_app['slug'] ] ) ? $apwa_mocks[ $apwa_app['slug'] ] : $apwa_ln( 70, true ) . $apwa_ln( 90 ) . $apwa_ln( 55 ); // phpcs:ignore WordPress.Security.EscapeOutput -- static markup built above. ?></div></div>
 								<span class="apwa-mkt-tile__state apwa-mkt-tile__state--<?php echo esc_attr( $apwa_state ); ?>"><i></i><?php echo esc_html( $apwa_state_labels[ $apwa_state ] ); ?></span>
 							</div>
 							<div class="apwa-mkt-tile__body">
+								<?php if ( isset( $apwa_used_cats[ $apwa_app['category'] ] ) ) : ?>
+								<span class="apwa-mkt-tile__cat"><?php echo esc_html( $apwa_used_cats[ $apwa_app['category'] ] ); ?></span>
+								<?php endif; ?>
 								<button type="button" class="apwa-mkt-tile__open" data-app="<?php echo esc_attr( $apwa_app['slug'] ); ?>" aria-haspopup="dialog"><strong class="apwa-mkt-tile__name"><?php echo esc_html( $apwa_app['name'] ); ?></strong></button>
 								<span class="apwa-mkt-tile__line"><?php echo esc_html( $apwa_app['tagline'] ); ?></span>
 								<div class="apwa-mkt-tile__foot">
