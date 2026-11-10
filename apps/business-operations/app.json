@@ -5,7 +5,7 @@
   "icon": "clipboard-check",
   "color": "amber",
   "category": "operations",
-  "status": "coming-soon",
+  "status": "demo",
   "order": 90,
   "tagline": "Checklists, recurring duties, equipment and inventory for the work behind the scenes.",
   "description": "Assign recurring duties and checklists to staff, keep SOPs handy, and track equipment and stock levels.",
@@ -40,11 +40,14 @@
   "related": [
     "booking-manager"
   ],
-  "module": "",
-  "styles": [],
+  "module": "ops.js",
+  "styles": [
+    "ops.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
     "addons": []
-  }
+  },
+  "launched": 8
 }
