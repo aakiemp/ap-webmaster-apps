@@ -37,15 +37,22 @@ load, so new routes work without reactivating.
 - **Demo dashboard** is a standalone HTML document (`templates/app-shell.php`).
   It does not call `wp_head()` or `wp_footer()`, so theme and other plugins'
   assets never load there and the app's CSS can't leak into the site.
-- **Marketplace** (`templates/marketplace.php`) uses the theme's own header and
-  footer on classic themes (the site uses Elementor) and a standalone frame on
-  block themes. Override with the `apwa_marketplace_layout` filter
-  (`theme` or `standalone`). Its CSS is enqueued only on that route.
+- **Marketplace** (`templates/marketplace.php`) is a standalone landing page
+  with its own header and footer (no `wp_head()`), because the theme header
+  plus the Elementor header showed twice on apwebmaster.com. It uses the
+  site's Customizer logo when one is set (filter `apwa_marketplace_logo`),
+  otherwise an "AP" mark and the site name. The `apwa_marketplace_layout`
+  filter can return `theme` to wrap it in the theme's header and footer
+  instead; its CSS is then enqueued only on that route.
+- **Product screenshots** on the marketplace are real captures of the demo,
+  stored as `assets/img/product-*.webp`. Recapture them after visible demo
+  changes (desktop 1280x800 at 2x, phone 390x844 at 2x, resized to 1600 and
+  600 px wide).
 
 ### Filters
 
 `apwa_base_path`, `apwa_is_public`, `apwa_inquiry_url`, `apwa_categories`,
-`apwa_apps`, `apwa_marketplace_layout`.
+`apwa_apps`, `apwa_marketplace_layout`, `apwa_marketplace_logo`.
 
 ## Front end (vanilla ES modules, no build step)
 

@@ -9,7 +9,7 @@ their business.
 
 | URL | What it is |
 | --- | --- |
-| `/apps/` | Marketplace: every app with its sales copy, a demo link and an inquiry link |
+| `/apps/` | Marketplace: a landing page for the suite with product screenshots, every app's sales copy, demo links and inquiry links |
 | `/apps/demo/` | Demo dashboard: one app shell with all live demos |
 | `/apps/demo/crm/` | Deep link straight into an app (works for any app slug) |
 
