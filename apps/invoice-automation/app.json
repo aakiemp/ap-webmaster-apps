@@ -8,6 +8,7 @@
   "status": "demo",
   "stage": "",
   "order": 30,
+  "launched": 3,
   "tagline": "Send invoices from finished jobs and let reminders chase late payments for you.",
   "description": "Turn completed jobs into invoices, track what is paid, due and overdue, and run automatic payment reminders.",
   "problem": "Invoices go out late or not at all, and chasing unpaid bills eats into the week.",

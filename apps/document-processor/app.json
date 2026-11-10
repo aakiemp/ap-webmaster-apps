@@ -6,6 +6,7 @@
   "category": "documents",
   "status": "demo",
   "order": 80,
+  "launched": 4,
   "tagline": "Turn invoices, forms and paperwork into clean, organized data without retyping it.",
   "description": "A document inbox that extracts key fields, lets staff review and correct them, and exports the result.",
   "problem": "Staff spend hours copying numbers and names from documents into other systems.",

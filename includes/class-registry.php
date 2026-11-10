@@ -43,7 +43,7 @@ final class Registry {
 	}
 
 	/**
-	 * All apps, sorted by "order".
+	 * All apps: live demos first, newest launch on top, then the rest by "order".
 	 *
 	 * @return array
 	 */
@@ -61,6 +61,14 @@ final class Registry {
 		uasort(
 			$apps,
 			static function ( $a, $b ) {
+				$a_live = 'demo' === $a['status'];
+				$b_live = 'demo' === $b['status'];
+				if ( $a_live !== $b_live ) {
+					return $a_live ? -1 : 1;
+				}
+				if ( $a_live && $a['launched'] !== $b['launched'] ) {
+					return $b['launched'] <=> $a['launched'];
+				}
 				return $a['order'] <=> $b['order'];
 			}
 		);
@@ -120,6 +128,7 @@ final class Registry {
 			'stage'             => '',
 			'priority'          => '',
 			'order'             => 100,
+			'launched'          => 0,
 			'tagline'           => '',
 			'description'       => '',
 			'problem'           => '',
@@ -141,6 +150,7 @@ final class Registry {
 		$app['slug']      = $slug;
 		$app['shortName'] = $app['shortName'] ? $app['shortName'] : $app['name'];
 		$app['order']     = (int) $app['order'];
+		$app['launched']  = (int) $app['launched'];
 		$app['status']    = in_array( $app['status'], array( 'demo', 'coming-soon' ), true ) ? $app['status'] : 'coming-soon';
 		return $app;
 	}
@@ -161,6 +171,7 @@ final class Registry {
 				'color'       => $app['color'],
 				'category'    => $app['category'],
 				'status'      => $app['status'],
+				'order'       => $app['order'],
 				'stage'       => $app['stage'],
 				'tagline'     => $app['tagline'],
 				'audience'    => $app['audience'],

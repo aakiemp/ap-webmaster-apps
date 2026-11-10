@@ -6,6 +6,7 @@
   "category": "scheduling",
   "status": "demo",
   "order": 20,
+  "launched": 2,
   "tagline": "Appointments, availability and reminders in one calendar your customers can book into.",
   "description": "A booking calendar with requests, rescheduling, cancellations and reminder settings.",
   "problem": "Back-and-forth messages to find a time, double bookings and no-shows cost hours every week.",
