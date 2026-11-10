@@ -66,9 +66,6 @@ final class Registry {
 				if ( $a_live !== $b_live ) {
 					return $a_live ? -1 : 1;
 				}
-				if ( $a_live && $a['launched'] !== $b['launched'] ) {
-					return $b['launched'] <=> $a['launched'];
-				}
 				return $a['order'] <=> $b['order'];
 			}
 		);
