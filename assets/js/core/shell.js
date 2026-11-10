@@ -67,7 +67,7 @@ function sidebar() {
   const b = store.get().business;
   return html`<aside class="apwa-sidebar" aria-label="Main navigation">
     <div class="apwa-brand">
-      <span class="apwa-brand__mark" aria-hidden="true">AP</span>
+      <span class="apwa-brand__mark" aria-hidden="true"><img src="${CONFIG.assetsUrl}assets/img/ap-mark.png" alt=""></span>
       <span class="apwa-brand__text"><strong>AP Webmaster</strong><span>Apps</span></span>
     </div>
     <div class="apwa-workspace" title="Fictional demo business">
@@ -93,7 +93,7 @@ function topbar() {
   return html`<header class="apwa-topbar">
     <div class="apwa-topbar__left">
       <a class="apwa-topbar__back apwa-show-phone" href="#" hidden aria-label="Back">${icon('chevron-left')}</a>
-      <span class="apwa-topbar__logo apwa-show-phone" aria-hidden="true">AP</span>
+      <span class="apwa-topbar__logo apwa-show-phone" aria-hidden="true"><img src="${CONFIG.assetsUrl}assets/img/ap-mark.png" alt=""></span>
       <nav class="apwa-crumbs" aria-label="Breadcrumb"></nav>
     </div>
     <div class="apwa-search apwa-hide-phone" role="search">

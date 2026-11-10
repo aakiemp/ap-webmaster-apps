@@ -38,7 +38,7 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 
 /* ---------- Boot ---------- */
 .apwa-boot { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--apwa-text-3); }
-.apwa-boot__mark { width: 44px; height: 44px; border-radius: 10px; background: var(--apwa-navy-900); color: #fff; display: grid; place-items: center; font-weight: 700; letter-spacing: -0.5px; animation: apwa-pulse 1.2s ease-in-out infinite; }
+.apwa-boot__mark { width: 44px; height: 44px; padding: 4px; border-radius: 10px; background: var(--apwa-navy-950); color: #fff; display: grid; place-items: center; font-weight: 700; letter-spacing: -0.5px; animation: apwa-pulse 1.2s ease-in-out infinite; }
 @keyframes apwa-pulse { 50% { opacity: 0.55; } }
 
 /* ---------- Layout ---------- */
@@ -52,7 +52,7 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 /* Sidebar */
 .apwa-sidebar { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow-y: auto; background: var(--apwa-navy-900); color: var(--apwa-navy-300); display: flex; flex-direction: column; padding: 14px 10px 12px; scrollbar-width: thin; scrollbar-color: var(--apwa-navy-700) transparent; }
 .apwa-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 14px; }
-.apwa-brand__mark { width: 32px; height: 32px; border-radius: 7px; background: var(--apwa-brand-600); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px; letter-spacing: -0.3px; flex: none; }
+.apwa-brand__mark { width: 34px; height: 34px; padding: 3px; border-radius: 8px; background: var(--apwa-navy-950); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px; letter-spacing: -0.3px; flex: none; }
 .apwa-brand__text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
 .apwa-brand__text strong { color: #fff; font-size: 14px; font-weight: 650; }
 .apwa-brand__text span { font-size: 11.5px; color: var(--apwa-navy-300); }
@@ -78,9 +78,10 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 .apwa-topbar { position: sticky; top: 0; z-index: 30; height: var(--apwa-topbar-h); display: flex; align-items: center; gap: 16px; padding: 0 20px; background: rgba(255, 255, 255, 0.96); backdrop-filter: saturate(1.4) blur(8px); -webkit-backdrop-filter: saturate(1.4) blur(8px); border-bottom: 1px solid var(--apwa-border); }
 .apwa-topbar__left { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
 .apwa-topbar__right { display: flex; align-items: center; gap: 8px; }
-.apwa-topbar__logo { width: 28px; height: 28px; border-radius: 7px; background: var(--apwa-navy-900); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; flex: none; }
+.apwa-topbar__logo { width: 30px; height: 30px; padding: 3px; border-radius: 7px; background: var(--apwa-navy-950); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; flex: none; }
 .apwa-topbar__back { display: grid; place-items: center; width: 36px; height: 36px; margin-left: -8px; border-radius: 8px; color: var(--apwa-text) !important; }
 .apwa-topbar__back[hidden], .apwa-topbar__logo[hidden] { display: none !important; }
+.apwa-brand__mark img, .apwa-topbar__logo img, .apwa-boot__mark img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .apwa-crumbs { display: flex; align-items: center; gap: 4px; min-width: 0; font-size: 13px; color: var(--apwa-text-3); }
 .apwa-crumbs a { color: var(--apwa-text-2); white-space: nowrap; }
 .apwa-crumbs a:hover { color: var(--apwa-text); }

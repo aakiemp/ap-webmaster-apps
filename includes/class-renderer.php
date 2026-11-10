@@ -153,19 +153,12 @@ final class Renderer {
 	}
 
 	/**
-	 * URL of the site's own logo (Customizer / Elementor site logo), if set.
+	 * URL of the AP Webmaster logo shown in the marketplace header and footer.
 	 *
-	 * @return string Empty when the site has no logo.
+	 * @return string Empty to fall back to an "AP" mark and the site name.
 	 */
 	private static function site_logo() {
-		$url = '';
-		if ( function_exists( 'get_theme_mod' ) && function_exists( 'wp_get_attachment_image_url' ) ) {
-			$id = (int) get_theme_mod( 'custom_logo' );
-			if ( $id ) {
-				$url = (string) wp_get_attachment_image_url( $id, 'medium' );
-			}
-		}
-		return (string) apply_filters( 'apwa_marketplace_logo', $url );
+		return (string) apply_filters( 'apwa_marketplace_logo', APWA_URL . 'assets/img/logo-horizontal.png' );
 	}
 
 	/**
