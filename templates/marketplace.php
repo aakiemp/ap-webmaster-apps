@@ -320,7 +320,7 @@ endif;
 						<?php endif; ?>
 
 						<details class="apwa-mkt-more">
-							<summary><?php esc_html_e( 'Details and what is included', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'chevron-down', 'apwa-mkt-more__chev' ); ?></summary>
+							<summary><span class="apwa-mkt-more__lead" aria-hidden="true"><?php echo Renderer::icon( 'list' ); ?></span><span class="apwa-mkt-more__label"><?php esc_html_e( 'Details and what is included', 'ap-webmaster-apps' ); ?></span><span class="apwa-mkt-more__chev" aria-hidden="true"><?php echo Renderer::icon( 'chevron-down' ); ?></span></summary>
 							<div class="apwa-mkt-more__body">
 								<?php if ( $apwa_app['problem'] ) : ?>
 								<p><strong><?php esc_html_e( 'The problem:', 'ap-webmaster-apps' ); ?></strong> <?php echo esc_html( $apwa_app['problem'] ); ?></p>
