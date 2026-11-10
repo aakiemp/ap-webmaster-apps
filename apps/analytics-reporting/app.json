@@ -1,0 +1,52 @@
+{
+  "slug": "analytics-reporting",
+  "name": "Analytics & Reporting",
+  "shortName": "Analytics",
+  "icon": "bar-chart",
+  "color": "blue",
+  "category": "reporting",
+  "status": "coming-soon",
+  "priority": "high",
+  "order": 60,
+  "tagline": "Website, ads, SEO and leads in one simple dashboard, with reports that send themselves.",
+  "description": "One place to see how the website, Google and Meta ads and search rankings turn into leads and revenue, with automated monthly reports.",
+  "problem": "Performance data lives in five different tools, so nobody knows which marketing actually brings in customers.",
+  "audience": [
+    "Businesses running ads or SEO",
+    "Agencies reporting to clients",
+    "Owners who want one number to watch"
+  ],
+  "benefits": [
+    "See every channel in one view",
+    "Know which campaigns bring paying customers",
+    "Send client-ready reports automatically"
+  ],
+  "demoFeatures": [
+    "Website traffic and conversions",
+    "Google Ads and Meta Ads performance",
+    "SEO rankings and Search Console",
+    "Lead attribution and campaign ROI",
+    "Automated report preview"
+  ],
+  "productionOptions": [
+    "GA4 and Search Console connections",
+    "Google Ads and Meta Ads connections",
+    "Scheduled PDF and email reports"
+  ],
+  "customization": [
+    "Metrics and goals",
+    "Report branding",
+    "Client-specific dashboards"
+  ],
+  "related": [
+    "crm",
+    "email-automation"
+  ],
+  "module": "",
+  "styles": [],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": []
+  }
+}

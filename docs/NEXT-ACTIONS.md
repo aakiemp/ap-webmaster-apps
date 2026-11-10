@@ -13,4 +13,4 @@
 1. Apply real brand tokens once confirmed.
 2. Verify inside the live WordPress (Elementor header and footer around the
    marketplace, caching, rewrite rules).
-3. Build AI Document Processor, then Email Campaigns, then Quote Recovery (moved last on Nov 10).
+3. Build Invoice Automations (in progress), then AI Document Processor, Email Campaigns, Quote Recovery. Coming-soon ideas after that: Analytics & Reporting (high priority), Projects & Client Portal, Customer Support, Business Operations.

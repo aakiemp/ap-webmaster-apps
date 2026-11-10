@@ -10,7 +10,8 @@ _Last updated: 10 Nov 2026_
 | Marketplace page | Done |
 | Deploy workflow (GitHub Actions over FTPS) | Written, not yet run |
 | Booking Manager | Demo live (calendar, requests, bookings, booking page, settings) |
-| AI Document Processor, Email Campaigns, Quote Recovery | Not started (listed as coming soon) |
+| Invoice Automations | In progress |
+| AI Document Processor, Email Campaigns, Quote Recovery, Analytics & Reporting, Client Portal, Customer Support, Business Operations | Not started (listed as coming soon) |
 | Public launch | Not launched. Needs the owner's approval |
 
 ## Tested

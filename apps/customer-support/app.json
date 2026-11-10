@@ -1,0 +1,51 @@
+{
+  "slug": "customer-support",
+  "name": "Customer Support",
+  "shortName": "Support",
+  "icon": "inbox",
+  "color": "pink",
+  "category": "clients",
+  "status": "coming-soon",
+  "order": 80,
+  "tagline": "Turn calls, emails and form requests into tickets your team can track to done.",
+  "description": "A shared support inbox with tickets, a service request form, a help center with FAQs and customer feedback.",
+  "problem": "Customer requests get lost between inboxes and nobody knows who is handling what.",
+  "audience": [
+    "Service businesses",
+    "Property managers",
+    "Software and product companies"
+  ],
+  "benefits": [
+    "Nothing slips through the cracks",
+    "Faster, consistent replies",
+    "Customers find answers on their own"
+  ],
+  "demoFeatures": [
+    "Ticket inbox with owners and status",
+    "Service request form",
+    "Help center and FAQ",
+    "Response time tracking",
+    "Customer feedback"
+  ],
+  "productionOptions": [
+    "Email-to-ticket",
+    "Live chat widget",
+    "AI answer suggestions"
+  ],
+  "customization": [
+    "Ticket categories and priorities",
+    "Request form fields",
+    "Help center articles"
+  ],
+  "related": [
+    "crm",
+    "client-portal"
+  ],
+  "module": "",
+  "styles": [],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": []
+  }
+}
