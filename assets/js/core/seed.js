@@ -106,6 +106,116 @@ const NOTES = [
   'Left voicemail. Will try again Thursday.',
 ];
 
+/* ---------- Booking Manager ---------- */
+
+const SERVICES = [
+  { id: 's1', name: 'In-home estimate', minutes: 60, price: 0, color: 'blue' },
+  { id: 's2', name: 'HVAC tune-up', minutes: 90, price: 129, color: 'teal' },
+  { id: 's3', name: 'Plumbing service call', minutes: 60, price: 95, color: 'purple' },
+  { id: 's4', name: 'Gutter cleaning', minutes: 120, price: 180, color: 'amber' },
+  { id: 's5', name: 'Window cleaning', minutes: 120, price: 160, color: 'pink' },
+];
+
+const BOOKING_NOTES = ['Gate code is on file.', 'Two dogs, both friendly.', 'Please call on arrival.', 'Park in the driveway.', '', '', ''];
+
+/** Booking settings and appointments, built around the shared contacts. */
+export function bookingSeed(contacts) {
+  const r = rng(20261110);
+  const pick = (arr) => arr[Math.floor(r() * arr.length)];
+  const staff = ['u1', 'u2', 'u3'];
+  // Each team member has their own visit times, so the week view stays readable.
+  const slots = { u1: [[8, 0], [10, 30], [13, 0], [15, 30]], u2: [[9, 0], [11, 30], [14, 0], [16, 0]], u3: [[8, 30], [12, 0], [14, 30], [16, 0]] };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dayAt = (offset, h, m) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() + offset);
+    d.setHours(h, m, 0, 0);
+    return d;
+  };
+  const people = contacts.filter((c) => c.status !== 'inactive');
+  const taken = new Set();
+  const appointments = [];
+  let n = 0;
+  const add = (a) => {
+    const start = dayAt(a.offset, a.h, a.m);
+    const created = new Date(Math.min(Date.now(), start.getTime()) - (2 + Math.floor(r() * 9)) * DAY);
+    appointments.push({
+      id: `b${++n}`,
+      contactId: a.contactId,
+      serviceId: a.serviceId,
+      staffId: a.staffId,
+      start: start.toISOString(),
+      minutes: SERVICES.find((s) => s.id === a.serviceId).minutes,
+      status: a.status,
+      source: a.source || pick(['Phone', 'Online booking', 'Online booking', 'Manual']),
+      notes: a.notes != null ? a.notes : pick(BOOKING_NOTES),
+      seriesId: a.seriesId || '',
+      createdAt: (a.status === 'requested' ? new Date(Date.now() - (1 + Math.floor(r() * 20)) * 3600000) : created).toISOString(),
+      updatedAt: created.toISOString(),
+    });
+  };
+
+  // A weekly window-cleaning series for a commercial customer (multi-date booking).
+  let base = 1;
+  while ([0, 6].includes(dayAt(base, 9, 0).getDay())) base += 1;
+  [base - 7, base, base + 7, base + 14].forEach((offset) => {
+    taken.add(`${offset}|u1|0`);
+    add({ offset, h: 8, m: 0, staffId: 'u1', contactId: 'c2', serviceId: 's5', status: offset < 0 ? 'completed' : 'confirmed', source: 'Manual', notes: 'Weekly visit for the lobby and front offices.', seriesId: 'ser1' });
+  });
+
+  for (let offset = -7; offset <= 10; offset += 1) {
+    const dow = dayAt(offset, 9, 0).getDay();
+    if (dow === 0) continue;
+    staff.forEach((staffId) => {
+      const count = dow === 6 ? (r() > 0.5 ? 1 : 0) : 1 + (r() > 0.45 ? 1 : 0);
+      const order = [0, 1, 2, 3].sort(() => r() - 0.5).slice(0, count);
+      order.forEach((si) => {
+        const key = `${offset}|${staffId}|${si}`;
+        if (taken.has(key)) return;
+        taken.add(key);
+        const [h, m] = slots[staffId][si];
+        const serviceId = pick(['s1', 's1', 's2', 's2', 's3', 's3', 's4', 's5']);
+        const end = dayAt(offset, h, m).getTime() + SERVICES.find((s) => s.id === serviceId).minutes * 60000;
+        let status = 'confirmed';
+        if (end < Date.now()) {
+          const x = r();
+          status = x < 0.08 ? 'noshow' : x < 0.15 ? 'cancelled' : 'completed';
+        }
+        add({ offset, h, m, staffId, serviceId, status, contactId: pick(people).id });
+      });
+    });
+  }
+
+  // A few open requests from the online booking page.
+  appointments
+    .filter((a) => a.status === 'confirmed' && !a.seriesId && new Date(a.start) > new Date(Date.now() + DAY))
+    .filter((_, i) => i % 5 === 1)
+    .slice(0, 4)
+    .forEach((a) => {
+      a.status = 'requested';
+      a.source = 'Online booking';
+      a.createdAt = new Date(Date.now() - (1 + Math.floor(r() * 20)) * 3600000).toISOString();
+    });
+
+  appointments.sort((a, b) => (a.start < b.start ? -1 : 1));
+  return {
+    booking: {
+      services: SERVICES.map((s) => ({ ...s })),
+      staff,
+      hours: { days: [1, 2, 3, 4, 5, 6], start: 8, end: 18 },
+      rules: { bufferMin: 0, noticeHours: 12, autoConfirm: false },
+      reminders: {
+        confirmation: true,
+        dayBefore: true,
+        twoHour: false,
+        message: 'Hi {first_name}, this is a reminder of your {service} with Summit Home Services on {date} at {time}. Reply C to confirm or R to reschedule.',
+      },
+    },
+    appointments,
+  };
+}
+
 export function createSeed() {
   const r = rng(20261109);
   const now = new Date().toISOString();
@@ -195,5 +305,6 @@ export function createSeed() {
     contacts,
     deals,
     activities,
+    ...bookingSeed(contacts),
   };
 }

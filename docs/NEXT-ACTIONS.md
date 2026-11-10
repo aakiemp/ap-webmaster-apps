@@ -13,4 +13,4 @@
 1. Apply real brand tokens once confirmed.
 2. Verify inside the live WordPress (Elementor header and footer around the
    marketplace, caching, rewrite rules).
-3. Build Quote Recovery, then Booking Manager, then AI Document Processor.
+3. Build AI Document Processor, then Email Campaigns, then Quote Recovery (moved last on Nov 10).

@@ -192,6 +192,8 @@ const ACTIVITY = {
   won: { icon: 'award', tone: 'green', label: 'Won' },
   lost: { icon: 'x-circle', tone: 'red', label: 'Lost' },
   update: { icon: 'edit', tone: 'gray', label: 'Updated' },
+  booking: { icon: 'calendar-check', tone: 'purple', label: 'Booking' },
+  reminder: { icon: 'send', tone: 'blue', label: 'Reminder' },
 };
 export const ACTIVITY_TYPES = ACTIVITY;
 

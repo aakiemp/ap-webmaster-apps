@@ -4,7 +4,7 @@
   "icon": "calendar-check",
   "color": "purple",
   "category": "scheduling",
-  "status": "coming-soon",
+  "status": "demo",
   "order": 30,
   "tagline": "Appointments, availability and reminders in one calendar your customers can book into.",
   "description": "A booking calendar with requests, rescheduling, cancellations and reminder settings.",
@@ -19,13 +19,16 @@
   "benefits": [
     "Let customers pick open times",
     "Cut no-shows with reminders",
-    "See the whole week at a glance"
+    "See the whole week at a glance",
+    "Stop the back-and-forth over email and text"
   ],
   "demoFeatures": [
-    "Calendar views",
-    "Appointment requests",
-    "Rescheduling and cancellations",
-    "Reminder settings"
+    "Week and team-day calendar views",
+    "Book, reschedule and cancel appointments",
+    "Recurring and multi-date bookings",
+    "Accept or decline online booking requests",
+    "A customer booking page with live open times",
+    "Reminder settings with a message preview"
   ],
   "productionOptions": [
     "Online booking page",
@@ -41,11 +44,14 @@
   "related": [
     "crm"
   ],
-  "module": "",
-  "styles": [],
+  "module": "booking.js",
+  "styles": [
+    "booking.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
     "addons": []
-  }
+  },
+  "shortName": "Booking"
 }
