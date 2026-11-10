@@ -303,13 +303,22 @@ endif;
 					);
 					?>
 					<li data-category="<?php echo esc_attr( $apwa_app['category'] ); ?>">
-						<button type="button" class="apwa-mkt-tile apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?>" data-app="<?php echo esc_attr( $apwa_app['slug'] ); ?>" aria-haspopup="dialog">
-							<span class="apwa-mkt-tile__icon" aria-hidden="true"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></span>
-							<span class="apwa-mkt-tile__state apwa-mkt-tile__state--<?php echo esc_attr( $apwa_state ); ?>"><i aria-hidden="true"></i><?php echo esc_html( $apwa_state_labels[ $apwa_state ] ); ?></span>
-							<strong class="apwa-mkt-tile__name"><?php echo esc_html( $apwa_app['name'] ); ?></strong>
-							<span class="apwa-mkt-tile__line"><?php echo esc_html( $apwa_app['tagline'] ); ?></span>
-							<span class="apwa-mkt-tile__more"><?php esc_html_e( 'View details', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'arrow-right' ); ?></span>
-						</button>
+						<div class="apwa-mkt-tile apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?> apwa-mkt-tile--<?php echo esc_attr( $apwa_state ); ?>">
+							<div class="apwa-mkt-tile__media" aria-hidden="true">
+								<span class="apwa-mkt-tile__icon"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></span>
+								<span class="apwa-mkt-tile__state apwa-mkt-tile__state--<?php echo esc_attr( $apwa_state ); ?>"><i></i><?php echo esc_html( $apwa_state_labels[ $apwa_state ] ); ?></span>
+							</div>
+							<div class="apwa-mkt-tile__body">
+								<button type="button" class="apwa-mkt-tile__open" data-app="<?php echo esc_attr( $apwa_app['slug'] ); ?>" aria-haspopup="dialog"><strong class="apwa-mkt-tile__name"><?php echo esc_html( $apwa_app['name'] ); ?></strong></button>
+								<span class="apwa-mkt-tile__line"><?php echo esc_html( $apwa_app['tagline'] ); ?></span>
+								<div class="apwa-mkt-tile__foot">
+									<span class="apwa-mkt-tile__more"><?php esc_html_e( 'Details', 'ap-webmaster-apps' ); ?></span>
+									<?php if ( 'live' === $apwa_state ) : ?>
+									<a class="apwa-mkt-tile__demo" href="<?php echo esc_url( Router::url( 'demo/' . $apwa_app['slug'] . '/' ) ); ?>"><?php esc_html_e( 'Try demo', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'arrow-right' ); ?></a>
+									<?php endif; ?>
+								</div>
+							</div>
+						</div>
 					</li>
 					<?php endforeach; ?>
 				</ul>
@@ -608,7 +617,7 @@ endif;
 			card.removeAttribute('id');
 			card.hidden = false;
 			var det = card.querySelector('details');
-			if (det) { det.open = true; }
+			if (det) { det.open = false; }
 			var slot = modal.querySelector('[data-slot]');
 			slot.innerHTML = '';
 			slot.appendChild(card);
@@ -638,7 +647,9 @@ endif;
 			}
 		};
 		tiles.addEventListener('click', function (e) {
-			var t = e.target.closest('[data-app]');
+			if (e.target.closest('a')) { return; }
+			var tile = e.target.closest('.apwa-mkt-tile');
+			var t = tile && tile.querySelector('[data-app]');
 			if (!t) { return; }
 			lastTile = t;
 			modal = document.createElement('div');
