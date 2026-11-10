@@ -153,6 +153,22 @@ final class Renderer {
 	}
 
 	/**
+	 * URL of the site's own logo (Customizer / Elementor site logo), if set.
+	 *
+	 * @return string Empty when the site has no logo.
+	 */
+	private static function site_logo() {
+		$url = '';
+		if ( function_exists( 'get_theme_mod' ) && function_exists( 'wp_get_attachment_image_url' ) ) {
+			$id = (int) get_theme_mod( 'custom_logo' );
+			if ( $id ) {
+				$url = (string) wp_get_attachment_image_url( $id, 'medium' );
+			}
+		}
+		return (string) apply_filters( 'apwa_marketplace_logo', $url );
+	}
+
+	/**
 	 * Marketplace page.
 	 */
 	public static function marketplace() {
@@ -161,11 +177,13 @@ final class Renderer {
 		$categories = Registry::categories();
 		$demo_url   = Router::url( 'demo/' );
 		$inquiry    = Settings::inquiry_url();
+		$logo       = self::site_logo();
 		/**
-		 * "theme" wraps the page in the site's own header and footer (classic
-		 * themes such as Hello Elementor); "standalone" renders our own frame.
+		 * "standalone" (default) renders the page as its own landing page with
+		 * its own header and footer. "theme" wraps it in the site's header and
+		 * footer instead; on Elementor sites that can show two headers.
 		 */
-		$layout = apply_filters( 'apwa_marketplace_layout', function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ? 'standalone' : 'theme' );
+		$layout = apply_filters( 'apwa_marketplace_layout', 'standalone' );
 		$layout = 'standalone' === $layout ? 'standalone' : 'theme';
 
 		if ( 'theme' === $layout ) {

@@ -36,6 +36,9 @@ foreach ( $GLOBALS['apwa_dev']['rules'] as $apwa_regex => $apwa_query ) {
 		break;
 	}
 }
+if ( ! empty( $_GET['theme'] ) ) {
+	add_filter( 'apwa_marketplace_layout', function () { return 'theme'; } );
+}
 do_action( 'template_redirect' );
 http_response_code( 404 );
 echo '<h1>Not found (dev harness)</h1>';
