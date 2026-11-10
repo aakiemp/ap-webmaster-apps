@@ -1,0 +1,108 @@
+/*
+ * AP Webmaster Apps — design tokens.
+ *
+ * Every colour, size and shadow the apps use comes from here. To match the
+ * AP Webmaster brand, change the --apwa-brand-* and --apwa-navy-* values
+ * (and --apwa-font if the site uses a specific typeface). Nothing else needs
+ * to change. All tokens live on .apwa-scope so they never reach other pages.
+ */
+.apwa-scope {
+	/* Brand (placeholder until confirmed against apwebmaster.com) */
+	--apwa-brand-50: #eef4ff;
+	--apwa-brand-100: #dce8fd;
+	--apwa-brand-200: #bcd2fb;
+	--apwa-brand-300: #8fb3f5;
+	--apwa-brand-400: #5a8fee;
+	--apwa-brand-500: #2f6fe4;
+	--apwa-brand-600: #1f5bd0;
+	--apwa-brand-700: #1a4aa8;
+	--apwa-brand-800: #163d87;
+
+	/* Sidebar / chrome */
+	--apwa-navy-950: #0b1422;
+	--apwa-navy-900: #0f1b2d;
+	--apwa-navy-800: #17263c;
+	--apwa-navy-700: #22354f;
+	--apwa-navy-500: #5d6e86;
+	--apwa-navy-300: #a9b6c8;
+	--apwa-navy-100: #e3e9f1;
+
+	/* Neutrals */
+	--apwa-gray-0: #ffffff;
+	--apwa-gray-25: #fbfcfd;
+	--apwa-gray-50: #f6f8fa;
+	--apwa-gray-75: #f1f4f7;
+	--apwa-gray-100: #eceff3;
+	--apwa-gray-200: #e1e6ec;
+	--apwa-gray-300: #cdd5de;
+	--apwa-gray-400: #98a4b2;
+	--apwa-gray-500: #697585;
+	--apwa-gray-600: #4b5767;
+	--apwa-gray-700: #343e4b;
+	--apwa-gray-800: #222a35;
+	--apwa-gray-900: #141a22;
+
+	/* Status */
+	--apwa-green-50: #e8f6ef;
+	--apwa-green-600: #12805c;
+	--apwa-green-700: #0d6a4b;
+	--apwa-amber-50: #fdf4e4;
+	--apwa-amber-600: #b25e09;
+	--apwa-red-50: #fdeeee;
+	--apwa-red-600: #c4302b;
+	--apwa-red-700: #a32621;
+	--apwa-purple-50: #f3f0fd;
+	--apwa-purple-600: #6941c6;
+	--apwa-teal-50: #e6f6f7;
+	--apwa-teal-600: #0e7c86;
+	--apwa-pink-50: #fdeef6;
+	--apwa-pink-600: #c11574;
+
+	/* Semantic */
+	--apwa-bg: var(--apwa-gray-75);
+	--apwa-surface: var(--apwa-gray-0);
+	--apwa-surface-muted: var(--apwa-gray-50);
+	--apwa-border: var(--apwa-gray-200);
+	--apwa-border-strong: var(--apwa-gray-300);
+	--apwa-text: var(--apwa-gray-900);
+	--apwa-text-2: var(--apwa-gray-600);
+	--apwa-text-3: var(--apwa-gray-500);
+	--apwa-primary: var(--apwa-brand-600);
+	--apwa-primary-hover: var(--apwa-brand-700);
+	--apwa-focus: 0 0 0 3px rgba(47, 111, 228, 0.28);
+
+	/* Type */
+	--apwa-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	--apwa-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--apwa-fs-xs: 11.5px;
+	--apwa-fs-sm: 12.5px;
+	--apwa-fs-md: 13.5px;
+	--apwa-fs-lg: 15px;
+	--apwa-fs-xl: 18px;
+	--apwa-fs-2xl: 22px;
+	--apwa-lh: 1.45;
+
+	/* Shape and depth */
+	--apwa-radius-sm: 4px;
+	--apwa-radius: 6px;
+	--apwa-radius-lg: 8px;
+	--apwa-shadow-xs: 0 1px 1px rgba(16, 24, 40, 0.04);
+	--apwa-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 1px rgba(16, 24, 40, 0.03);
+	--apwa-shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 1px 3px rgba(16, 24, 40, 0.06);
+	--apwa-shadow-lg: 0 16px 40px rgba(16, 24, 40, 0.18), 0 2px 6px rgba(16, 24, 40, 0.08);
+
+	/* Layout */
+	--apwa-sidebar-w: 236px;
+	--apwa-rail-w: 64px;
+	--apwa-topbar-h: 56px;
+	--apwa-tabbar-h: 58px;
+	--apwa-safe-top: env(safe-area-inset-top, 0px);
+	--apwa-safe-bottom: env(safe-area-inset-bottom, 0px);
+	--apwa-safe-left: env(safe-area-inset-left, 0px);
+	--apwa-safe-right: env(safe-area-inset-right, 0px);
+
+	/* Motion */
+	--apwa-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+	--apwa-fast: 120ms;
+	--apwa-med: 200ms;
+}

@@ -1,0 +1,64 @@
+{
+  "slug": "crm",
+  "name": "CRM & Sales Pipeline",
+  "shortName": "CRM",
+  "icon": "pipeline",
+  "color": "blue",
+  "category": "sales",
+  "status": "demo",
+  "order": 10,
+  "tagline": "Every lead, customer and deal in one place, with a pipeline your team will actually keep up to date.",
+  "description": "A contact directory, deal pipeline and activity history built for small teams that sell services. See who needs a follow-up, what each deal is worth and where revenue is stuck.",
+  "problem": "Leads live in inboxes, spreadsheets and sticky notes, so follow-ups slip and nobody knows what the pipeline is really worth.",
+  "audience": [
+    "Service businesses",
+    "Contractors",
+    "Agencies",
+    "Consultants",
+    "Medical and wellness practices"
+  ],
+  "benefits": [
+    "Stop losing leads between the inbox and the spreadsheet",
+    "See pipeline value by stage at a glance",
+    "Know the last time anyone spoke to a customer",
+    "Give every team member the same up-to-date view"
+  ],
+  "demoFeatures": [
+    "Add and edit contacts",
+    "Search and filter the contact directory",
+    "Create opportunities and drag them through the pipeline",
+    "Mark deals won or lost",
+    "Log calls, notes and meetings on a timeline",
+    "Pipeline reporting by stage, owner and source"
+  ],
+  "productionOptions": [
+    "Website form and phone lead capture",
+    "Two-way email and SMS",
+    "Team logins and permissions",
+    "Import from spreadsheets or another CRM",
+    "Integrations with QuickBooks, Google Workspace or Microsoft 365"
+  ],
+  "customization": [
+    "Your pipeline stages and deal fields",
+    "Your lead sources and tags",
+    "Your branding, logo and colors",
+    "Reports for the numbers you track"
+  ],
+  "related": [
+    "quote-recovery",
+    "booking-manager"
+  ],
+  "module": "crm.js",
+  "styles": [
+    "crm.css"
+  ],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": [
+      "lead-capture",
+      "sms",
+      "email-sync"
+    ]
+  }
+}
