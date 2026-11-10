@@ -370,7 +370,7 @@ function demoInfo(btn) {
   const body = el(html`<div class="apwa-demoinfo">
     <p><strong>You're exploring a live demo.</strong> The business, people and deals are fictional sample data.</p>
     <ul>
-      <li>${icon('lock')}<span>Everything you enter stays in this browser only. Nothing is sent to us or anyone else.</span></li>
+      <li>${icon('lock')}<span>Everything you enter stays in this browser only. Nothing is sent anywhere.</span></li>
       <li>${icon('mail')}<span>Emails, texts and calls are simulated. Nothing actually goes out.</span></li>
       <li>${icon('alert')}<span>Please don't enter real personal, medical or financial information.</span></li>
     </ul>

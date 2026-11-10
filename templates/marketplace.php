@@ -64,7 +64,7 @@ $apwa_mocks = array(
 
 $apwa_nav = array(
 	'#apps' => __( 'Apps', 'ap-webmaster-apps' ),
-	'#why'  => __( 'Why us', 'ap-webmaster-apps' ),
+	'#why'  => __( 'Why AP Webmaster', 'ap-webmaster-apps' ),
 	'#how'  => __( 'How it works', 'ap-webmaster-apps' ),
 	'#faq'  => __( 'FAQ', 'ap-webmaster-apps' ),
 );
@@ -75,15 +75,15 @@ $apwa_features = array(
 	array( 'site', 'building', __( 'Lives on your website', 'ap-webmaster-apps' ), __( 'Installed on your own website under your domain, with your logo and colors.', 'ap-webmaster-apps' ) ),
 	array( 'tools', 'repeat', __( 'Works with your tools', 'ap-webmaster-apps' ), __( 'Connect website forms, email, Google Workspace, Square or QuickBooks when you need them.', 'ap-webmaster-apps' ) ),
 	array( 'team', 'users', __( 'One view for the whole team', 'ap-webmaster-apps' ), __( 'Team logins and permissions, so everyone works from the same up-to-date picture.', 'ap-webmaster-apps' ) ),
-	array( 'support', 'award', __( 'Set up and supported for you', 'ap-webmaster-apps' ), __( 'We install it, set it up with you and keep it running month to month.', 'ap-webmaster-apps' ) ),
+	array( 'support', 'award', __( 'Set up and supported for you', 'ap-webmaster-apps' ), __( 'I install it, set it up with you and keep it running month to month.', 'ap-webmaster-apps' ) ),
 );
 
 $apwa_faq = array(
 	array( __( 'Is the demo a real app?', 'ap-webmaster-apps' ), __( 'Yes. It is the same software, running with sample data for a fictional business. You can add contacts, move deals through the pipeline and log activity.', 'ap-webmaster-apps' ) ),
-	array( __( 'What happens to what I type in the demo?', 'ap-webmaster-apps' ), __( 'It stays in your own browser. Nothing is sent to us or anyone else, and "Reset demo data" puts everything back the way it started.', 'ap-webmaster-apps' ) ),
+	array( __( 'What happens to what I type in the demo?', 'ap-webmaster-apps' ), __( 'It stays in your own browser. Nothing is sent to me or anyone else, and "Reset demo data" puts everything back the way it started.', 'ap-webmaster-apps' ) ),
 	array( __( 'Can it be changed to fit my business?', 'ap-webmaster-apps' ), __( 'Yes, that is the point. Stages, fields, lead sources, reports, branding and colors are all set up around how you work.', 'ap-webmaster-apps' ) ),
 	array( __( 'Where does it run?', 'ap-webmaster-apps' ), __( 'On your own website, under your own domain. Your team signs in there from any phone, tablet or computer.', 'ap-webmaster-apps' ) ),
-	array( __( 'How much does it cost?', 'ap-webmaster-apps' ), __( 'It depends on which apps you need and how much setup they take. After a short call we give you a clear quote before anything is built.', 'ap-webmaster-apps' ) ),
+	array( __( 'How much does it cost?', 'ap-webmaster-apps' ), __( 'It depends on which apps you need and how much setup they take. After a short call I give you a clear quote before anything is built.', 'ap-webmaster-apps' ) ),
 );
 
 // Icon markup comes from the plugin's own icons.json and image URLs from
@@ -138,7 +138,7 @@ endif;
 				<a class="apwa-mkt-nav__site" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Main site', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'external' ); ?></a>
 			</nav>
 			<div class="apwa-mkt-nav__actions">
-				<a class="apwa-mkt-btn apwa-mkt-btn--ghost apwa-mkt-hide-phone" href="<?php echo esc_url( $inquiry ); ?>"><?php esc_html_e( 'Talk to us', 'ap-webmaster-apps' ); ?></a>
+				<a class="apwa-mkt-btn apwa-mkt-btn--ghost apwa-mkt-hide-phone" href="<?php echo esc_url( $inquiry ); ?>"><?php esc_html_e( 'Get a quote', 'ap-webmaster-apps' ); ?></a>
 				<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--sm" href="<?php echo esc_url( $demo_url ); ?>"><?php esc_html_e( 'Try the demo', 'ap-webmaster-apps' ); ?></a>
 				<button type="button" class="apwa-mkt-nav__toggle" aria-controls="apwa-mkt-menu" aria-expanded="false" data-apwa-menu hidden>
 					<span class="apwa-mkt-sr"><?php esc_html_e( 'Menu', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'menu', 'apwa-mkt-nav__open' ); ?><?php echo Renderer::icon( 'x', 'apwa-mkt-nav__close' ); ?>
@@ -175,7 +175,7 @@ endif;
 				<p class="apwa-mkt-hero__lead"><?php esc_html_e( 'CRM, booking, quote follow-up and document tools, customized to your process and installed on your own website. Click through a working demo before you spend a dollar.', 'ap-webmaster-apps' ); ?></p>
 				<div class="apwa-mkt-hero__actions">
 					<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( $demo_url ); ?>"><span><?php esc_html_e( 'Try the live demo', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
-					<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="<?php echo esc_url( $inquiry ); ?>"><span><?php esc_html_e( 'Talk to us', 'ap-webmaster-apps' ); ?></span></a>
+					<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="<?php echo esc_url( $inquiry ); ?>"><span><?php esc_html_e( 'Get a quote', 'ap-webmaster-apps' ); ?></span></a>
 				</div>
 				<ul class="apwa-mkt-hero__meta">
 					<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'No sign-up', 'ap-webmaster-apps' ); ?></li>
@@ -521,12 +521,12 @@ endif;
 					</li>
 					<li>
 						<span class="apwa-mkt-how__n">02</span>
-						<h3><?php esc_html_e( 'Tell us how you work', 'ap-webmaster-apps' ); ?></h3>
-						<p><?php esc_html_e( 'We map your stages, fields, team and the tools you already use.', 'ap-webmaster-apps' ); ?></p>
+						<h3><?php esc_html_e( 'Tell me how you work', 'ap-webmaster-apps' ); ?></h3>
+						<p><?php esc_html_e( 'I map your stages, fields, team and the tools you already use.', 'ap-webmaster-apps' ); ?></p>
 					</li>
 					<li>
 						<span class="apwa-mkt-how__n">03</span>
-						<h3><?php esc_html_e( 'We set it up for you', 'ap-webmaster-apps' ); ?></h3>
+						<h3><?php esc_html_e( 'I set it up for you', 'ap-webmaster-apps' ); ?></h3>
 						<p><?php esc_html_e( 'Your version is installed on your website with your branding, then supported month to month.', 'ap-webmaster-apps' ); ?></p>
 					</li>
 				</ol>
@@ -540,7 +540,7 @@ endif;
 					<h2 id="apwa-mkt-faq-title" class="apwa-mkt-h2"><?php esc_html_e( 'Questions, answered', 'ap-webmaster-apps' ); ?></h2>
 					<p class="apwa-mkt-sub">
 						<?php esc_html_e( 'Something else on your mind?', 'ap-webmaster-apps' ); ?>
-						<a class="apwa-mkt-link" href="<?php echo esc_url( $inquiry ); ?>"><?php esc_html_e( 'Ask us directly', 'ap-webmaster-apps' ); ?></a>
+						<a class="apwa-mkt-link" href="<?php echo esc_url( $inquiry ); ?>"><?php esc_html_e( 'Ask me directly', 'ap-webmaster-apps' ); ?></a>
 					</p>
 				</div>
 				<div class="apwa-mkt-faq__list">
@@ -558,10 +558,10 @@ endif;
 			<div class="apwa-mkt-wrap apwa-mkt-final__inner">
 				<div>
 					<h2 id="apwa-mkt-final-title" class="apwa-mkt-h2"><?php esc_html_e( 'See what it would look like for your business', 'ap-webmaster-apps' ); ?></h2>
-					<p class="apwa-mkt-sub"><?php esc_html_e( 'Tell us what slows your team down and we will show you where the apps fit, before anything is built.', 'ap-webmaster-apps' ); ?></p>
+					<p class="apwa-mkt-sub"><?php esc_html_e( 'Tell me what slows your team down and I will show you where the apps fit, before anything is built.', 'ap-webmaster-apps' ); ?></p>
 				</div>
 				<div class="apwa-mkt-final__actions">
-					<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( $inquiry ); ?>"><span><?php esc_html_e( 'Talk to us', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
+					<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( $inquiry ); ?>"><span><?php esc_html_e( 'Get a quote', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
 					<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="<?php echo esc_url( $demo_url ); ?>"><span><?php esc_html_e( 'Try the live demo', 'ap-webmaster-apps' ); ?></span></a>
 				</div>
 			</div>
