@@ -4,7 +4,7 @@
   "icon": "receipt",
   "color": "green",
   "category": "sales",
-  "status": "coming-soon",
+  "status": "demo",
   "order": 40,
   "tagline": "Follow up on every open estimate automatically, and win back jobs you would have lost to silence.",
   "description": "Track outstanding estimates, schedule follow-ups and see how much revenue follow-ups recover.",
@@ -41,11 +41,15 @@
   "related": [
     "crm"
   ],
-  "module": "",
-  "styles": [],
+  "module": "followups.js",
+  "styles": [
+    "followups.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
     "addons": []
-  }
+  },
+  "launched": 11,
+  "shortName": "Follow-Ups"
 }

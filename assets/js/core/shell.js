@@ -438,7 +438,7 @@ function launcher() {
         <div class="apwa-lp__search">${icon('search')}<input type="search" placeholder="Search apps" aria-label="Search apps" data-lp-q></div>
         <button type="button" class="apwa-lp__close" data-lp-close aria-label="Close">${icon('x')}</button>
       </div>
-      <p class="apwa-lp__sub">${live} live demos · ${apps.length - live} more on the way</p>
+      <p class="apwa-lp__sub">${live} live demos${apps.length > live ? ` · ${apps.length - live} more on the way` : ", all ready to try"}</p>
       <div class="apwa-lp__grid" data-lp-grid>
         ${apps.map((a, i) => html`<a class="apwa-lp__app ${a.status !== 'demo' ? 'is-soon' : ''}" href="${router.href(`${a.slug}/`)}" style="--i:${i}" data-name="${(a.name + ' ' + (a.shortName || '')).toLowerCase()}">
           <span class="apwa-lp__icon apwa-lp--${a.color}">${icon(a.icon)}${a.status !== 'demo' ? html`<em>Soon</em>` : ''}</span>
