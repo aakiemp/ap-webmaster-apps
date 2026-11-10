@@ -1,0 +1,53 @@
+{
+  "slug": "invoice-automation",
+  "name": "Invoice Automations",
+  "shortName": "Invoices",
+  "icon": "dollar",
+  "color": "teal",
+  "category": "billing",
+  "status": "coming-soon",
+  "stage": "building",
+  "order": 30,
+  "tagline": "Send invoices from finished jobs and let reminders chase late payments for you.",
+  "description": "Turn completed jobs into invoices, track what is paid, due and overdue, and run automatic payment reminders.",
+  "problem": "Invoices go out late or not at all, and chasing unpaid bills eats into the week.",
+  "audience": [
+    "Home service businesses",
+    "Contractors and trades",
+    "Agencies and consultants",
+    "Any business that bills after the work"
+  ],
+  "benefits": [
+    "Get paid faster",
+    "Stop chasing late payments by hand",
+    "See what you are owed at a glance"
+  ],
+  "demoFeatures": [
+    "Invoices from completed jobs",
+    "Paid, due and overdue tracking",
+    "Automatic reminder schedule",
+    "Simulated sending"
+  ],
+  "productionOptions": [
+    "Online card and bank payments",
+    "Accounting software sync",
+    "Branded invoice emails"
+  ],
+  "customization": [
+    "Invoice layout and terms",
+    "Reminder timing and wording",
+    "Taxes and line items"
+  ],
+  "related": [
+    "crm",
+    "booking-manager",
+    "quote-recovery"
+  ],
+  "module": "",
+  "styles": [],
+  "package": {
+    "setup": true,
+    "monthly": true,
+    "addons": []
+  }
+}

@@ -32,10 +32,12 @@ final class Registry {
 			array(
 				'sales'      => __( 'Sales & CRM', 'ap-webmaster-apps' ),
 				'scheduling' => __( 'Booking & Scheduling', 'ap-webmaster-apps' ),
+				'billing'    => __( 'Billing & Invoices', 'ap-webmaster-apps' ),
 				'documents'  => __( 'AI & Documents', 'ap-webmaster-apps' ),
-				'operations' => __( 'Business Operations', 'ap-webmaster-apps' ),
 				'marketing'  => __( 'Marketing', 'ap-webmaster-apps' ),
-				'reporting'  => __( 'Reporting & Productivity', 'ap-webmaster-apps' ),
+				'reporting'  => __( 'Analytics & Reporting', 'ap-webmaster-apps' ),
+				'clients'    => __( 'Clients & Support', 'ap-webmaster-apps' ),
+				'operations' => __( 'Business Operations', 'ap-webmaster-apps' ),
 			)
 		);
 	}
@@ -115,6 +117,8 @@ final class Registry {
 			'color'             => 'blue',
 			'category'          => 'operations',
 			'status'            => 'coming-soon',
+			'stage'             => '',
+			'priority'          => '',
 			'order'             => 100,
 			'tagline'           => '',
 			'description'       => '',
@@ -157,6 +161,7 @@ final class Registry {
 				'color'       => $app['color'],
 				'category'    => $app['category'],
 				'status'      => $app['status'],
+				'stage'       => $app['stage'],
 				'tagline'     => $app['tagline'],
 				'audience'    => $app['audience'],
 				'module'      => ( 'demo' === $app['status'] && $app['module'] ) ? APWA_URL . 'apps/' . $slug . '/' . $app['module'] : '',
