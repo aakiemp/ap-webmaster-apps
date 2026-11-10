@@ -52,6 +52,11 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v4
+      - name: Stamp the build
+        # The plugin compares this stamp on each request and clears its own
+        # cached PHP when it changes, so hosts with long OPcache times show a
+        # deploy right away.
+        run: echo "${GITHUB_SHA}" > build.txt
       - name: Upload changed files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

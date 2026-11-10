@@ -42,4 +42,30 @@ require_once APWA_DIR . 'includes/class-plugin.php';
 register_activation_hook( __FILE__, array( Plugin::class, 'activate' ) );
 register_deactivation_hook( __FILE__, array( Plugin::class, 'deactivate' ) );
 
+/*
+ * After a deploy, clear this plugin's files from PHP's OPcache so the new
+ * templates and classes are used straight away. The deploy writes build.txt.
+ */
+add_action(
+	'plugins_loaded',
+	static function () {
+		$stamp = @file_get_contents( APWA_DIR . 'build.txt' ); // phpcs:ignore
+		if ( ! $stamp || ! function_exists( 'opcache_invalidate' ) ) {
+			return;
+		}
+		$stamp = trim( $stamp );
+		if ( get_option( 'apwa_build' ) === $stamp ) {
+			return;
+		}
+		$files = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( APWA_DIR, \FilesystemIterator::SKIP_DOTS ) );
+		foreach ( $files as $file ) {
+			if ( 'php' === $file->getExtension() ) {
+				@opcache_invalidate( $file->getPathname(), true ); // phpcs:ignore
+			}
+		}
+		update_option( 'apwa_build', $stamp, false );
+	},
+	1
+);
+
 add_action( 'plugins_loaded', array( Plugin::class, 'boot' ) );
