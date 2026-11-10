@@ -85,6 +85,25 @@ function commit(change) {
   });
 }
 
+/**
+ * Give an app its own sample data the first time it is opened (and again
+ * after a reset). seedFn(state) returns the keys to add. Quiet: no re-render.
+ */
+export function ensure(key, seedFn) {
+  const s = get();
+  if (s[key] === undefined) {
+    Object.assign(s, seedFn(s));
+    writeStorage();
+  }
+  return s[key];
+}
+
+/** Save a small change without re-rendering (used while someone is typing). */
+export function quietly(mutator) {
+  mutator(get());
+  writeStorage();
+}
+
 /** Low-level: mutate the state in a function and persist. */
 export function update(mutator, change = { type: 'update' }) {
   mutator(get());
