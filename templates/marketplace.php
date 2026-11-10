@@ -127,7 +127,6 @@ endif;
 				<?php else : ?>
 				<span class="apwa-mkt-nav__mark" aria-hidden="true">AP</span><span class="apwa-mkt-nav__name"><?php echo esc_html( $apwa_site ); ?></span>
 				<?php endif; ?>
-				<span class="apwa-mkt-nav__tag"><?php esc_html_e( 'Apps', 'ap-webmaster-apps' ); ?></span>
 			</a>
 			<nav class="apwa-mkt-nav__links" id="apwa-mkt-menu" aria-label="<?php esc_attr_e( 'Page sections', 'ap-webmaster-apps' ); ?>">
 				<?php foreach ( $apwa_nav as $apwa_href => $apwa_label ) : ?>
