@@ -1,0 +1,76 @@
+# Uploads this plugin's runtime files to the plugin folder on apwebmaster.com.
+#
+# Runs only when someone presses "Run workflow" (Actions tab). It never
+# activates the plugin and never touches anything outside the folder the
+# FTP account is locked to (public_html/wp-content/plugins/ap-webmaster-apps).
+#
+# Secrets (Settings > Secrets and variables > Actions): FTP_SERVER,
+# FTP_USERNAME, FTP_PASSWORD. They are passed to the upload step only and
+# are masked in logs.
+name: Deploy plugin
+
+on:
+  workflow_dispatch:
+    inputs:
+      protocol:
+        description: "Connection type. Use ftps unless the host refuses it."
+        type: choice
+        options: [ftps, ftp]
+        default: ftps
+      dry_run:
+        description: "Dry run: list what would change without uploading"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP syntax
+        run: find . -name '*.php' -not -path './dev/*' -print0 | xargs -0 -n1 php -l
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: JavaScript syntax
+        run: find assets apps -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: App metadata is valid JSON
+        run: for f in apps/*/app.json assets/icons/icons.json; do python3 -m json.tool "$f" > /dev/null || exit 1; done
+
+  deploy:
+    name: Upload to apwebmaster.com
+    needs: check
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload changed files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ inputs.protocol }}
+          port: 21
+          # The FTP account's home is already the plugin folder.
+          server-dir: ./
+          dry-run: ${{ inputs.dry_run }}
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .github/**
+            docs/**
+            dev/**
+            README.md
+            .distignore
+            .editorconfig
