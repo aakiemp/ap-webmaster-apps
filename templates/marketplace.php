@@ -200,7 +200,7 @@ endif;
 					<li class="apwa-mkt-trust__item apwa-mkt-trust__item--suite">
 						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'grid' ); ?></span>
 						<strong><?php echo esc_html( count( $apps ) ); ?></strong>
-						<span><?php esc_html_e( 'business apps in one suite', 'ap-webmaster-apps' ); ?></span>
+						<span><?php esc_html_e( 'Business apps in one suite', 'ap-webmaster-apps' ); ?></span>
 						<span class="apwa-mkt-trust__dots" aria-hidden="true">
 							<?php foreach ( $apps as $apwa_app ) : ?>
 							<i class="apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?>"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></i>
@@ -210,18 +210,28 @@ endif;
 					<li class="apwa-mkt-trust__item apwa-mkt-trust__item--live">
 						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'zap' ); ?></span>
 						<strong><?php echo esc_html( count( $apwa_live_apps ) ); ?></strong>
-						<span><?php echo esc_html( _n( 'live demo you can try right now', 'live demos you can try right now', count( $apwa_live_apps ), 'ap-webmaster-apps' ) ); ?></span>
+						<span><?php echo esc_html( _n( 'Live demo you can try right now', 'Live demos you can try right now', count( $apwa_live_apps ), 'ap-webmaster-apps' ) ); ?></span>
 						<span class="apwa-mkt-trust__meter" aria-hidden="true"><i style="width: <?php echo esc_attr( (string) round( 100 * count( $apwa_live_apps ) / max( 1, count( $apps ) ) ) ); ?>%"></i></span>
 					</li>
 					<li class="apwa-mkt-trust__item apwa-mkt-trust__item--shared">
 						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'users' ); ?></span>
 						<strong>1</strong>
-						<span><?php esc_html_e( 'customer list shared by every app, so nothing is typed twice', 'ap-webmaster-apps' ); ?></span>
+						<span><?php esc_html_e( 'Customer list shared by every app, so nothing is typed twice', 'ap-webmaster-apps' ); ?></span>
+						<span class="apwa-mkt-trust__sync" aria-hidden="true">
+							<span class="apwa-mkt-trust__faces"><i>JM</i><i>AR</i><i>KT</i><i>+</i></span>
+							<?php echo Renderer::icon( 'refresh' ); ?>
+							<span class="apwa-mkt-trust__apps">
+								<?php foreach ( array_slice( $apwa_live_apps, 0, 3 ) as $apwa_app ) : ?>
+								<i class="apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?>"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></i>
+								<?php endforeach; ?>
+							</span>
+						</span>
 					</li>
 					<li class="apwa-mkt-trust__item apwa-mkt-trust__item--site">
 						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'lock' ); ?></span>
 						<strong>1</strong>
-						<span><?php esc_html_e( 'home for it all: your own website, under your name', 'ap-webmaster-apps' ); ?></span>
+						<span><?php esc_html_e( 'Home for it all: your own website, under your name', 'ap-webmaster-apps' ); ?></span>
+						<span class="apwa-mkt-trust__url" aria-hidden="true"><?php echo Renderer::icon( 'lock' ); ?><span>yoursite.com<b>/apps</b></span></span>
 					</li>
 				</ul>
 			</div>
