@@ -5,8 +5,9 @@
   "icon": "briefcase",
   "color": "purple",
   "category": "clients",
-  "status": "coming-soon",
+  "status": "demo",
   "order": 60,
+  "launched": 6,
   "tagline": "Give every client one place to see progress, approve work and share files.",
   "description": "A branded portal where clients onboard, follow project timelines, approve deliverables, share files and send requests.",
   "problem": "Project updates, approvals and files are scattered across email threads and texts.",
@@ -41,8 +42,10 @@
     "crm",
     "customer-support"
   ],
-  "module": "",
-  "styles": [],
+  "module": "portal.js",
+  "styles": [
+    "portal.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
