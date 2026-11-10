@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) || exit;
 <meta name="apple-mobile-web-app-title" content="AP Apps">
 <title><?php echo esc_html( $page_title ); ?></title>
 <link rel="manifest" href="<?php echo esc_url( $manifest ); ?>">
-<link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/icon.svg' ); ?>" type="image/svg+xml">
+<link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/favicon-64.png' ); ?>" type="image/png">
 <link rel="apple-touch-icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/apple-touch-icon.png' ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/tokens.css' ) ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/app.css' ) ); ?>">
@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 <body class="apwa-body apwa-scope">
 <div id="apwa-root" class="apwa-root" aria-live="polite">
 	<div class="apwa-boot" role="status">
-		<div class="apwa-boot__mark" aria-hidden="true">AP</div>
+		<div class="apwa-boot__mark" aria-hidden="true"><img src="<?php echo esc_url( APWA_URL . 'assets/img/ap-mark.png' ); ?>" alt=""></div>
 		<div class="apwa-boot__text"><?php esc_html_e( 'Loading AP Webmaster Apps…', 'ap-webmaster-apps' ); ?></div>
 	</div>
 </div>

@@ -7,16 +7,21 @@
  * to change. All tokens live on .apwa-scope so they never reach other pages.
  */
 .apwa-scope {
-	/* Brand (placeholder until confirmed against apwebmaster.com) */
-	--apwa-brand-50: #eef4ff;
-	--apwa-brand-100: #dce8fd;
-	--apwa-brand-200: #bcd2fb;
-	--apwa-brand-300: #8fb3f5;
-	--apwa-brand-400: #5a8fee;
-	--apwa-brand-500: #2f6fe4;
-	--apwa-brand-600: #1f5bd0;
-	--apwa-brand-700: #1a4aa8;
-	--apwa-brand-800: #163d87;
+	/* Brand: AP Webmaster teal (the "WEB" in the logo, #2c8dac) */
+	--apwa-brand-50: #eaf6fa;
+	--apwa-brand-100: #cdebf3;
+	--apwa-brand-200: #9fd6e7;
+	--apwa-brand-300: #6cbdd7;
+	--apwa-brand-400: #40a3c3;
+	--apwa-brand-500: #2c8dac;
+	--apwa-brand-600: #237592;
+	--apwa-brand-700: #1d5f77;
+	--apwa-brand-800: #194e62;
+
+	/* Brand accent: AP Webmaster magenta (the "MASTER" in the logo) */
+	--apwa-accent-400: #e46ef4;
+	--apwa-accent-500: #dc3ff0;
+	--apwa-accent-600: #b92ccd;
 
 	/* Sidebar / chrome */
 	--apwa-navy-950: #0b1422;
@@ -69,7 +74,7 @@
 	--apwa-text-3: var(--apwa-gray-500);
 	--apwa-primary: var(--apwa-brand-600);
 	--apwa-primary-hover: var(--apwa-brand-700);
-	--apwa-focus: 0 0 0 3px rgba(47, 111, 228, 0.28);
+	--apwa-focus: 0 0 0 3px rgba(44, 141, 172, 0.3);
 
 	/* Type */
 	--apwa-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

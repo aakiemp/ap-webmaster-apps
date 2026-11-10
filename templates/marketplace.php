@@ -91,7 +91,7 @@ if ( 'standalone' === $layout ) :
 <title><?php echo esc_html( $apwa_title . ' | ' . $apwa_site ); ?></title>
 <meta name="description" content="<?php esc_attr_e( 'Business apps built around the way you work: CRM, booking, quote follow-up and document tools, installed on your own website. Try the live demo.', 'ap-webmaster-apps' ); ?>">
 <meta name="theme-color" content="#0b1422">
-<link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/icon.svg' ); ?>" type="image/svg+xml">
+<link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/favicon-64.png' ); ?>" type="image/png">
 <link rel="preload" as="image" href="<?php echo esc_url( $apwa_img( 'product-dashboard.webp' ) ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/tokens.css' ) ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/marketplace.css' ) ); ?>">
