@@ -5,7 +5,7 @@
   "icon": "inbox",
   "color": "pink",
   "category": "clients",
-  "status": "coming-soon",
+  "status": "demo",
   "order": 70,
   "tagline": "Turn calls, emails and form requests into tickets your team can track to done.",
   "description": "A shared support inbox with tickets, a service request form, a help center with FAQs and customer feedback.",
@@ -41,11 +41,14 @@
     "crm",
     "client-portal"
   ],
-  "module": "",
-  "styles": [],
+  "module": "support.js",
+  "styles": [
+    "support.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
     "addons": []
-  }
+  },
+  "launched": 7
 }
