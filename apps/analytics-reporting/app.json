@@ -5,7 +5,7 @@
   "icon": "bar-chart",
   "color": "blue",
   "category": "reporting",
-  "status": "coming-soon",
+  "status": "demo",
   "priority": "high",
   "order": 100,
   "tagline": "Website, ads, SEO and leads in one simple dashboard, with reports that send themselves.",
@@ -42,11 +42,14 @@
     "crm",
     "email-automation"
   ],
-  "module": "",
-  "styles": [],
+  "module": "analytics.js",
+  "styles": [
+    "analytics.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
     "addons": []
-  }
+  },
+  "launched": 9
 }
