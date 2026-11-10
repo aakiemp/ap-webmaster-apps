@@ -65,7 +65,8 @@ function sidebar() {
   const groups = [...new Set(live.map((i) => i.group))];
   const soon = (CONFIG.apps || []).filter((a) => a.status !== 'demo');
   const b = store.get().business;
-  return html`<aside class="apwa-sidebar" aria-label="Main navigation">
+  return html`<aside class="apwa-sidebar" id="apwa-sidebar" aria-label="Main navigation">
+    <button type="button" class="apwa-iconbtn apwa-sidebar__close apwa-show-phone" data-action="drawer-close" aria-label="Close menu">${icon('x')}</button>
     <div class="apwa-brand">
       <span class="apwa-brand__mark" aria-hidden="true"><img src="${CONFIG.assetsUrl}assets/img/ap-mark.png" alt=""></span>
       <span class="apwa-brand__text"><strong>AP Webmaster</strong><span>Apps</span></span>
@@ -94,7 +95,7 @@ function topbar() {
   return html`<header class="apwa-topbar">
     <div class="apwa-topbar__left">
       <a class="apwa-topbar__back apwa-show-phone" href="#" hidden aria-label="Back">${icon('chevron-left')}</a>
-      <span class="apwa-topbar__logo apwa-show-phone" aria-hidden="true"><img src="${CONFIG.assetsUrl}assets/img/ap-mark.png" alt=""></span>
+      <button type="button" class="apwa-iconbtn apwa-topbar__menu apwa-show-phone" data-action="drawer" aria-label="Open menu" aria-controls="apwa-sidebar" aria-expanded="false">${icon('menu')}</button>
       <nav class="apwa-crumbs" aria-label="Breadcrumb"></nav>
     </div>
     <div class="apwa-search apwa-hide-phone" role="search">
@@ -145,6 +146,7 @@ export function mount(container) {
       </main>
     </div>
     ${tabbar()}
+    <div class="apwa-drawer-scrim" data-action="drawer-close" hidden></div>
     <button type="button" class="apwa-fab apwa-show-phone" hidden></button>
   </div>`;
 
@@ -164,6 +166,7 @@ function queueRender() {
 
 function render(ev) {
   closeMenu();
+  setDrawer(false);
   const rel = router.path();
   const r = resolve(rel);
   if (r.redirect) { router.go(r.redirect, { replace: true }); return; }
@@ -197,8 +200,8 @@ function render(ev) {
   crumbs.innerHTML = crumbItems.join(`<span class="apwa-crumbs__sep" aria-hidden="true">${icon('chevron-right')}</span>`);
 
   const back = $('.apwa-topbar__back', root);
-  const logo = $('.apwa-topbar__logo', root);
-  if (v.back) { back.hidden = false; back.href = v.back; logo.hidden = true; } else { back.hidden = true; logo.hidden = false; }
+  const menuBtn = $('.apwa-topbar__menu', root);
+  if (v.back) { back.hidden = false; back.href = v.back; menuBtn.hidden = true; } else { back.hidden = true; menuBtn.hidden = false; }
 
   // Page.
   const page = $('.apwa-page', root);
@@ -292,9 +295,26 @@ function quickActions() {
   return modules.flatMap((m) => (m.quickActions || []));
 }
 
+function setDrawer(open) {
+  const app = $('.apwa-app', root);
+  if (!app || app.classList.contains('is-drawer') === open) return;
+  app.classList.toggle('is-drawer', open);
+  $('.apwa-drawer-scrim', root).hidden = !open;
+  const btn = $('.apwa-topbar__menu', root);
+  btn.setAttribute('aria-expanded', String(open));
+  document.documentElement.classList.toggle('apwa-noscroll', open);
+  if (open) $('.apwa-sidebar__close', root).focus();
+  else if (document.activeElement && $('.apwa-sidebar', root).contains(document.activeElement)) btn.focus();
+}
+
 function bindGlobal() {
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setDrawer(false); });
+  mqPhone.addEventListener('change', () => setDrawer(false));
+
   on(root, 'click', '[data-action]', (e, btn) => {
     const act = btn.dataset.action;
+    if (act === 'drawer') setDrawer(true);
+    if (act === 'drawer-close') setDrawer(false);
     if (act === 'reset') resetDemo();
     if (act === 'quick-add') {
       menu(btn, quickActions().map((q) => ({ label: q.label, icon: q.icon, onClick: q.run })), { title: 'Create new' });
