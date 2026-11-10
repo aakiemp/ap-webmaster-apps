@@ -30,7 +30,7 @@ their business.
 ## Live today
 
 - CRM & Sales Pipeline (live demo)
-- Quote Recovery, Booking Manager, AI Document Processor, Email Campaigns
+- Smart Follow-Ups, Booking Manager, AI Document Processor, Email Campaigns
   (listed as "coming soon")
 
 See [APP-CATALOG.md](APP-CATALOG.md), [STATUS.md](STATUS.md) and

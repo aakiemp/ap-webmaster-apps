@@ -23,7 +23,7 @@ dashboard launcher and sidebar all read from it.
 | App | Status | Category |
 | --- | --- | --- |
 | CRM & Sales Pipeline | Live demo | Sales & CRM |
-| Quote Recovery | Coming soon | Sales & CRM |
+| Smart Follow-Ups | Coming soon | Sales & CRM |
 | Booking Manager | Coming soon | Booking & Scheduling |
 | AI Document Processor | Coming soon | AI & Documents |
 | Email Campaigns | Coming soon | Marketing |

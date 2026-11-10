@@ -66,7 +66,7 @@ html:has(.apwa-mkt) { scroll-behavior: smooth; scroll-padding-top: 96px; }
 .apwa-mkt-nav.is-scrolled { border-bottom-color: var(--mkt-line-dark); box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.5); }
 .apwa-mkt-nav__inner { display: flex; align-items: center; gap: 32px; height: 84px; padding-top: 12px; }
 /* The logo's wordmark sits low in the image, so lift it to line up with the menu text. */
-header.apwa-mkt-nav .apwa-mkt-nav__logo { transform: translateY(-24%); }
+header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { transform: translateY(-24%); }
 .apwa-mkt-nav__brand { display: inline-flex; align-items: center; gap: 10px; color: #fff !important; text-decoration: none; flex: none; min-width: 0; }
 .apwa-mkt-nav__logo { height: 38px; width: auto; max-width: 220px; object-fit: contain; }
 .apwa-mkt-nav__mark { width: 34px; height: 34px; border-radius: 9px; background: var(--apwa-brand-600); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; }
@@ -283,7 +283,7 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo { transform: translateY(-24%); }
 .apwa-mkt-mobile { background: var(--mkt-dark); color: #fff; overflow: hidden; }
 .apwa-mkt-mobile__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; }
 .apwa-mkt-mobile__phones { position: relative; height: 600px; }
-.apwa-mkt-mobile__phones img { position: absolute; width: 260px; border: 7px solid #1d2a3f; border-radius: 36px; background: #1d2a3f; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 32px 64px -24px rgba(0, 0, 0, 0.7); }
+.apwa-mkt-mobile__phones img { position: absolute; width: 260px; border: 7px solid #1d2a3f; border-radius: 36px; padding: 16px 12px 10px; background: #fff; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 32px 64px -24px rgba(0, 0, 0, 0.7); }
 .apwa-mkt-mobile__p1 { left: 4%; top: 0; }
 .apwa-mkt-mobile__p2 { left: 42%; top: 56px; }
 .apwa-mkt-mobile .apwa-mkt-eyebrow { color: var(--apwa-brand-300); }
@@ -324,7 +324,7 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo { transform: translateY(-24%); }
 
 /* Footer */
 .apwa-mkt-foot { background: var(--mkt-dark); color: var(--mkt-on-dark-3); font-size: 14px; }
-.apwa-mkt-foot__inner { display: flex; align-items: center; gap: 20px 40px; flex-wrap: wrap; padding-top: 40px; padding-bottom: 40px; }
+.apwa-mkt-foot__inner { display: flex; align-items: center; gap: 20px 40px; flex-wrap: wrap; padding-top: 52px; padding-bottom: 44px; }
 .apwa-mkt-foot__links { display: flex; flex-wrap: wrap; gap: 10px 28px; flex: 1; }
 .apwa-mkt-foot__links a { color: var(--mkt-on-dark-2) !important; text-decoration: none; }
 .apwa-mkt-foot__links a:hover { color: #fff !important; }
@@ -581,7 +581,7 @@ html.apwa-mkt-lock { overflow: hidden; }
 	.apwa-mkt-card__body { padding: 20px 20px 22px; }
 
 	.apwa-mkt-mobile__phones { height: 360px; }
-	.apwa-mkt-mobile__phones img { width: 46%; max-width: 200px; border-width: 5px; border-radius: 26px; }
+	.apwa-mkt-mobile__phones img { width: 46%; max-width: 200px; border-width: 5px; border-radius: 26px; padding: 12px 8px 8px; }
 	.apwa-mkt-mobile__p1 { left: 2%; }
 	.apwa-mkt-mobile__p2 { left: auto; right: 2%; top: 36px; }
 
@@ -598,7 +598,7 @@ html.apwa-mkt-lock { overflow: hidden; }
 	.apwa-mkt-final__actions { width: 100%; flex-direction: column; }
 	.apwa-mkt-final__actions .apwa-mkt-btn { width: 100%; }
 
-	.apwa-mkt-foot__inner { flex-direction: column; align-items: flex-start; padding-top: 32px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
+	.apwa-mkt-foot__inner { flex-direction: column; align-items: flex-start; padding-top: 44px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
 }
 
 @media (prefers-reduced-motion: reduce) {

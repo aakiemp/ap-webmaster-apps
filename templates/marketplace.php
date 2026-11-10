@@ -73,7 +73,7 @@ $apwa_features = array(
 	array( 'process', 'sliders', __( 'Shaped around your process', 'ap-webmaster-apps' ), __( 'Your stages, fields, lead sources and reports, so the software follows how you already sell and schedule.', 'ap-webmaster-apps' ) ),
 	array( 'phone', 'smartphone', __( 'Just as good on a phone', 'ap-webmaster-apps' ), __( 'Every screen is built for phones, tablets and desktops, and it can be added to a home screen like an app.', 'ap-webmaster-apps' ) ),
 	array( 'site', 'building', __( 'Lives on your website', 'ap-webmaster-apps' ), __( 'Installed on your own website under your domain, with your logo and colors.', 'ap-webmaster-apps' ) ),
-	array( 'tools', 'repeat', __( 'Works with your tools', 'ap-webmaster-apps' ), __( 'Connect website forms, email, Google Workspace, Microsoft 365 or QuickBooks when you need them.', 'ap-webmaster-apps' ) ),
+	array( 'tools', 'repeat', __( 'Works with your tools', 'ap-webmaster-apps' ), __( 'Connect website forms, email, Google Workspace, Square or QuickBooks when you need them.', 'ap-webmaster-apps' ) ),
 	array( 'team', 'users', __( 'One view for the whole team', 'ap-webmaster-apps' ), __( 'Team logins and permissions, so everyone works from the same up-to-date picture.', 'ap-webmaster-apps' ) ),
 	array( 'support', 'award', __( 'Set up and supported for you', 'ap-webmaster-apps' ), __( 'We install it, set it up with you and keep it running month to month.', 'ap-webmaster-apps' ) ),
 );
@@ -304,7 +304,7 @@ endif;
 					'client-portal'       => array( '#237592', '#6cbdd7' ),
 					'customer-support'    => array( '#2c8dac', '#b92ccd' ),
 					'business-operations' => array( '#3f5873', '#8ea3bb' ),
-					'quote-recovery'      => array( '#1d5f77', '#dc3ff0' ),
+					'quote-recovery'      => array( '#6d2a99', '#c56be3' ),
 				);
 				?>
 				<ul class="apwa-mkt-tiles" data-apwa-tiles hidden>
@@ -464,7 +464,7 @@ endif;
 								break;
 							case 'tools':
 								echo '<div class="apwa-mkt-why__viz apwa-mkt-chips" aria-hidden="true">';
-								foreach ( array( 'Web forms', 'Gmail', 'Outlook', 'Google', 'Microsoft 365', 'QuickBooks' ) as $apwa_tool ) {
+								foreach ( array( 'Web forms', 'Gmail', 'Outlook', 'Google', 'Square', 'QuickBooks' ) as $apwa_tool ) {
 									echo '<span>' . esc_html( $apwa_tool ) . '</span>';
 								}
 								echo '</div>';

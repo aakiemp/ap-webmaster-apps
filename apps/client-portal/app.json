@@ -6,7 +6,7 @@
   "color": "purple",
   "category": "clients",
   "status": "coming-soon",
-  "order": 70,
+  "order": 60,
   "tagline": "Give every client one place to see progress, approve work and share files.",
   "description": "A branded portal where clients onboard, follow project timelines, approve deliverables, share files and send requests.",
   "problem": "Project updates, approvals and files are scattered across email threads and texts.",

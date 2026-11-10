@@ -5,7 +5,7 @@
   "color": "amber",
   "category": "documents",
   "status": "coming-soon",
-  "order": 40,
+  "order": 80,
   "tagline": "Turn invoices, forms and paperwork into clean, organized data without retyping it.",
   "description": "A document inbox that extracts key fields, lets staff review and correct them, and exports the result.",
   "problem": "Staff spend hours copying numbers and names from documents into other systems.",

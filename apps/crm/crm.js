@@ -1,7 +1,7 @@
 /**
  * CRM & Sales Pipeline demo.
  * Screens: Contacts, Contact detail, Pipeline (board + list), Reports.
- * All records live in the shared demo store, so later apps (Quote Recovery,
+ * All records live in the shared demo store, so later apps (Smart Follow-Ups,
  * Booking Manager) can reuse the same contacts and opportunities.
  */
 import { html, raw, el, esc, icon, on, $, $$, debounce, money, moneyShort, pct, num, plural, date, dateTime, ago, isoDay, fromDay, isPhone } from '../../assets/js/core/dom.js';
