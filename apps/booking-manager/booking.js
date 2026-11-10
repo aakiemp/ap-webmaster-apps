@@ -645,6 +645,9 @@ function bookingsView(ctx) {
         empty: emptyState({ icon: 'calendar', title: 'No bookings here', text: listUI.q ? 'Try a different search.' : 'Bookings will show up here.' }),
       }) })}</div>`,
     mount(root) {
+      const openRow = (tr) => openAppt(new URL(tr.dataset.href, location.href).searchParams.get('appt'));
+      root.addEventListener('click', (e) => { const tr = e.target.closest('tr[data-href]'); if (tr && !e.target.closest('a, button, input')) openRow(tr); });
+      root.addEventListener('keydown', (e) => { const tr = e.target.closest('tr[data-href]'); if (tr && e.key === 'Enter') openRow(tr); });
       const input = $('[data-bk-q]', root);
       input.addEventListener('input', debounce((e) => { listUI.q = e.target.value.trim(); ctx.rerender(); setTimeout(() => { const i = $('[data-bk-q]'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }, 0); }, 250));
       bindSegmented(root, { btab: (v) => { listUI.tab = v; ctx.rerender(); } });

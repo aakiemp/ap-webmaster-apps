@@ -194,6 +194,8 @@ const ACTIVITY = {
   update: { icon: 'edit', tone: 'gray', label: 'Updated' },
   booking: { icon: 'calendar-check', tone: 'purple', label: 'Booking' },
   reminder: { icon: 'send', tone: 'blue', label: 'Reminder' },
+  invoice: { icon: 'receipt', tone: 'teal', label: 'Invoice' },
+  payment: { icon: 'dollar', tone: 'green', label: 'Payment' },
 };
 export const ACTIVITY_TYPES = ACTIVITY;
 

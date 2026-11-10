@@ -5,8 +5,8 @@
   "icon": "dollar",
   "color": "teal",
   "category": "billing",
-  "status": "coming-soon",
-  "stage": "building",
+  "status": "demo",
+  "stage": "",
   "order": 30,
   "tagline": "Send invoices from finished jobs and let reminders chase late payments for you.",
   "description": "Turn completed jobs into invoices, track what is paid, due and overdue, and run automatic payment reminders.",
@@ -23,10 +23,12 @@
     "See what you are owed at a glance"
   ],
   "demoFeatures": [
-    "Invoices from completed jobs",
-    "Paid, due and overdue tracking",
-    "Automatic reminder schedule",
-    "Simulated sending"
+    "Invoices from finished Booking Manager jobs",
+    "Paid, due, overdue and partly paid tracking",
+    "Automatic reminder schedule you can switch on and off",
+    "Record payments and see what customers owe",
+    "Customer payment page preview",
+    "Simulated sending, no real emails or charges"
   ],
   "productionOptions": [
     "Online card and bank payments",
@@ -43,8 +45,10 @@
     "booking-manager",
     "quote-recovery"
   ],
-  "module": "",
-  "styles": [],
+  "module": "invoices.js",
+  "styles": [
+    "invoice.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,

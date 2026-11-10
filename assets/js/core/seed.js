@@ -216,6 +216,96 @@ export function bookingSeed(contacts) {
   };
 }
 
+/** Invoicing settings and invoices, built from completed visits and won jobs. */
+export function invoiceSeed(contacts, appointments, deals) {
+  const r = rng(20261111);
+  const now = Date.now();
+  const svc = Object.fromEntries(SERVICES.map((x) => [x.id, x]));
+  const commercial = new Set(contacts.filter((c) => c.company).map((c) => c.id));
+  const drafts = [];
+
+  // Visits: invoiced the same day, except the three most recent (ready to invoice).
+  const done = (appointments || [])
+    .filter((a) => a.status === 'completed' && svc[a.serviceId] && svc[a.serviceId].price > 0)
+    .sort((a, b) => (a.start < b.start ? 1 : -1));
+  done.slice(3).forEach((a) => {
+    const s = svc[a.serviceId];
+    drafts.push({ contactId: a.contactId, source: { type: 'appointment', id: a.id }, items: [{ desc: s.name, qty: 1, price: s.price }], issued: new Date(a.start).getTime() + 3 * 3600000, terms: 14 });
+  });
+
+  // Won jobs: one invoice each, net 30 for businesses.
+  (deals || []).filter((d) => d.status === 'won').forEach((d) => {
+    const labor = Math.round((d.value * 0.55) / 10) * 10;
+    drafts.push({ contactId: d.contactId, source: { type: 'deal', id: d.id }, items: [{ desc: `${d.name}: labor`, qty: 1, price: labor }, { desc: `${d.name}: materials`, qty: 1, price: d.value - labor }], issued: new Date(d.closedAt).getTime() + 2 * DAY, terms: commercial.has(d.contactId) ? 30 : 14 });
+  });
+
+  // A few older paid service invoices so reports have history.
+  const regulars = ['c1', 'c6', 'c10', 'c18', 'c2'];
+  [[38, 's2'], [44, 's4'], [52, 's3'], [61, 's5'], [70, 's2'], [83, 's4']].forEach(([ago, sid], i) => {
+    drafts.push({ contactId: regulars[i % regulars.length], source: { type: 'manual' }, items: [{ desc: svc[sid].name, qty: 1, price: svc[sid].price }], issued: now - ago * DAY, terms: 14, late: i === 0 || i === 2 || i === 4 });
+  });
+
+  drafts.sort((a, b) => a.issued - b.issued);
+  const invoices = drafts.map((d, i) => {
+    const total = d.items.reduce((t, it) => t + it.qty * it.price, 0);
+    const due = d.issued + d.terms * DAY;
+    const age = (now - d.issued) / DAY;
+    const iso = (t) => new Date(t).toISOString();
+    const inv = {
+      id: `inv${i + 1}`,
+      number: `INV-${1001 + i}`,
+      contactId: d.contactId,
+      source: d.source,
+      items: d.items,
+      taxRate: 0,
+      issuedAt: iso(d.issued),
+      dueAt: iso(due),
+      status: 'sent',
+      notes: '',
+      payments: [],
+      events: [{ at: iso(d.issued), type: 'sent', text: 'Invoice emailed to the customer' }],
+      createdAt: iso(d.issued),
+    };
+    const roll = r();
+    // Older invoices are paid; recent ones are a mix of paid, partly paid, due and late.
+    const payAt = d.issued + (1 + Math.floor(r() * Math.max(2, d.terms))) * DAY + Math.floor(r() * 8) * 3600000;
+    const paid = !d.late && payAt < now - 3600000 && (age > 45 ? roll < 0.92 : age > 14 ? roll < 0.5 : roll < 0.5);
+    if (paid) {
+      inv.payments.push({ id: `pay${i + 1}`, at: iso(payAt), amount: total, method: r() < 0.65 ? 'Card' : 'Check' });
+      inv.events.push({ at: iso(payAt), type: 'payment', text: 'Payment received in full' });
+    } else if (total > 5000 && roll < 0.75) {
+      const dep = Math.round(total * 0.5);
+      inv.payments.push({ id: `pay${i + 1}`, at: iso(d.issued + DAY), amount: dep, method: 'Bank transfer' });
+      inv.events.push({ at: iso(d.issued + DAY), type: 'payment', text: 'Deposit received' });
+    }
+    if (!paid && due - 3 * DAY < now) inv.events.push({ at: iso(due - 3 * DAY), type: 'reminder', text: 'Automatic reminder: due in 3 days' });
+    if (!paid && due + 3 * DAY < now) inv.events.push({ at: iso(due + 3 * DAY), type: 'reminder', text: 'Automatic reminder: 3 days past due' });
+    inv.events.sort((a, b) => (a.at < b.at ? -1 : 1));
+    return inv;
+  });
+
+  return {
+    invoicing: {
+      prefix: 'INV-',
+      nextNumber: 1001 + invoices.length,
+      terms: 14,
+      taxRate: 0,
+      autoDraft: true,
+      autoSend: false,
+      thankYou: true,
+      lateFee: false,
+      reminders: [
+        { id: 'before3', offset: -3, on: true, label: '3 days before it is due' },
+        { id: 'due', offset: 0, on: true, label: 'On the due date' },
+        { id: 'after3', offset: 3, on: true, label: '3 days late' },
+        { id: 'after10', offset: 10, on: false, label: '10 days late' },
+      ],
+      message: 'Hi {first_name}, a friendly reminder that invoice {number} for {amount} is due {due_date}. You can pay online with the link below. Thank you for choosing Summit Home Services!',
+    },
+    invoices,
+  };
+}
+
 export function createSeed() {
   const r = rng(20261109);
   const now = new Date().toISOString();
@@ -293,7 +383,7 @@ export function createSeed() {
     c.lastActivityAt = last ? last.at : c.createdAt;
   });
 
-  return {
+  const base = {
     schema: SCHEMA_VERSION,
     seededAt: now,
     updatedAt: now,
@@ -307,4 +397,5 @@ export function createSeed() {
     activities,
     ...bookingSeed(contacts),
   };
+  return { ...base, ...invoiceSeed(contacts, base.appointments, deals) };
 }
