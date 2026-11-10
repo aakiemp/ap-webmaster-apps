@@ -335,6 +335,11 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 .apwa-bars__value { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 56px; text-align: right; }
 .apwa-fill--blue { background: var(--apwa-brand-500); display: block; height: 100%; }
 .apwa-fill--green { background: var(--apwa-green-600); display: block; height: 100%; }
+.apwa-fill--amber { background: #d08a12; display: block; height: 100%; }
+.apwa-fill--purple { background: var(--apwa-purple-600); display: block; height: 100%; }
+.apwa-fill--pink { background: var(--apwa-pink-600); display: block; height: 100%; }
+.apwa-fill--teal { background: var(--apwa-teal-600); display: block; height: 100%; }
+.apwa-fill--gray { background: var(--apwa-gray-400, #98a2b3); display: block; height: 100%; }
 .apwa-cols { display: flex; align-items: stretch; gap: 10px; height: 220px; padding-top: 6px; }
 .apwa-cols__col { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
 .apwa-cols__value { font-size: 11.5px; font-weight: 600; color: var(--apwa-text-2); height: 18px; font-variant-numeric: tabular-nums; white-space: nowrap; }

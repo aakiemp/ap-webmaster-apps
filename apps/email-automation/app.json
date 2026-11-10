@@ -4,8 +4,9 @@
   "icon": "megaphone",
   "color": "pink",
   "category": "marketing",
-  "status": "coming-soon",
+  "status": "demo",
   "order": 50,
+  "launched": 5,
   "tagline": "Simple campaigns and follow-up sequences for the customers already in your CRM.",
   "description": "Compose campaigns, pick recipients from your contacts and preview automated sequences.",
   "problem": "Past customers rarely hear from you again, so repeat business and referrals go elsewhere.",
@@ -36,11 +37,14 @@
   "related": [
     "crm"
   ],
-  "module": "",
-  "styles": [],
+  "module": "campaigns.js",
+  "styles": [
+    "campaigns.css"
+  ],
   "package": {
     "setup": true,
     "monthly": true,
     "addons": []
-  }
+  },
+  "shortName": "Email Campaigns"
 }

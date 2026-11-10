@@ -53,7 +53,9 @@ function resolve(rel) {
 
 function navItems() {
   const items = [{ id: 'home', href: router.href(''), label: 'Dashboard', icon: 'home', slug: '' }];
-  modules.forEach((m) => {
+  // The sidebar keeps the suite's journey order (CRM first); the launcher and suite put the newest live demo first.
+  const rank = (m) => (appMeta(m.slug) || {}).order || 999;
+  modules.slice().sort((a, b) => rank(a) - rank(b)).forEach((m) => {
     m.nav.forEach((n) => items.push({ ...n, href: router.href(n.path), slug: m.slug, group: appMeta(m.slug)?.name }));
   });
   return items;
@@ -124,7 +126,7 @@ function tabbar() {
 function renderTabbar(slug) {
   const nav = $('.apwa-tabbar', root);
   if (!nav) return;
-  const mod = moduleFor(slug) || modules[0];
+  const mod = moduleFor(slug) || moduleFor('crm') || modules[0];
   const tabs = [{ id: 'home', href: router.href(''), label: 'Home', icon: 'home' }];
   (mod ? (mod.tabs || mod.nav) : []).slice(0, 3).forEach((n) => tabs.push({ id: n.id, href: router.href(n.path), label: n.short || n.label, icon: n.icon }));
   nav.innerHTML = html`${tabs.map((t) => html`<a class="apwa-tab" data-nav="${t.id}" href="${t.href}">${icon(t.icon)}<span>${t.label}</span></a>`)}

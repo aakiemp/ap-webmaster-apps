@@ -7,6 +7,7 @@
   "category": "sales",
   "status": "demo",
   "order": 10,
+  "launched": 1,
   "tagline": "Every lead, customer and deal in one place, with a pipeline your team will actually keep up to date.",
   "description": "A contact directory, deal pipeline and activity history built for small teams that sell services. See who needs a follow-up, what each deal is worth and where revenue is stuck.",
   "problem": "Leads live in inboxes, spreadsheets and sticky notes, so follow-ups slip and nobody knows what the pipeline is really worth.",
