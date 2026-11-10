@@ -133,6 +133,8 @@ function renderTabbar(slug) {
 
 export function mount(container) {
   root = container;
+  // Set the base path first: the sidebar and tab bar build their links from it.
+  router.start(CONFIG.basePath || '/', (ev) => render(ev));
   root.innerHTML = html`<div class="apwa-app">
     ${sidebar()}
     <div class="apwa-main">
@@ -148,7 +150,6 @@ export function mount(container) {
   bindGlobal();
   store.subscribe(() => queueRender());
   mqPhone.addEventListener('change', () => queueRender());
-  router.start(CONFIG.basePath || '/', (ev) => render(ev));
   render({ type: 'initial' });
 }
 
