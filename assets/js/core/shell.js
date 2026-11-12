@@ -53,7 +53,7 @@ function resolve(rel) {
 
 function navItems() {
   const items = [{ id: 'home', href: router.href(''), label: 'Dashboard', icon: 'home', slug: '' }];
-  // The sidebar keeps the suite's journey order (CRM first); the launcher and suite put the newest live demo first.
+  // The sidebar, launcher and suite all follow the agreed journey order (CRM first).
   const rank = (m) => (appMeta(m.slug) || {}).order || 999;
   modules.slice().sort((a, b) => rank(a) - rank(b)).forEach((m) => {
     m.nav.forEach((n) => items.push({ ...n, href: router.href(n.path), slug: m.slug, group: appMeta(m.slug)?.name }));
@@ -107,6 +107,7 @@ function topbar() {
       <div class="apwa-search__results" hidden></div>
     </div>
     <div class="apwa-topbar__right">
+      <button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm apwa-topbar__apps" data-action="launcher" aria-haspopup="dialog" aria-label="Browse all apps">${icon('grid')}<span class="apwa-hide-phone">All apps</span><span class="apwa-topbar__apps-short">Apps</span></button>
       <button type="button" class="apwa-iconbtn apwa-show-phone" data-action="search" aria-label="Search">${icon('search')}</button>
       <button type="button" class="apwa-btn apwa-btn--primary apwa-btn--sm apwa-hide-phone" data-action="quick-add" aria-haspopup="menu" aria-expanded="false">${icon('plus')}<span>New</span></button>
       <button type="button" class="apwa-demo-pill" data-action="demo-info" aria-haspopup="dialog">
@@ -156,6 +157,9 @@ export function mount(container) {
   store.subscribe(() => queueRender());
   mqPhone.addEventListener('change', () => queueRender());
   render({ type: 'initial' });
+  // Landing on the demo home opens the app launcher so visitors see every app first.
+  // Deep links straight into an app skip it.
+  if (!router.path()) launcher();
 }
 
 function queueRender() {
