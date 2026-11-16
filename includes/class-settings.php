@@ -101,7 +101,7 @@ final class Settings {
 	public static function inquiry_url() {
 		$url = (string) self::get( 'inquiry_url' );
 		if ( '' === $url ) {
-			$url = home_url( '/contact/' );
+			$url = Router::url( 'contact/' );
 		}
 		return (string) apply_filters( 'apwa_inquiry_url', $url );
 	}

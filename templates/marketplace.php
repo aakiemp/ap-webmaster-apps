@@ -36,7 +36,10 @@ $apwa_live_apps = array_values(
 );
 $apwa_featured  = $apwa_live_apps ? $apwa_live_apps[0] : null;
 $apwa_site      = get_bloginfo( 'name' );
-$apwa_title     = __( 'Business Apps', 'ap-webmaster-apps' );
+$apwa_title     = 'contact' === $apwa_page ? __( 'Get a quote', 'ap-webmaster-apps' ) : __( 'Business Apps', 'ap-webmaster-apps' );
+// Section links point back to the landing page when shown on the quote page.
+$apwa_home      = 'contact' === $apwa_page ? Router::url() : '';
+$apwa_book      = (string) apply_filters( 'apwa_booking_url', Router::url( 'contact/' ) . '#book' );
 $apwa_img       = static function ( $file ) {
 	return Renderer::asset( 'assets/img/' . $file );
 };
@@ -71,10 +74,7 @@ $apwa_nav = array(
 
 $apwa_features = array(
 	array( 'process', 'sliders', __( 'Shaped around your process', 'ap-webmaster-apps' ), __( 'Your stages, fields, lead sources and reports, so the software follows how you already sell and schedule.', 'ap-webmaster-apps' ) ),
-	array( 'phone', 'smartphone', __( 'Just as good on a phone', 'ap-webmaster-apps' ), __( 'Every screen is built for phones, tablets and desktops, and it can be added to a home screen like an app.', 'ap-webmaster-apps' ) ),
 	array( 'site', 'building', __( 'Lives on your website', 'ap-webmaster-apps' ), __( 'Installed on your own website under your domain, with your logo and colors.', 'ap-webmaster-apps' ) ),
-	array( 'tools', 'repeat', __( 'Works with your tools', 'ap-webmaster-apps' ), __( 'Connect website forms, email, Google Workspace, Square or QuickBooks when you need them.', 'ap-webmaster-apps' ) ),
-	array( 'team', 'users', __( 'One view for the whole team', 'ap-webmaster-apps' ), __( 'Team logins and permissions, so everyone works from the same up-to-date picture.', 'ap-webmaster-apps' ) ),
 	array( 'support', 'award', __( 'Set up and supported for you', 'ap-webmaster-apps' ), __( 'I install it, set it up with you and keep it running month to month.', 'ap-webmaster-apps' ) ),
 );
 
@@ -83,7 +83,7 @@ $apwa_faq = array(
 	array( __( 'What happens to what I type in the demo?', 'ap-webmaster-apps' ), __( 'It stays in your own browser. Nothing is sent to me or anyone else, and "Reset demo data" puts everything back the way it started.', 'ap-webmaster-apps' ) ),
 	array( __( 'Can it be changed to fit my business?', 'ap-webmaster-apps' ), __( 'Yes, that is the point. Stages, fields, lead sources, reports, branding and colors are all set up around how you work.', 'ap-webmaster-apps' ) ),
 	array( __( 'Where does it run?', 'ap-webmaster-apps' ), __( 'On your own website, under your own domain. Your team signs in there from any phone, tablet or computer.', 'ap-webmaster-apps' ) ),
-	array( __( 'How much does it cost?', 'ap-webmaster-apps' ), __( 'It depends on which apps you need and how much setup they take. After a short call I give you a clear quote before anything is built.', 'ap-webmaster-apps' ) ),
+	array( __( 'How much does it cost?', 'ap-webmaster-apps' ), __( 'Packages start at $100 a month. The final price depends on which apps you need and how much setup they take, and after a short call I give you a clear quote before anything is built.', 'ap-webmaster-apps' ) ),
 );
 
 // Icon markup comes from the plugin's own icons.json and image URLs from
@@ -103,7 +103,9 @@ if ( 'standalone' === $layout ) :
 <meta name="description" content="<?php esc_attr_e( 'Business apps built around the way you work: CRM, booking, quote follow-up and document tools, installed on your own website. Try the live demo.', 'ap-webmaster-apps' ); ?>">
 <meta name="theme-color" content="#0b1422">
 <link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/favicon-64.png' ); ?>" type="image/png">
+<?php if ( 'contact' !== $apwa_page ) : ?>
 <link rel="preload" as="image" href="<?php echo esc_url( $apwa_img( 'product-dashboard.webp' ) ); ?>">
+<?php endif; ?>
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/tokens.css' ) ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/marketplace.css' ) ); ?>">
 </head>
@@ -133,7 +135,7 @@ endif;
 			</a>
 			<nav class="apwa-mkt-nav__links" id="apwa-mkt-menu" aria-label="<?php esc_attr_e( 'Page sections', 'ap-webmaster-apps' ); ?>">
 				<?php foreach ( $apwa_nav as $apwa_href => $apwa_label ) : ?>
-				<a href="<?php echo esc_attr( $apwa_href ); ?>"><?php echo esc_html( $apwa_label ); ?></a>
+				<a href="<?php echo esc_attr( $apwa_home . $apwa_href ); ?>"><?php echo esc_html( $apwa_label ); ?></a>
 				<?php endforeach; ?>
 				<a class="apwa-mkt-nav__site" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Main site', 'ap-webmaster-apps' ); ?><?php echo Renderer::icon( 'external' ); ?></a>
 			</nav>
@@ -149,38 +151,20 @@ endif;
 	<?php endif; ?>
 
 	<main id="apwa-marketplace">
+		<?php if ( 'contact' === $apwa_page ) : ?>
+		<?php include __DIR__ . '/contact.php'; ?>
+		<?php else : ?>
 		<section class="apwa-mkt-hero" aria-labelledby="apwa-mkt-hero-title">
 			<div class="apwa-mkt-wrap apwa-mkt-hero__inner">
-				<?php if ( $apwa_featured ) : ?>
-				<a class="apwa-mkt-pill" href="<?php echo esc_url( 1 === count( $apwa_live_apps ) ? Router::url( 'demo/' . $apwa_featured['slug'] . '/' ) : $demo_url ); ?>">
-					<span class="apwa-mkt-pill__tag"><?php esc_html_e( 'Live', 'ap-webmaster-apps' ); ?></span>
-					<span>
-					<?php
-					$apwa_live_names = array_map(
-						static function ( $a ) {
-							return strlen( $a['name'] ) <= 16 ? $a['name'] : $a['shortName'];
-						},
-						$apwa_live_apps
-					);
-					$apwa_last_name  = array_pop( $apwa_live_names );
-					$apwa_live_list  = $apwa_live_names ? implode( ', ', $apwa_live_names ) . ' ' . __( 'and', 'ap-webmaster-apps' ) . ' ' . $apwa_last_name : $apwa_last_name;
-					/* translators: %s: list of app names. */
-					printf( esc_html__( 'Try the %s demos', 'ap-webmaster-apps' ), esc_html( $apwa_live_list ) );
-					?>
-					</span>
-					<?php echo Renderer::icon( 'arrow-right' ); ?>
-				</a>
-				<?php endif; ?>
 				<h1 id="apwa-mkt-hero-title" class="apwa-mkt-hero__title"><?php esc_html_e( 'Business apps built around', 'ap-webmaster-apps' ); ?> <span class="apwa-mkt-accent"><?php esc_html_e( 'the way you work.', 'ap-webmaster-apps' ); ?></span></h1>
 				<p class="apwa-mkt-hero__lead"><?php esc_html_e( 'CRM, booking, quote follow-up and document tools, customized to your process and installed on your own website. Click through a working demo before you spend a dollar.', 'ap-webmaster-apps' ); ?></p>
 				<div class="apwa-mkt-hero__actions">
 					<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( $demo_url ); ?>"><span><?php esc_html_e( 'Try the live demo', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
-					<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="<?php echo esc_url( $inquiry ); ?>"><span><?php esc_html_e( 'Get a quote', 'ap-webmaster-apps' ); ?></span></a>
+					<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="<?php echo esc_url( $apwa_book ); ?>"><?php echo Renderer::icon( 'calendar' ); ?><span><?php esc_html_e( 'Book a call', 'ap-webmaster-apps' ); ?></span></a>
 				</div>
 				<ul class="apwa-mkt-hero__meta">
 					<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'No sign-up', 'ap-webmaster-apps' ); ?></li>
 					<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'Sample data only', 'ap-webmaster-apps' ); ?></li>
-					<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'Works on any device', 'ap-webmaster-apps' ); ?></li>
 				</ul>
 			</div>
 			<div class="apwa-mkt-wrap apwa-mkt-hero__visual">
@@ -193,97 +177,6 @@ endif;
 				</figure>
 			</div>
 		</section>
-
-		<section class="apwa-mkt-trust" aria-label="<?php esc_attr_e( 'Highlights', 'ap-webmaster-apps' ); ?>">
-			<div class="apwa-mkt-wrap">
-				<ul class="apwa-mkt-trust__list">
-					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'grid' ); ?></span>
-						<strong><?php echo esc_html( count( $apps ) ); ?></strong>
-						<span class="apwa-mkt-trust__label"><?php esc_html_e( 'Business apps in one suite', 'ap-webmaster-apps' ); ?></span>
-						<span class="apwa-mkt-trust__glyphs" aria-hidden="true">
-							<?php foreach ( $apps as $apwa_app ) : ?>
-							<i><?php echo Renderer::icon( $apwa_app['icon'] ); ?></i>
-							<?php endforeach; ?>
-						</span>
-					</li>
-					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'zap' ); ?></span>
-						<strong><?php echo esc_html( count( $apwa_live_apps ) ); ?></strong>
-						<span class="apwa-mkt-trust__label"><?php echo esc_html( _n( 'Live demo you can try right now', 'Live demos you can try right now', count( $apwa_live_apps ), 'ap-webmaster-apps' ) ); ?></span>
-						<span class="apwa-mkt-trust__stack" aria-hidden="true">
-							<?php foreach ( array_slice( $apwa_live_apps, 0, 4 ) as $apwa_app ) : ?>
-							<i class="apwa-mkt-tone--<?php echo esc_attr( $apwa_app['color'] ); ?>" title="<?php echo esc_attr( $apwa_app['shortName'] ? $apwa_app['shortName'] : $apwa_app['name'] ); ?>"><?php echo Renderer::icon( $apwa_app['icon'] ); ?></i>
-							<?php endforeach; ?>
-							<?php if ( count( $apwa_live_apps ) > 4 ) : ?>
-							<i class="apwa-mkt-trust__more">+<?php echo esc_html( count( $apwa_live_apps ) - 4 ); ?></i>
-							<?php endif; ?>
-						</span>
-					</li>
-					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'users' ); ?></span>
-						<strong>1</strong>
-						<span class="apwa-mkt-trust__label"><?php esc_html_e( 'Customer list shared by every app, so nothing is typed twice', 'ap-webmaster-apps' ); ?></span>
-						<span class="apwa-mkt-trust__faces" aria-hidden="true"><i>JM</i><i>AR</i><i>KT</i><i>SL</i><i>+</i></span>
-					</li>
-					<li class="apwa-mkt-trust__item">
-						<span class="apwa-mkt-trust__icon" aria-hidden="true"><?php echo Renderer::icon( 'lock' ); ?></span>
-						<strong>1</strong>
-						<span class="apwa-mkt-trust__label"><?php esc_html_e( 'Home for it all: your own website, under your name', 'ap-webmaster-apps' ); ?></span>
-						<span class="apwa-mkt-trust__url" aria-hidden="true"><?php echo Renderer::icon( 'lock' ); ?><span>yoursite.com<b>/apps</b></span></span>
-					</li>
-				</ul>
-			</div>
-		</section>
-
-		<?php if ( $apwa_featured ) : ?>
-			<?php
-			$apwa_f_shots = isset( $apwa_shots[ $apwa_featured['slug'] ] ) ? $apwa_shots[ $apwa_featured['slug'] ] : array();
-			$apwa_f_url   = Router::url( 'demo/' . $apwa_featured['slug'] . '/' );
-			?>
-		<section class="apwa-mkt-section apwa-mkt-feature" aria-labelledby="apwa-mkt-feature-title">
-			<div class="apwa-mkt-wrap apwa-mkt-feature__grid">
-				<div class="apwa-mkt-feature__copy">
-					<p class="apwa-mkt-eyebrow"><?php esc_html_e( 'Featured app · Live demo', 'ap-webmaster-apps' ); ?></p>
-					<h2 id="apwa-mkt-feature-title" class="apwa-mkt-h2"><?php echo esc_html( $apwa_featured['name'] ); ?></h2>
-					<p class="apwa-mkt-sub"><?php echo esc_html( $apwa_featured['tagline'] ); ?></p>
-					<?php if ( $apwa_featured['benefits'] ) : ?>
-					<ul class="apwa-mkt-checks apwa-mkt-checks--lg">
-						<?php foreach ( $apwa_featured['benefits'] as $apwa_item ) : ?>
-						<li><span class="apwa-mkt-checks__dot"><?php echo Renderer::icon( 'check' ); ?></span><span><?php echo esc_html( $apwa_item ); ?></span></li>
-						<?php endforeach; ?>
-					</ul>
-					<?php endif; ?>
-					<div class="apwa-mkt-feature__actions">
-						<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( $apwa_f_url ); ?>"><span>
-						<?php
-						/* translators: %s: short app name such as CRM. */
-						printf( esc_html__( 'Open the %s demo', 'ap-webmaster-apps' ), esc_html( $apwa_featured['shortName'] ? $apwa_featured['shortName'] : $apwa_featured['name'] ) );
-						?>
-						</span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
-						<a class="apwa-mkt-link" href="#app-<?php echo esc_attr( $apwa_featured['slug'] ); ?>"><?php esc_html_e( 'See everything included', 'ap-webmaster-apps' ); ?></a>
-					</div>
-				</div>
-				<?php if ( $apwa_f_shots ) : ?>
-				<div class="apwa-mkt-tabs" data-apwa-tabs>
-					<div class="apwa-mkt-tabs__list" role="tablist" aria-label="<?php esc_attr_e( 'Screens', 'ap-webmaster-apps' ); ?>" hidden>
-						<?php foreach ( $apwa_f_shots as $apwa_i => $apwa_shot ) : ?>
-						<button type="button" role="tab" id="apwa-tab-<?php echo (int) $apwa_i; ?>" aria-controls="apwa-panel-<?php echo (int) $apwa_i; ?>" aria-selected="<?php echo 0 === $apwa_i ? 'true' : 'false'; ?>" tabindex="<?php echo 0 === $apwa_i ? '0' : '-1'; ?>"><?php echo esc_html( $apwa_shot[0] ); ?></button>
-						<?php endforeach; ?>
-					</div>
-					<figure class="apwa-mkt-frame apwa-mkt-frame--browser">
-						<div class="apwa-mkt-frame__bar" aria-hidden="true"><i></i><i></i><i></i></div>
-						<?php foreach ( $apwa_f_shots as $apwa_i => $apwa_shot ) : ?>
-						<div class="apwa-mkt-tabs__panel" role="tabpanel" id="apwa-panel-<?php echo (int) $apwa_i; ?>" aria-labelledby="apwa-tab-<?php echo (int) $apwa_i; ?>"<?php echo 0 === $apwa_i ? '' : ' hidden'; ?>>
-							<img src="<?php echo esc_url( $apwa_img( $apwa_shot[1] ) ); ?>" width="1600" height="1000" alt="<?php echo esc_attr( $apwa_shot[2] ); ?>" loading="lazy">
-						</div>
-						<?php endforeach; ?>
-					</figure>
-				</div>
-				<?php endif; ?>
-			</div>
-		</section>
-		<?php endif; ?>
 
 		<section class="apwa-mkt-section apwa-mkt-catalog" id="apps" aria-labelledby="apwa-mkt-catalog-title">
 			<div class="apwa-mkt-wrap">
@@ -401,8 +294,7 @@ endif;
 						</ul>
 						<?php endif; ?>
 
-						<details class="apwa-mkt-more">
-							<summary><span class="apwa-mkt-more__lead" aria-hidden="true"><?php echo Renderer::icon( 'list' ); ?></span><span class="apwa-mkt-more__label"><?php esc_html_e( 'Details and what is included', 'ap-webmaster-apps' ); ?></span><span class="apwa-mkt-more__chev" aria-hidden="true"><?php echo Renderer::icon( 'chevron-down' ); ?></span></summary>
+						<div class="apwa-mkt-more">
 							<div class="apwa-mkt-more__body">
 								<?php if ( $apwa_app['problem'] ) : ?>
 								<p><strong><?php esc_html_e( 'The problem:', 'ap-webmaster-apps' ); ?></strong> <?php echo esc_html( $apwa_app['problem'] ); ?></p>
@@ -440,7 +332,7 @@ endif;
 								<p class="apwa-mkt-more__rel"><strong><?php esc_html_e( 'Works well with:', 'ap-webmaster-apps' ); ?></strong> <?php echo esc_html( implode( ', ', $apwa_rel ) ); ?></p>
 								<?php endif; ?>
 							</div>
-						</details>
+						</div>
 
 						<div class="apwa-mkt-card__foot">
 							<?php if ( $apwa_is_demo ) : ?>
@@ -589,6 +481,7 @@ endif;
 				</div>
 			</div>
 		</section>
+		<?php endif; ?>
 	</main>
 
 	<?php if ( 'standalone' === $layout ) : ?>
@@ -603,7 +496,7 @@ endif;
 			</a>
 			<nav class="apwa-mkt-foot__links" aria-label="<?php esc_attr_e( 'Footer', 'ap-webmaster-apps' ); ?>">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Main site', 'ap-webmaster-apps' ); ?></a>
-				<a href="#apps"><?php esc_html_e( 'Apps', 'ap-webmaster-apps' ); ?></a>
+				<a href="<?php echo esc_attr( $apwa_home ); ?>#apps"><?php esc_html_e( 'Apps', 'ap-webmaster-apps' ); ?></a>
 				<a href="<?php echo esc_url( $demo_url ); ?>"><?php esc_html_e( 'Live demo', 'ap-webmaster-apps' ); ?></a>
 				<a href="<?php echo esc_url( $inquiry ); ?>"><?php esc_html_e( 'Contact', 'ap-webmaster-apps' ); ?></a>
 			</nav>
@@ -659,8 +552,6 @@ endif;
 			var card = src.cloneNode(true);
 			card.removeAttribute('id');
 			card.hidden = false;
-			var det = card.querySelector('details');
-			if (det) { det.open = false; }
 			var slot = modal.querySelector('[data-slot]');
 			slot.innerHTML = '';
 			slot.appendChild(card);

@@ -92,6 +92,13 @@ function sidebar() {
   </aside>`;
 }
 
+/** The quote page, with the app they were looking at passed along. */
+function quoteHref(slug) {
+  const base = CONFIG.inquiryUrl || '#';
+  if (!slug || base === '#') return base;
+  return `${base}${base.includes('?') ? '&' : '?'}app=${encodeURIComponent(slug)}`;
+}
+
 function topbar() {
   const u = store.currentUser();
   return html`<header class="apwa-topbar">
@@ -110,6 +117,7 @@ function topbar() {
       <button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm apwa-topbar__apps" data-action="launcher" aria-haspopup="dialog" aria-label="Browse all apps">${icon('grid')}<span class="apwa-hide-phone">All apps</span><span class="apwa-topbar__apps-short">Apps</span></button>
       <button type="button" class="apwa-iconbtn apwa-show-phone" data-action="search" aria-label="Search">${icon('search')}</button>
       <button type="button" class="apwa-btn apwa-btn--primary apwa-btn--sm apwa-hide-phone" data-action="quick-add" aria-haspopup="menu" aria-expanded="false">${icon('plus')}<span>New</span></button>
+      <a class="apwa-btn apwa-btn--sm apwa-topbar__quote apwa-hide-phone" href="${quoteHref()}" data-quote>${icon('send')}<span>Get a quote</span></a>
       <button type="button" class="apwa-demo-pill" data-action="demo-info" aria-haspopup="dialog">
         <i aria-hidden="true"></i><span>Demo<span class="apwa-hide-phone"> mode</span></span>
       </button>
@@ -192,6 +200,9 @@ function render(ev) {
     v = { title: 'Something went wrong', body: emptyState({ icon: 'alert', title: 'This screen could not load', text: 'Try resetting the demo data from the menu.' }) };
   }
   current = { ...v, slug: r.slug, navId: r.navId || (r.slug ? `app:${r.slug}` : 'home') };
+
+  const quote = $('[data-quote]', root);
+  if (quote) quote.href = quoteHref(r.slug);
 
   // Document title.
   const meta = appMeta(r.slug);
@@ -279,7 +290,7 @@ function comingSoonView({ params }) {
           <p class="apwa-text-2">${a.tagline}</p>
           ${a.audience && a.audience.length ? html`<p class="apwa-soonpage__aud"><strong>Built for:</strong> ${a.audience.join(', ')}</p>` : ''}
           <div class="apwa-soonpage__actions">
-            ${button('Ask about this app', { kind: 'primary', href: CONFIG.inquiryUrl || '#', icon: 'send', attrs: { 'data-external': '', target: '_blank', rel: 'noopener' } })}
+            ${button('Ask about this app', { kind: 'primary', href: quoteHref(a.slug), icon: 'send' })}
             ${button('Explore the CRM demo', { href: router.href('crm/'), icon: 'arrow-right' })}
           </div>
         </div>
@@ -402,7 +413,7 @@ function demoInfo(btn) {
     </ul>
     <div class="apwa-demoinfo__actions">
       <button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm" data-demo-reset>${icon('refresh')}<span>Reset demo data</span></button>
-      <a class="apwa-btn apwa-btn--primary apwa-btn--sm" href="${CONFIG.inquiryUrl || '#'}" target="_blank" rel="noopener">${icon('send')}<span>Get this for your business</span></a>
+      <a class="apwa-btn apwa-btn--primary apwa-btn--sm" href="${quoteHref(current && current.slug)}">${icon('send')}<span>Like what you see? Get a quote</span></a>
     </div>
     ${store.isPersistent() ? '' : html`<p class="apwa-text-3">Your browser is blocking storage, so changes will reset when you leave this page.</p>`}
   </div>`);

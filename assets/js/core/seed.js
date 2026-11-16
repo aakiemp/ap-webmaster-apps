@@ -356,7 +356,11 @@ export function createSeed() {
 
   const activities = [];
   let n = 0;
-  const add = (a) => activities.push({ id: `a${++n}`, userId: 'u1', ...a });
+  // Seeded times fall on fixed hours, so on a morning visit "today at 3 PM" would read as "in 6 hours".
+  // Keep every seeded activity in the past.
+  const nowMs = Date.now();
+  const past = (iso, k) => (iso && new Date(iso).getTime() > nowMs - 60000 ? new Date(nowMs - (8 + (k * 17) % 90) * 60000).toISOString() : iso);
+  const add = (a) => { n += 1; activities.push({ id: `a${n}`, userId: 'u1', ...a, at: past(a.at, n) }); };
 
   contacts.forEach((c) => {
     add({ type: 'created', contactId: c.id, userId: c.ownerId, at: c.createdAt, text: `Contact created from ${c.source}` });

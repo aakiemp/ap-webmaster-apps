@@ -98,7 +98,7 @@ final class Renderer {
 			'siteUrl'     => home_url( '/' ),
 			'siteName'    => get_bloginfo( 'name' ),
 			'marketplace' => Router::url(),
-			'inquiryUrl'  => Settings::inquiry_url(),
+			'inquiryUrl'  => Router::url( 'contact/' ),
 			'assetsUrl'   => APWA_URL,
 			'swUrl'       => Router::demo_path() . 'sw.js',
 			'isPublic'    => Settings::is_public(),
@@ -164,12 +164,13 @@ final class Renderer {
 	/**
 	 * Marketplace page.
 	 */
-	public static function marketplace() {
+	public static function marketplace( $page = 'landing' ) {
+		$apwa_page  = 'contact' === $page ? 'contact' : 'landing';
 		status_header( 200 );
 		$apps       = Registry::all();
 		$categories = Registry::categories();
 		$demo_url   = Router::url( 'demo/' );
-		$inquiry    = Settings::inquiry_url();
+		$inquiry    = Router::url( 'contact/' );
 		$logo       = self::site_logo();
 		/**
 		 * "standalone" (default) renders the page as its own landing page with
@@ -192,7 +193,7 @@ final class Renderer {
 			add_filter(
 				'pre_get_document_title',
 				static function () {
-					return __( 'Business Apps', 'ap-webmaster-apps' ) . ' | ' . get_bloginfo( 'name' );
+					return ( 'contact' === get_query_var( Router::QV_ROUTE ) ? __( 'Get a quote', 'ap-webmaster-apps' ) : __( 'Business Apps', 'ap-webmaster-apps' ) ) . ' | ' . get_bloginfo( 'name' );
 				}
 			);
 			add_filter(

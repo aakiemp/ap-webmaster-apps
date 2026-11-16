@@ -41,6 +41,8 @@ const staffIds = () => cfg().staff;
 const staffName = (id) => store.user(id)?.name || 'Any available';
 const appts = () => store.all('appointments');
 const custName = (a) => store.contactName(store.contact(a.contactId));
+/** "Maria G." for tight calendar blocks. */
+const custShort = (a) => { const p = custName(a).trim().split(/\s+/); return p.length > 1 ? `${p[0]} ${p[p.length - 1][0]}.` : p[0]; };
 const first = (a) => store.contact(a.contactId)?.firstName || 'there';
 const live = (a) => a.status !== 'cancelled';
 
@@ -455,8 +457,8 @@ function calendarGrid() {
             const s = new Date(a.start);
             const top = ((s.getHours() - h0) * 60 + s.getMinutes()) / 60 * HOUR_PX;
             const svc = service(a.serviceId);
-            return html`<button type="button" class="bk-ev bk-tone--${svc.color} is-${a.status}" data-appt="${a.id}" style="top:${top + 1}px;height:${a.minutes / 60 * HOUR_PX - 3}px;left:calc(${(lane / of) * 100}% + 2px);width:calc(${100 / of}% - 5px)">
-              <strong>${custName(a)}</strong><span>${fTime.format(s)} · ${svc.name}</span>${a.status === 'requested' ? html`<em>Request</em>` : ''}
+            return html`<button type="button" class="bk-ev bk-tone--${svc.color} is-${a.status} ${of > 1 ? 'is-narrow' : ''}" data-appt="${a.id}" title="${custName(a)} · ${fTime.format(s)} · ${svc.name}" style="top:${top + 1}px;height:${a.minutes / 60 * HOUR_PX - 3}px;left:calc(${(lane / of) * 100}% + 2px);width:calc(${100 / of}% - ${of > 1 ? 3 : 5}px)">
+              <strong>${of > 1 ? custShort(a) : custName(a)}</strong><span>${fTime.format(s)} · ${svc.name}</span>${a.status === 'requested' ? html`<em>Request</em>` : ''}
             </button>`;
           })}
           ${sameDay(c.day, now) && nowTop > 0 && nowTop < (h1 - h0) * HOUR_PX ? html`<div class="bk-now" style="top:${nowTop}px"></div>` : ''}
