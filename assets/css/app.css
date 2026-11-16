@@ -666,3 +666,6 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 	.apwa-topbar__apps { height: 34px; padding: 0 10px; margin-right: 2px; }
 	.apwa-topbar__apps-short { display: inline; }
 }
+.apwa-topbar__quote { gap: 6px; color: var(--apwa-accent-600, #b92ccd); background: #fff; border: 1px solid color-mix(in srgb, var(--apwa-accent-500, #dc3ff0) 35%, transparent); }
+.apwa-topbar__quote:hover { background: color-mix(in srgb, var(--apwa-accent-500, #dc3ff0) 8%, #fff); color: var(--apwa-accent-600, #b92ccd); }
+.apwa-topbar__quote .apwa-icon { width: 15px; height: 15px; }

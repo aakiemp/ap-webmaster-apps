@@ -1,6 +1,6 @@
 {
   "slug": "document-processor",
-  "name": "AI Document Processor",
+  "name": "Document Processor",
   "icon": "scan",
   "color": "amber",
   "category": "documents",
@@ -49,5 +49,5 @@
     "monthly": true,
     "addons": []
   },
-  "shortName": "Documents"
+  "shortName": "Document Processor"
 }
