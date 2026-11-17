@@ -129,7 +129,7 @@ endif;
 	<?php if ( 'standalone' === $layout ) : ?>
 	<header class="apwa-mkt-nav" data-apwa-nav>
 		<div class="apwa-mkt-wrap apwa-mkt-nav__inner">
-			<a class="apwa-mkt-nav__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( $apwa_site ); ?>">
+			<a class="apwa-mkt-nav__brand" href="<?php echo esc_url( Router::url() ); ?>" aria-label="<?php echo esc_attr( $apwa_site ); ?>">
 				<?php if ( $logo ) : ?>
 				<img class="apwa-mkt-nav__logo" src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $apwa_site ); ?>">
 				<?php else : ?>
@@ -490,7 +490,7 @@ endif;
 	<?php if ( 'standalone' === $layout ) : ?>
 	<footer class="apwa-mkt-foot">
 		<div class="apwa-mkt-wrap apwa-mkt-foot__inner">
-			<a class="apwa-mkt-nav__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+			<a class="apwa-mkt-nav__brand" href="<?php echo esc_url( Router::url() ); ?>">
 				<?php if ( $logo ) : ?>
 				<img class="apwa-mkt-nav__logo" src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $apwa_site ); ?>" loading="lazy">
 				<?php else : ?>
