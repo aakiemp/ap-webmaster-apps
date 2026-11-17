@@ -669,3 +669,44 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 .apwa-topbar__quote { gap: 6px; color: var(--apwa-accent-600, #b92ccd); background: #fff; border: 1px solid color-mix(in srgb, var(--apwa-accent-500, #dc3ff0) 35%, transparent); }
 .apwa-topbar__quote:hover { background: color-mix(in srgb, var(--apwa-accent-500, #dc3ff0) 8%, #fff); color: var(--apwa-accent-600, #b92ccd); }
 .apwa-topbar__quote .apwa-icon { width: 15px; height: 15px; }
+
+/* Exit demo, app dropdowns and Get a quote (sidebar + floating button) */
+.apwa-exit { display: flex; align-items: center; gap: 8px; margin: 0 2px 10px; padding: 8px 10px; border-radius: var(--apwa-radius); background: var(--apwa-navy-800); border: 1px solid var(--apwa-navy-700); color: #fff !important; font-size: 13px; font-weight: 600; }
+.apwa-exit:hover { background: var(--apwa-navy-700); }
+.apwa-exit .apwa-icon { width: 16px; height: 16px; flex: none; }
+.apwa-nav__app > summary { list-style: none; cursor: pointer; font-weight: 600; }
+.apwa-nav__app > summary::-webkit-details-marker { display: none; }
+.apwa-nav__app.is-current > summary, .apwa-nav__app[open] > summary { color: #fff !important; }
+.apwa-nav__chev { width: 15px !important; height: 15px !important; opacity: 0.6; flex: none; transition: transform var(--apwa-fast); }
+.apwa-nav__app[open] > summary .apwa-nav__chev { transform: rotate(180deg); }
+.apwa-nav__sub { display: flex; flex-direction: column; gap: 1px; padding: 1px 0 6px 18px; }
+.apwa-nav__sub .apwa-nav__item { font-size: 12.5px; }
+.apwa-nav__sub .apwa-nav__item.is-active::before { left: -28px; }
+.apwa-sidequote { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 10px; background: var(--apwa-accent-600, #b92ccd); color: #fff !important; font-weight: 700; font-size: 14px; }
+.apwa-sidequote:hover { background: var(--apwa-accent-500, #dc3ff0); }
+.apwa-sidequote .apwa-icon { width: 16px; height: 16px; }
+.apwa-sidequote__note { text-align: center; font-size: 11.5px; color: var(--apwa-navy-300); margin: 5px 0 8px; }
+.apwa-quotefab { position: fixed; z-index: 45; right: max(24px, var(--apwa-safe-right)); bottom: max(24px, var(--apwa-safe-bottom)); display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 999px; background: var(--apwa-accent-600, #b92ccd); color: #fff !important; font-weight: 700; font-size: 14px; box-shadow: 0 10px 24px rgba(185, 44, 205, 0.35), 0 2px 6px rgba(16, 24, 40, 0.18); }
+.apwa-quotefab:hover { background: var(--apwa-accent-500, #dc3ff0); }
+.apwa-quotefab .apwa-icon { width: 17px; height: 17px; }
+@media (max-width: 1199.98px) {
+	.apwa-exit { width: 44px; height: 40px; justify-content: center; padding: 0; margin: 0 0 10px; }
+	.apwa-exit span, .apwa-nav__chev, .apwa-sidequote span, .apwa-sidequote__note { display: none; }
+	.apwa-nav__app { width: 100%; display: flex; flex-direction: column; align-items: center; }
+	.apwa-nav__sub { padding: 2px 0 6px; align-items: center; }
+	.apwa-nav__sub .apwa-nav__item.is-active::before { left: -8px; }
+	.apwa-sidequote { width: 44px; height: 40px; padding: 0; margin-bottom: 6px; }
+}
+@media (max-width: 767.98px) {
+	.apwa-exit { width: auto; height: auto; justify-content: flex-start; padding: 10px; margin: 0 2px 10px; }
+	.apwa-exit span, .apwa-sidequote span { display: block; }
+	.apwa-sidequote__note { display: block; }
+	.apwa-nav__chev { display: inline-block; }
+	.apwa-nav__app { align-items: stretch; }
+	.apwa-nav__sub { padding: 1px 0 6px 18px; align-items: stretch; }
+	.apwa-nav__sub .apwa-nav__item.is-active::before { left: -28px; }
+	.apwa-sidequote { width: auto; height: auto; padding: 12px; margin-bottom: 0; }
+	.apwa-topbar__exit.apwa-show-phone { display: flex !important; align-items: center; gap: 1px; height: 30px; padding: 0 10px 0 5px; border-radius: 999px; background: var(--apwa-navy-900); color: #fff !important; font-size: 12.5px; font-weight: 600; flex: none; }
+	.apwa-topbar__exit .apwa-icon { width: 15px; height: 15px; }
+	.apwa-quotefab { left: max(16px, var(--apwa-safe-left)); right: auto; bottom: calc(var(--apwa-tabbar-h) + var(--apwa-safe-bottom) + 18px); padding: 11px 16px; font-size: 13.5px; }
+}

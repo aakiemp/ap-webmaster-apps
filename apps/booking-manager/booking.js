@@ -57,6 +57,41 @@ const isWorkDay = (d) => cfg().hours.days.includes(new Date(d).getDay());
 const priceLabel = (s) => (s.price ? money(s.price) : 'Free');
 const statusBadge = (s) => badge((STATUS[s] || STATUS.confirmed).label, (STATUS[s] || STATUS.confirmed).tone, { dot: true });
 
+/* Sample visits for any work day someone browses to that has none yet, so the
+   demo calendar never runs dry, whichever week or month they look at. */
+const FILL_SLOTS = { u1: [[8, 0], [10, 30], [13, 0], [15, 30]], u2: [[9, 0], [11, 30], [14, 0], [16, 0]], u3: [[8, 30], [12, 0], [14, 30], [16, 0]] };
+function fillDays(from, count) {
+  const st = store.get();
+  if (!st.booking || !st.appointments) return;
+  const before = st.booking.filledDays || [];
+  const filled = new Set(before);
+  const people = store.all('contacts').filter((c) => c.status !== 'inactive');
+  const rows = [];
+  for (let i = 0; i < count && people.length; i += 1) {
+    const day = startOfDay(addDays(from, i));
+    const key = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+    if (filled.has(key) || !isWorkDay(day) || dayAppts(day).length) continue;
+    filled.add(key);
+    let seed = day.getFullYear() * 10000 + (day.getMonth() + 1) * 100 + day.getDate();
+    const r = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+    staffIds().forEach((staffId) => {
+      const slots = FILL_SLOTS[staffId] || FILL_SLOTS.u1;
+      const n = day.getDay() === 6 ? (r() > 0.5 ? 1 : 0) : 1 + (r() > 0.45 ? 1 : 0);
+      [0, 1, 2, 3].sort(() => r() - 0.5).slice(0, n).forEach((k) => {
+        const start = new Date(day);
+        start.setHours(slots[k][0], slots[k][1], 0, 0);
+        const svc = services()[Math.floor(r() * services().length)];
+        const x = r();
+        const status = start.getTime() + svc.minutes * MIN < Date.now() ? (x < 0.08 ? 'noshow' : x < 0.15 ? 'cancelled' : 'completed') : 'confirmed';
+        const made = new Date(Math.min(Date.now(), start.getTime()) - (2 + Math.floor(r() * 9)) * 86400000).toISOString();
+        rows.push({ id: uid('app'), contactId: people[Math.floor(r() * people.length)].id, serviceId: svc.id, staffId, start: start.toISOString(), minutes: svc.minutes, status, source: r() < 0.5 ? 'Online booking' : 'Phone', notes: '', seriesId: '', createdAt: made, updatedAt: made });
+      });
+    });
+  }
+  if (filled.size === before.length) return;
+  store.quietly((s) => { s.booking.filledDays = [...filled].slice(-500); s.appointments.push(...rows); });
+}
+
 function dayAppts(day, staff = 'all') {
   return appts()
     .filter((a) => sameDay(a.start, day) && (staff === 'all' || a.staffId === staff))
@@ -490,8 +525,10 @@ function agenda() {
 }
 
 function calendarView(ctx) {
-  if (ctx.query.appt) setTimeout(() => { router.go('booking-manager/calendar', { replace: true }); openAppt(ctx.query.appt); }, 0);
   if (!calUI.view) calUI.view = 'week';
+  fillDays(startOfDay(new Date()), 14);
+  fillDays(startOfWeek(calUI.anchor), 7);
+  if (ctx.query.appt) setTimeout(() => { router.go('booking-manager/calendar', { replace: true }); openAppt(ctx.query.appt); }, 0);
   const phone = isPhone();
   const today = new Date();
   const wk = startOfWeek(today);
@@ -609,6 +646,7 @@ function requestsView() {
 const listUI = { tab: 'upcoming', q: '' };
 
 function bookingsView(ctx) {
+  fillDays(startOfDay(new Date()), 14);
   if (ctx.query.appt) setTimeout(() => { router.go('booking-manager/bookings', { replace: true }); openAppt(ctx.query.appt); }, 0);
   const now = Date.now();
   const groups = {
