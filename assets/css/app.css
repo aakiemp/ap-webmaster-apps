@@ -662,6 +662,9 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 .apwa-topbar__apps { gap: 6px; }
 .apwa-topbar__apps .apwa-icon { width: 16px; height: 16px; color: var(--apwa-primary); }
 .apwa-topbar__apps-short { display: none; }
+/* Keep icon and label optically centered whatever line-height the theme sets. */
+.apwa-topbar__apps, .apwa-topbar__apps span, .apwa-topbar__exit, .apwa-topbar__exit span { line-height: 1; }
+.apwa-topbar__apps .apwa-icon, .apwa-topbar__exit .apwa-icon { display: block; flex: none; }
 @media (max-width: 767.98px) {
 	.apwa-topbar__apps { height: 34px; padding: 0 10px; margin-right: 2px; }
 	.apwa-topbar__apps-short { display: inline; }
