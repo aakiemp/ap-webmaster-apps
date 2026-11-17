@@ -124,7 +124,6 @@ function topbar() {
     </div>
     <div class="apwa-topbar__right">
       <button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm apwa-topbar__apps" data-action="launcher" aria-haspopup="dialog" aria-label="Browse all apps">${icon('grid')}<span class="apwa-hide-phone">All apps</span><span class="apwa-topbar__apps-short">Apps</span></button>
-      <button type="button" class="apwa-iconbtn apwa-show-phone" data-action="search" aria-label="Search">${icon('search')}</button>
       <button type="button" class="apwa-btn apwa-btn--primary apwa-btn--sm apwa-hide-phone" data-action="quick-add" aria-haspopup="menu" aria-expanded="false">${icon('plus')}<span>New</span></button>
       <button type="button" class="apwa-demo-pill" data-action="demo-info" aria-haspopup="dialog">
         <i aria-hidden="true"></i><span>Demo<span class="apwa-hide-phone"> mode</span></span>
