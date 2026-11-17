@@ -90,3 +90,5 @@ function get_header() {
 	echo '</head><body class="' . esc_attr( $classes ) . '"><header class="site-head"><a href="/">Sample theme header</a><nav><a href="/">Home</a> · <a href="/contact/">Contact</a></nav></header>';
 }
 function get_footer() { echo '<footer class="site-foot">Sample theme footer</footer></body></html>'; }
+function sanitize_email( $v ) { return filter_var( trim( (string) $v ), FILTER_SANITIZE_EMAIL ); }
+function register_post_type( $t, $a = array() ) { return (object) $a; }
