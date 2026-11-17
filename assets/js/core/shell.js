@@ -17,6 +17,7 @@ let dashboardView = null;
 let root;
 let current = null;
 let renderQueued = false;
+let navSlug = null;
 
 /* ---------------- Module registry ---------------- */
 
@@ -64,7 +65,7 @@ function navItems() {
 function sidebar() {
   const items = navItems();
   const live = items.filter((i) => i.group);
-  const groups = [...new Set(live.map((i) => i.group))];
+  const slugs = [...new Set(live.map((i) => i.slug))];
   const soon = (CONFIG.apps || []).filter((a) => a.status !== 'demo');
   const b = store.get().business;
   return html`<aside class="apwa-sidebar" id="apwa-sidebar" aria-label="Main navigation">
@@ -73,21 +74,28 @@ function sidebar() {
       <span class="apwa-brand__mark" aria-hidden="true"><img src="${CONFIG.assetsUrl}assets/img/ap-mark.png" alt=""></span>
       <span class="apwa-brand__text"><strong>AP Webmaster</strong><span>Apps</span></span>
     </div>
+    <a class="apwa-exit" href="${suiteUrl()}" title="Exit demo">${icon('chevron-left')}<span>Exit demo</span></a>
     <div class="apwa-workspace" title="Fictional demo business">
       <span class="apwa-workspace__mark" aria-hidden="true">${b.name.split(' ').map((w) => w[0]).slice(0, 2).join('')}</span>
       <span class="apwa-workspace__text"><strong>${b.name}</strong><span>Demo workspace</span></span>
     </div>
     <nav class="apwa-nav">
       <a class="apwa-nav__item" data-nav="home" href="${items[0].href}" title="Dashboard">${icon('home')}<span>Dashboard</span></a>
-      ${groups.map((g) => html`<div class="apwa-nav__group">${g}</div>
-        ${live.filter((i) => i.group === g).map((i) => html`<a class="apwa-nav__item" data-nav="${i.id}" href="${i.href}" title="${i.label}">${icon(i.icon)}<span>${i.label}</span></a>`)}`)}
+      ${slugs.map((slug) => {
+        const m = appMeta(slug) || {};
+        return html`<details class="apwa-nav__app" data-app="${slug}">
+          <summary class="apwa-nav__item apwa-nav__head" title="${m.shortName}">${icon(m.icon || 'grid')}<span>${m.shortName}</span>${icon('chevron-down', 'apwa-nav__chev')}</summary>
+          <div class="apwa-nav__sub">${live.filter((i) => i.slug === slug).map((i) => html`<a class="apwa-nav__item" data-nav="${i.id}" href="${i.href}" title="${i.label}">${icon(i.icon)}<span>${i.label}</span></a>`)}</div>
+        </details>`;
+      })}
       ${soon.length ? html`<div class="apwa-nav__group">More apps</div>
         ${soon.map((a) => html`<a class="apwa-nav__item is-soon" data-nav="app:${a.slug}" href="${router.href(`${a.slug}/`)}" title="${a.name} (coming soon)">${icon(a.icon)}<span>${a.shortName || a.name}</span><em class="apwa-soon">Soon</em></a>`)}` : ''}
     </nav>
     <div class="apwa-sidebar__foot">
+      <a class="apwa-sidequote" href="${quoteHref()}" data-quote title="Get a quote">${icon('send')}<span>Get a quote</span></a>
+      <p class="apwa-sidequote__note">Like what you see? Let's talk.</p>
       <button type="button" class="apwa-nav__item" data-action="launcher" aria-haspopup="dialog" title="Browse all apps">${icon('grid')}<span>Browse all apps</span></button>
       <button type="button" class="apwa-nav__item" data-action="reset" title="Reset demo data">${icon('refresh')}<span>Reset demo data</span></button>
-      <a class="apwa-nav__item apwa-nav__item--exit" href="${suiteUrl()}" title="Exit demo">${icon('log-out')}<span>Exit demo</span></a>
     </div>
   </aside>`;
 }
@@ -105,6 +113,7 @@ function topbar() {
     <div class="apwa-topbar__left">
       <a class="apwa-topbar__back apwa-show-phone" href="#" hidden aria-label="Back">${icon('chevron-left')}</a>
       <button type="button" class="apwa-iconbtn apwa-topbar__menu apwa-show-phone" data-action="drawer" aria-label="Open menu" aria-controls="apwa-sidebar" aria-expanded="false">${icon('menu')}</button>
+      <a class="apwa-topbar__exit apwa-show-phone" href="${suiteUrl()}" aria-label="Exit demo">${icon('chevron-left')}<span>Exit</span></a>
       <nav class="apwa-crumbs" aria-label="Breadcrumb"></nav>
     </div>
     <div class="apwa-search apwa-hide-phone" role="search">
@@ -117,7 +126,6 @@ function topbar() {
       <button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm apwa-topbar__apps" data-action="launcher" aria-haspopup="dialog" aria-label="Browse all apps">${icon('grid')}<span class="apwa-hide-phone">All apps</span><span class="apwa-topbar__apps-short">Apps</span></button>
       <button type="button" class="apwa-iconbtn apwa-show-phone" data-action="search" aria-label="Search">${icon('search')}</button>
       <button type="button" class="apwa-btn apwa-btn--primary apwa-btn--sm apwa-hide-phone" data-action="quick-add" aria-haspopup="menu" aria-expanded="false">${icon('plus')}<span>New</span></button>
-      <a class="apwa-btn apwa-btn--sm apwa-topbar__quote apwa-hide-phone" href="${quoteHref()}" data-quote>${icon('send')}<span>Get a quote</span></a>
       <button type="button" class="apwa-demo-pill" data-action="demo-info" aria-haspopup="dialog">
         <i aria-hidden="true"></i><span>Demo<span class="apwa-hide-phone"> mode</span></span>
       </button>
@@ -159,6 +167,7 @@ export function mount(container) {
     ${tabbar()}
     <div class="apwa-drawer-scrim" data-action="drawer-close" hidden></div>
     <button type="button" class="apwa-fab apwa-show-phone" hidden></button>
+    <a class="apwa-quotefab" href="${quoteHref()}" data-quote>${icon('send')}<span>Get a quote</span></a>
   </div>`;
 
   bindGlobal();
@@ -201,8 +210,8 @@ function render(ev) {
   }
   current = { ...v, slug: r.slug, navId: r.navId || (r.slug ? `app:${r.slug}` : 'home') };
 
-  const quote = $('[data-quote]', root);
-  if (quote) quote.href = quoteHref(r.slug);
+  $$('[data-quote]', root).forEach((q) => { q.href = quoteHref(r.slug); });
+  root.firstElementChild.dataset.app = r.slug || 'home';
 
   // Document title.
   const meta = appMeta(r.slug);
@@ -255,8 +264,13 @@ function render(ev) {
     try { v.mount(body, ctx); } catch (err) { console.error(err); }
   }
 
-  // Active nav.
+  // Active nav: open the current app's group when moving between apps.
   renderTabbar(r.slug);
+  if (r.slug !== navSlug) {
+    navSlug = r.slug;
+    $$('.apwa-nav__app', root).forEach((d) => { d.open = d.dataset.app === r.slug; });
+  }
+  $$('.apwa-nav__app', root).forEach((d) => d.classList.toggle('is-current', d.dataset.app === r.slug));
   $$('[data-nav]', root).forEach((a) => {
     const active = a.dataset.nav === current.navId;
     a.classList.toggle('is-active', active);
