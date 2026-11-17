@@ -675,3 +675,5 @@ html.apwa-mkt-lock { overflow: hidden; }
 .apwa-mkt-quote__mail { margin: 16px 0 0; font-size: 14px; color: var(--apwa-text-2, #3b4657); }
 .apwa-mkt-quote__mail a { color: var(--apwa-brand-700, #0b6b6b); font-weight: 700; display: inline-block; white-space: nowrap; user-select: all; }
 @media (max-width: 520px) { .apwa-mkt-quote__row { grid-template-columns: 1fr; } .apwa-mkt-quote { padding: 18px; } }
+
+.apwa-mkt-card__tag { display: inline-block; margin-left: 6px; padding: 2px 7px; border-radius: 6px; background: var(--apwa-brand-50, #e6f6f6); color: var(--apwa-brand-700, #0b6b6b); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; vertical-align: middle; }

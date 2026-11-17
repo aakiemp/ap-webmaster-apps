@@ -148,7 +148,7 @@ final class Renderer {
 		$import_map = self::import_map();
 		$manifest   = Router::demo_path() . 'manifest.webmanifest';
 		$current    = $app ? Registry::get( $app ) : null;
-		$page_title = $current ? $current['name'] . ' · ' . __( 'AP Webmaster Apps', 'ap-webmaster-apps' ) : __( 'AP Webmaster Apps — Demo', 'ap-webmaster-apps' );
+		$page_title = $current ? $current['name'] . ( $current['tag'] ? ' (' . $current['tag'] . ')' : '' ) . ' · ' . __( 'AP Webmaster Apps', 'ap-webmaster-apps' ) : __( 'AP Webmaster Apps — Demo', 'ap-webmaster-apps' );
 		include APWA_DIR . 'templates/app-shell.php';
 	}
 

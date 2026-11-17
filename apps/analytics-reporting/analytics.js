@@ -287,7 +287,7 @@ function leadsView(ctx) {
         mobile: (r) => html`<span class="an-mrow"><span class="an-mrow__main"><span class="an-ch"><i class="apwa-fill--${r.tone}"></i><strong>${r.label}</strong></span><span>${num(r.leads)} leads · ${num(r.jobs)} jobs · ${moneyShort(r.revenue)}${r.spend ? ` on ${money(r.spend)}` : ''}</span></span>${cols[5].render(r)}</span>`,
       }) })}
       <div class="apwa-grid apwa-grid--2 an-grid">
-        ${card({ title: 'Won deals by source', actions: html`<a class="an-link" href="${href('crm/reports')}">CRM reports</a>`, body: crm.length ? barList(crm.map((s) => ({ label: s.source, sub: plural(s.count, 'deal'), value: s.wonValue, tone: 'green' }))) : html`<p class="an-muted">No CRM deals yet.</p>` })}
+        ${card({ title: 'Won deals by source', actions: html`<a class="an-link" href="${href('crm/reports')}">Customer reports</a>`, body: crm.length ? barList(crm.map((s) => ({ label: s.source, sub: plural(s.count, 'deal'), value: s.wonValue, tone: 'green' }))) : html`<p class="an-muted">No deals yet.</p>` })}
         ${card({ title: 'How it is counted', body: html`<ul class="an-how"><li>${icon('check')}A lead is a call, form or booking with its first visit recorded.</li><li>${icon('check')}Revenue counts paid invoices linked to that lead.</li><li>${icon('check')}Return is revenue divided by what the channel cost.</li></ul>` })}
       </div>`,
     mount(root) { bindRange(root, ctx); },

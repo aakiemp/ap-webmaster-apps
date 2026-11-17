@@ -162,8 +162,8 @@ function addToCrm(doc) {
     status: 'lead', source: 'Document Processor', ownerId: store.get().currentUserId, city: val(doc, 'city'), state: 'OH', tags: ['New customer form'], lastActivityAt: new Date().toISOString(),
   });
   store.logActivity({ type: 'note', contactId: row.id, text: `Created from a new customer form. Wants: ${val(doc, 'service')}, ${val(doc, 'when')}.` });
-  store.patch('documents', doc.id, { contactId: row.id, events: addEvent(store.find('documents', doc.id), 'Added to CRM contacts') });
-  toast(`${store.contactName(row)} was added to your CRM contacts.`, { title: 'Contact created' });
+  store.patch('documents', doc.id, { contactId: row.id, events: addEvent(store.find('documents', doc.id), 'Added to Customer Manager') });
+  toast(`${store.contactName(row)} was added to Customer Manager.`, { title: 'Contact created' });
 }
 
 function billWorkOrder(doc) {
@@ -331,7 +331,7 @@ function docView(ctx) {
   const invoice = doc.invoiceId ? store.find('invoices', doc.invoiceId) : null;
   let extra = '';
   if (doc.status !== 'review' && doc.status !== 'processing') {
-    if (doc.type === 'intake') extra = contact ? html`<p class="dp-link">${icon('check-circle')}In CRM as <a href="${href(`crm/contacts/${contact.id}`)}">${store.contactName(contact)}</a></p>` : button('Add to CRM contacts', { icon: 'user-plus', attrs: { 'data-crm': '1' } });
+    if (doc.type === 'intake') extra = contact ? html`<p class="dp-link">${icon('check-circle')}In Customer Manager as <a href="${href(`crm/contacts/${contact.id}`)}">${store.contactName(contact)}</a></p>` : button('Add to Customer Manager', { icon: 'user-plus', attrs: { 'data-crm': '1' } });
     if (doc.type === 'workorder') extra = invoice ? html`<p class="dp-link">${icon('check-circle')}Billed on <a href="${href(`invoice-automation/invoices?inv=${invoice.id}`)}">${invoice.number}</a></p>` : button('Create draft invoice', { icon: 'receipt', attrs: { 'data-bill': '1' } });
   }
   return {

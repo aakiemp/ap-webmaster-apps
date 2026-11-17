@@ -1,7 +1,8 @@
 {
   "slug": "crm",
-  "name": "CRM",
-  "shortName": "CRM",
+  "name": "Customer Manager",
+  "shortName": "Customer Manager",
+  "tag": "CRM",
   "icon": "pipeline",
   "color": "blue",
   "category": "sales",
@@ -36,7 +37,7 @@
     "Website form and phone lead capture",
     "Two-way email and SMS",
     "Team logins and permissions",
-    "Import from spreadsheets or another CRM",
+    "Import from spreadsheets or another system",
     "Integrations with QuickBooks, Google Workspace or Microsoft 365"
   ],
   "customization": [

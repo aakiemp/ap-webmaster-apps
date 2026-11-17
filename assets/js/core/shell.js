@@ -54,7 +54,7 @@ function resolve(rel) {
 
 function navItems() {
   const items = [{ id: 'home', href: router.href(''), label: 'Dashboard', icon: 'home', slug: '' }];
-  // The sidebar, launcher and suite all follow the agreed journey order (CRM first).
+  // The sidebar, launcher and suite all follow the agreed journey order (Customer Manager first).
   const rank = (m) => (appMeta(m.slug) || {}).order || 999;
   modules.slice().sort((a, b) => rank(a) - rank(b)).forEach((m) => {
     m.nav.forEach((n) => items.push({ ...n, href: router.href(n.path), slug: m.slug, group: appMeta(m.slug)?.name }));
@@ -215,7 +215,7 @@ function render(ev) {
 
   // Document title.
   const meta = appMeta(r.slug);
-  document.title = `${v.title || 'Dashboard'} · ${meta ? meta.shortName : 'AP Webmaster Apps'}`;
+  document.title = `${v.title || 'Dashboard'} · ${meta ? meta.shortName + (meta.tag ? ` (${meta.tag})` : '') : 'AP Webmaster Apps'}`;
 
   // Breadcrumbs (desktop) / title (phone).
   const crumbs = $('.apwa-crumbs', root);
@@ -305,7 +305,7 @@ function comingSoonView({ params }) {
           ${a.audience && a.audience.length ? html`<p class="apwa-soonpage__aud"><strong>Built for:</strong> ${a.audience.join(', ')}</p>` : ''}
           <div class="apwa-soonpage__actions">
             ${button('Ask about this app', { kind: 'primary', href: quoteHref(a.slug), icon: 'send' })}
-            ${button('Explore the CRM demo', { href: router.href('crm/'), icon: 'arrow-right' })}
+            ${button('Explore the Customer Manager demo', { href: router.href('crm/'), icon: 'arrow-right' })}
           </div>
         </div>
       </div>

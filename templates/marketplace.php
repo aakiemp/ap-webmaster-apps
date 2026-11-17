@@ -103,7 +103,7 @@ if ( 'standalone' === $layout ) :
 <meta name="robots" content="noindex, nofollow">
 <?php endif; ?>
 <title><?php echo esc_html( $apwa_title . ' | ' . $apwa_site ); ?></title>
-<meta name="description" content="<?php esc_attr_e( 'Business apps built around the way you work: CRM, booking, quote follow-up and document tools, installed on your own website. Try the live demo.', 'ap-webmaster-apps' ); ?>">
+<meta name="description" content="<?php esc_attr_e( 'Business apps built around the way you work: a customer manager (CRM), booking, quote follow-up and document tools, installed on your own website. Try the live demo.', 'ap-webmaster-apps' ); ?>">
 <meta name="theme-color" content="#0b1422">
 <link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/favicon-64.png' ); ?>" type="image/png">
 <?php if ( 'contact' !== $apwa_page ) : ?>
@@ -160,7 +160,7 @@ endif;
 		<section class="apwa-mkt-hero" aria-labelledby="apwa-mkt-hero-title">
 			<div class="apwa-mkt-wrap apwa-mkt-hero__inner">
 				<h1 id="apwa-mkt-hero-title" class="apwa-mkt-hero__title"><?php esc_html_e( 'Business apps built around', 'ap-webmaster-apps' ); ?> <span class="apwa-mkt-accent"><?php esc_html_e( 'the way you work.', 'ap-webmaster-apps' ); ?></span></h1>
-				<p class="apwa-mkt-hero__lead"><?php esc_html_e( 'CRM, booking, quote follow-up and document tools, customized to your process and installed on your own website. Click through a working demo before you spend a dollar.', 'ap-webmaster-apps' ); ?></p>
+				<p class="apwa-mkt-hero__lead"><?php esc_html_e( 'Customer management, booking, quote follow-up and document tools, customized to your process and installed on your own website. Click through a working demo before you spend a dollar.', 'ap-webmaster-apps' ); ?></p>
 				<div class="apwa-mkt-hero__actions">
 					<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( $demo_url ); ?>"><span><?php esc_html_e( 'Try the live demo', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
 					<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="<?php echo esc_url( $apwa_book ); ?>"><?php echo Renderer::icon( 'calendar' ); ?><span><?php esc_html_e( 'Book a call', 'ap-webmaster-apps' ); ?></span></a>
@@ -286,7 +286,7 @@ endif;
 						<span class="apwa-mkt-badge"><?php esc_html_e( 'Coming soon', 'ap-webmaster-apps' ); ?></span>
 						<?php endif; ?>
 						<p class="apwa-mkt-card__cat"><?php echo esc_html( isset( $categories[ $apwa_app['category'] ] ) ? $categories[ $apwa_app['category'] ] : '' ); ?></p>
-						<h3 class="apwa-mkt-card__title"><?php echo esc_html( $apwa_app['name'] ); ?></h3>
+						<h3 class="apwa-mkt-card__title"><?php echo esc_html( $apwa_app['name'] ); ?><?php if ( $apwa_app['tag'] ) : ?> <span class="apwa-mkt-card__tag"><?php echo esc_html( $apwa_app['tag'] ); ?></span><?php endif; ?></h3>
 						<p class="apwa-mkt-card__tagline"><?php echo esc_html( $apwa_app['tagline'] ); ?></p>
 
 						<?php if ( $apwa_app['benefits'] ) : ?>

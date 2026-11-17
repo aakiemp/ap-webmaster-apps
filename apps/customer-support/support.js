@@ -201,7 +201,7 @@ function ticketView(ctx) {
         ${c ? card({ title: 'Customer', body: html`<div class="sp-cust">${avatar(store.contactName(c), { size: 'md' })}<span><a href="${href(`crm/contacts/${c.id}`)}"><strong>${store.contactName(c)}</strong></a><small>${c.company || c.city || ''}</small></span></div>
           <ul class="sp-cust__list"><li>${icon('mail')}${c.email || '—'}</li><li>${icon('phone')}${c.phone || '—'}</li></ul>
           ${others.length ? html`<p class="sp-cust__more">${plural(others.length, 'other ticket')}: ${others.slice(0, 3).map((o, i) => html`${i ? ', ' : ''}<a href="${href(`customer-support/ticket/${o.id}`)}">${o.subject}</a>`)}</p>` : ''}
-          <div class="sp-cust__btns">${button('Book a visit', { size: 'sm', icon: 'calendar', href: href('booking-manager/calendar') })}${button('Open in CRM', { size: 'sm', icon: 'user', href: href(`crm/contacts/${c.id}`) })}</div>` }) : ''}
+          <div class="sp-cust__btns">${button('Book a visit', { size: 'sm', icon: 'calendar', href: href('booking-manager/calendar') })}${button('View customer', { size: 'sm', icon: 'user', href: href(`crm/contacts/${c.id}`) })}</div>` }) : ''}
       </div>
     </div>`,
     mount(root) {
