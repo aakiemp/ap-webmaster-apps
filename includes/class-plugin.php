@@ -19,6 +19,7 @@ final class Plugin {
 	 */
 	public static function boot() {
 		Router::init();
+		Contact::init();
 		if ( is_admin() ) {
 			Admin::init();
 		}

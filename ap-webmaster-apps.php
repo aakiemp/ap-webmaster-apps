@@ -36,6 +36,7 @@ require_once APWA_DIR . 'includes/class-registry.php';
 require_once APWA_DIR . 'includes/class-router.php';
 require_once APWA_DIR . 'includes/class-pwa.php';
 require_once APWA_DIR . 'includes/class-renderer.php';
+require_once APWA_DIR . 'includes/class-contact.php';
 require_once APWA_DIR . 'includes/class-admin.php';
 require_once APWA_DIR . 'includes/class-plugin.php';
 
