@@ -71,7 +71,7 @@ function seed() {
     sent('cmp6', 'seasonal', 'seg1', 61, 25, 13, 6, 4),
   ];
   const sequences = [
-    { id: 'seq1', name: 'Welcome new leads', trigger: 'A new lead is added in the CRM', on: true, enrolled: 7, done: 18, steps: [{ wait: 0, subject: 'Thanks for reaching out, {first_name}' }, { wait: 2, subject: 'What our customers say about us' }, { wait: 5, subject: 'Ready when you are: book a free estimate' }] },
+    { id: 'seq1', name: 'Welcome new leads', trigger: 'A new lead is added in Customer Manager', on: true, enrolled: 7, done: 18, steps: [{ wait: 0, subject: 'Thanks for reaching out, {first_name}' }, { wait: 2, subject: 'What our customers say about us' }, { wait: 5, subject: 'Ready when you are: book a free estimate' }] },
     { id: 'seq2', name: 'After every job', trigger: 'A booking is marked completed', on: true, enrolled: 4, done: 41, steps: [{ wait: 1, subject: 'How did we do?' }, { wait: 7, subject: 'A quick tip to keep things running' }] },
     { id: 'seq3', name: 'Paid invoice thank-you', trigger: 'An invoice is paid in full', on: true, enrolled: 2, done: 29, steps: [{ wait: 0, subject: 'Thank you for your payment' }] },
     { id: 'seq4', name: 'Win back quiet customers', trigger: 'No booking in 6 months', on: false, enrolled: 0, done: 9, steps: [{ wait: 0, subject: 'It has been a while, {first_name}' }, { wait: 10, subject: 'Your $25 credit ends soon' }] },
@@ -197,7 +197,7 @@ function listView(ctx) {
   ];
   return {
     title: 'Campaigns',
-    subtitle: 'Emails to the customers already in your CRM. Write once, send to the right people.',
+    subtitle: 'Emails to the customers already in Customer Manager. Write once, send to the right people.',
     actions: [{ label: 'New campaign', icon: 'plus', kind: 'primary', primary: true, onClick: newCampaign }],
     body: html`
       <div class="apwa-stats ec-stats">
@@ -348,7 +348,7 @@ function automationsView() {
   const list = sequences();
   return {
     title: 'Automations',
-    subtitle: 'Follow-up emails that send themselves when something happens in your CRM, bookings or invoices.',
+    subtitle: 'Follow-up emails that send themselves when something happens in Customer Manager, bookings or invoices.',
     body: html`<div class="ec-seqs">${list.map((s) => card({ title: s.name, actions: sw(s.id, s.on), body: html`
       <p class="ec-trigger">${icon('zap')}<span>When <strong>${s.trigger.charAt(0).toLowerCase() + s.trigger.slice(1)}</strong></span></p>
       <ol class="ec-steps">${s.steps.map((st, i) => html`<li><span class="ec-steps__wait">${st.wait ? `Wait ${plural(st.wait, 'day')}` : 'Right away'}</span><button type="button" class="ec-steps__mail" data-step="${s.id}:${i}">${icon('mail')}<span>${st.subject}</span>${icon('edit')}</button></li>`)}</ol>
@@ -415,7 +415,7 @@ function audiencesView() {
   const unsub = cfg().unsubscribed.map((id) => store.contact(id)).filter(Boolean);
   return {
     title: 'Audiences',
-    subtitle: 'Groups of contacts from your CRM. Contacts without an email or who unsubscribed are left out.',
+    subtitle: 'Groups of contacts from Customer Manager. Contacts without an email or who unsubscribed are left out.',
     actions: [{ label: 'New audience', icon: 'plus', kind: 'primary', primary: true, onClick: newSegment }],
     body: html`<div class="apwa-grid apwa-grid--2 ec-grid">
       ${card({ title: 'Your audiences', flush: true, body: html`<ul class="ec-segs">${segs.map((s) => { const m = members(s); return html`<li><span class="ec-segs__ic">${icon('users')}</span><span class="ec-segs__main"><strong>${s.name}</strong><span>${ruleText(s)}</span><span class="ec-faces">${m.slice(0, 5).map((c) => html`<i title="${store.contactName(c)}">${c.firstName[0]}${(c.lastName || ' ')[0]}</i>`)}${m.length > 5 ? html`<i>+${m.length - 5}</i>` : ''}</span></span><b>${m.length}</b>${s.builtIn ? '' : html`<button type="button" class="apwa-iconbtn" data-rm="${s.id}" aria-label="Delete ${s.name}">${icon('trash')}</button>`}</li>`; })}</ul>` })}

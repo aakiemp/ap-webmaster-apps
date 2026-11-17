@@ -30,7 +30,7 @@ final class Registry {
 		return apply_filters(
 			'apwa_categories',
 			array(
-				'sales'      => __( 'Sales & CRM', 'ap-webmaster-apps' ),
+				'sales'      => __( 'Sales & Customers', 'ap-webmaster-apps' ),
 				'scheduling' => __( 'Booking & Scheduling', 'ap-webmaster-apps' ),
 				'billing'    => __( 'Billing & Invoices', 'ap-webmaster-apps' ),
 				'documents'  => __( 'AI & Documents', 'ap-webmaster-apps' ),
@@ -118,6 +118,7 @@ final class Registry {
 			'slug'              => $slug,
 			'name'              => '',
 			'shortName'         => '',
+			'tag'               => '',
 			'icon'              => 'grid',
 			'color'             => 'blue',
 			'category'          => 'operations',
@@ -164,6 +165,7 @@ final class Registry {
 				'slug'        => $slug,
 				'name'        => $app['name'],
 				'shortName'   => $app['shortName'],
+				'tag'         => $app['tag'],
 				'icon'        => $app['icon'],
 				'color'       => $app['color'],
 				'category'    => $app['category'],
