@@ -185,7 +185,7 @@ endif;
 			<div class="apwa-mkt-wrap">
 				<div class="apwa-mkt-head">
 					<p class="apwa-mkt-eyebrow"><?php esc_html_e( 'The suite', 'ap-webmaster-apps' ); ?></p>
-					<h2 id="apwa-mkt-catalog-title" class="apwa-mkt-h2"><?php esc_html_e( 'One suite of apps that work together', 'ap-webmaster-apps' ); ?></h2>
+					<h2 id="apwa-mkt-catalog-title" class="apwa-mkt-h2"><?php esc_html_e( 'A suite of apps that work together', 'ap-webmaster-apps' ); ?></h2>
 					<p class="apwa-mkt-sub"><?php esc_html_e( 'Start with the one that fixes your biggest headache, then add the rest as you grow.', 'ap-webmaster-apps' ); ?></p>
 				</div>
 				<?php if ( count( $apwa_used_cats ) > 1 ) : ?>
