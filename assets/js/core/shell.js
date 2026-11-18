@@ -142,9 +142,10 @@ function tabbar() {
 function renderTabbar(slug) {
   const nav = $('.apwa-tabbar', root);
   if (!nav) return;
-  const mod = moduleFor(slug) || moduleFor('crm') || modules[0];
+  // Same three tabs on every page (Keem, Nov 18): Home, Ask AI, Apps. Each app's own
+  // screens stay one tap away in the menu drawer.
   const tabs = [{ id: 'home', href: router.href(''), label: 'Home', icon: 'home' }];
-  (mod ? (mod.tabs || mod.nav) : []).slice(0, 3).forEach((n) => tabs.push({ id: n.id, href: router.href(n.path), label: n.short || n.label, icon: n.icon }));
+  if (moduleFor('ai-assistant')) tabs.push({ id: 'ai-chat', href: router.href('ai-assistant/chat'), label: 'Ask AI', icon: 'sparkles' });
   nav.innerHTML = html`${tabs.map((t) => html`<a class="apwa-tab" data-nav="${t.id}" href="${t.href}">${icon(t.icon)}<span>${t.label}</span></a>`)}
     <button type="button" class="apwa-tab" data-action="apps-sheet">${icon('grid')}<span>Apps</span></button>`;
 }
