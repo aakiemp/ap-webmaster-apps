@@ -469,7 +469,11 @@ function launcher() {
       </div>
       <p class="apwa-lp__sub">${live} live demos${apps.length > live ? ` · ${apps.length - live} more on the way` : ", all ready to try"}</p>
       <div class="apwa-lp__grid" data-lp-grid>
-        ${apps.map((a, i) => html`<a class="apwa-lp__app ${a.status !== 'demo' ? 'is-soon' : ''}" href="${router.href(`${a.slug}/`)}" style="--i:${i}" data-name="${(a.name + ' ' + (a.shortName || '')).toLowerCase()}">
+        <a class="apwa-lp__app" href="${router.href('')}" style="--i:0" data-name="dashboard home overview">
+          <span class="apwa-lp__icon apwa-lp--navy">${icon('home')}</span>
+          <span class="apwa-lp__name">Dashboard</span>
+        </a>
+        ${apps.map((a, i) => html`<a class="apwa-lp__app ${a.status !== 'demo' ? 'is-soon' : ''}" href="${router.href(`${a.slug}/`)}" style="--i:${i + 1}" data-name="${(a.name + ' ' + (a.shortName || '')).toLowerCase()}">
           <span class="apwa-lp__icon apwa-lp--${a.color}">${icon(a.icon)}${a.status !== 'demo' ? html`<em>Soon</em>` : ''}</span>
           <span class="apwa-lp__name">${a.shortName || a.name}</span>
         </a>`)}
