@@ -10,3 +10,4 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 delete_option( 'apwa_settings' );
 delete_option( 'apwa_rules_version' );
 delete_option( 'apwa_build' );
+delete_option( 'apwa_f2f_key' );

@@ -142,6 +142,13 @@ final class Admin {
 							<p class="description"><?php esc_html_e( 'Where "Ask about installing" buttons go. Leave empty to use /contact/.', 'ap-webmaster-apps' ); ?></p>
 						</td>
 					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Field to Forest demo', 'ap-webmaster-apps' ); ?></th>
+						<td>
+							<input class="large-text" type="text" readonly value="<?php echo esc_attr( F2f::share_url() ); ?>" onfocus="this.select()">
+							<p class="description"><?php esc_html_e( 'Private link to the Field to Forest demo. Anyone with this link can open it, even before launch. It is not listed anywhere.', 'ap-webmaster-apps' ); ?></p>
+						</td>
+					</tr>
 				</table>
 				<?php submit_button(); ?>
 			</form>

@@ -38,6 +38,7 @@ final class Router {
 		add_rewrite_rule( '^' . $b . '/demo/sw\.js$', 'index.php?' . self::QV_ROUTE . '=sw', 'top' );
 		add_rewrite_rule( '^' . $b . '/demo/?$', 'index.php?' . self::QV_ROUTE . '=demo', 'top' );
 		add_rewrite_rule( '^' . $b . '/demo/([a-z0-9-]+)(?:/.*)?$', 'index.php?' . self::QV_ROUTE . '=demo&' . self::QV_APP . '=$matches[1]', 'top' );
+		F2f::add_rules( $b );
 		add_rewrite_rule( '^' . $b . '/contact/?$', 'index.php?' . self::QV_ROUTE . '=contact', 'top' );
 		add_rewrite_rule( '^' . $b . '/?$', 'index.php?' . self::QV_ROUTE . '=marketplace', 'top' );
 	}
@@ -81,6 +82,12 @@ final class Router {
 	public static function dispatch() {
 		$route = get_query_var( self::QV_ROUTE );
 		if ( ! $route ) {
+			return;
+		}
+
+		// Field to Forest client demo: its own private-link gate.
+		if ( 0 === strpos( $route, 'f2f' ) ) {
+			F2f::dispatch( $route );
 			return;
 		}
 

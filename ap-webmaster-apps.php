@@ -25,7 +25,7 @@ const VERSION = '0.1.0';
  * differs from the stored value, so a deploy that adds routes works without
  * deactivating and reactivating the plugin.
  */
-const RULES_VERSION = '2';
+const RULES_VERSION = '3';
 
 define( 'APWA_FILE', __FILE__ );
 define( 'APWA_DIR', plugin_dir_path( __FILE__ ) );
@@ -35,6 +35,7 @@ require_once APWA_DIR . 'includes/class-settings.php';
 require_once APWA_DIR . 'includes/class-registry.php';
 require_once APWA_DIR . 'includes/class-router.php';
 require_once APWA_DIR . 'includes/class-pwa.php';
+require_once APWA_DIR . 'includes/class-f2f.php';
 require_once APWA_DIR . 'includes/class-renderer.php';
 require_once APWA_DIR . 'includes/class-contact.php';
 require_once APWA_DIR . 'includes/class-admin.php';
