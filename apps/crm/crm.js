@@ -341,7 +341,9 @@ function contactsTable() {
       sort: contactsUI.sort,
       rowLink: contactHref,
       mobile: (c) => html`${avatar(name(c))}<div class="apwa-list__main"><strong>${name(c)}</strong><span>${c.company || c.email}</span></div><div class="apwa-list__side">${contactStatus(c.status)}<span>${ago(c.lastActivityAt)}</span></div>`,
-      empty: emptyState({ icon: 'users', title: 'No contacts match', text: 'Try a different search or clear the filters.', action: html`<button type="button" class="apwa-btn apwa-btn--secondary" data-clear-filters>Clear filters</button>` }),
+      empty: hasFilters
+        ? emptyState({ icon: 'users', title: 'No contacts match', text: 'Try a different search or clear the filters.', action: html`<button type="button" class="apwa-btn apwa-btn--secondary" data-clear-filters>Clear filters</button>` })
+        : emptyState({ icon: 'users', title: 'No contacts yet', text: 'Add your first customer. Use made-up details, nothing leaves your browser.', action: html`<button type="button" class="apwa-btn apwa-btn--primary" data-add-contact>Add a customer</button>` }),
     })}`;
 }
 
@@ -397,6 +399,7 @@ function contactsView(ctx) {
         refresh();
       });
       on(root, 'click', '[data-clear-filters]', () => { Object.assign(contactsUI, { q: '', status: 'all', owner: 'all' }); ctx.rerender(); });
+      on(root, 'click', '[data-add-contact]', () => openContactForm());
       bindRowLinks(root);
     },
   };

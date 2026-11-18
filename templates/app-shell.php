@@ -33,6 +33,14 @@ defined( 'ABSPATH' ) || exit;
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/tokens.css' ) ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/app.css' ) ); ?>">
 <script type="importmap"><?php echo wp_json_encode( $import_map, JSON_UNESCAPED_SLASHES ); ?></script>
+<?php
+// Fetch the shared scripts in parallel instead of one import at a time.
+foreach ( $import_map['imports'] as $apwa_src ) {
+	if ( false !== strpos( $apwa_src, '/assets/js/' ) ) {
+		echo '<link rel="modulepreload" href="' . esc_url( $apwa_src ) . '">' . "\n";
+	}
+}
+?>
 <script>window.APWA_CONFIG = <?php echo wp_json_encode( $config, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ); ?>;</script>
 </head>
 <body class="apwa-body apwa-scope">

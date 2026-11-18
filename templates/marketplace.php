@@ -214,14 +214,14 @@ endif;
 				);
 				$apwa_tile_tints = array(
 					'crm'                 => array( '#1d6f8c', '#40a3c3' ),
-					'booking-manager'     => array( '#2c8dac', '#9fd6e7' ),
+					'booking-manager'     => array( '#237592', '#9fd6e7' ),
 					'invoice-automation'  => array( '#15374d', '#2c6f8f' ),
 					'document-processor'  => array( '#8f2aa6', '#dc3ff0' ),
 					'email-automation'    => array( '#b92ccd', '#f0a3f7' ),
 					'analytics-reporting' => array( '#0f1b2d', '#3a5577' ),
 					'ai-assistant'        => array( '#5a2a9e', '#a77be6' ),
 					'client-portal'       => array( '#237592', '#6cbdd7' ),
-					'customer-support'    => array( '#2c8dac', '#b92ccd' ),
+					'customer-support'    => array( '#237592', '#b92ccd' ),
 					'business-operations' => array( '#3f5873', '#8ea3bb' ),
 					'quote-recovery'      => array( '#6d2a99', '#c56be3' ),
 				);

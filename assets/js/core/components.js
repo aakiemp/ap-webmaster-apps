@@ -104,7 +104,7 @@ export function emptyState({ icon: ic = 'inbox', title, text = '', action = '' }
 /** options: [{value, label, icon, count}] */
 export function segmented(name, options, value, opts = {}) {
   return html`<div class="apwa-seg ${opts.className || ''}" role="radiogroup" aria-label="${opts.label || name}" data-seg="${name}">
-    ${options.map((o) => html`<button type="button" role="radio" class="apwa-seg__btn ${o.value === value ? 'is-active' : ''}" aria-checked="${o.value === value}" data-value="${o.value}" ${o.title ? raw(`title="${esc(o.title)}"`) : ''}>
+    ${options.map((o) => html`<button type="button" role="radio" class="apwa-seg__btn ${o.value === value ? 'is-active' : ''}" aria-checked="${o.value === value ? 'true' : 'false'}" data-value="${o.value}" ${o.title ? raw(`title="${esc(o.title)}"`) : ''}>
       ${o.icon ? icon(o.icon) : ''}${o.label ? html`<span>${o.label}</span>` : ''}${o.count != null ? html`<span class="apwa-seg__count">${o.count}</span>` : ''}
     </button>`)}
   </div>`;
@@ -262,9 +262,9 @@ export function columnChart(items, opts = {}) {
 }
 
 /** Thin progress meter. */
-export function meter(value, tone = 'blue') {
+export function meter(value, tone = 'blue', label = 'Progress') {
   const v = Math.max(0, Math.min(1, value || 0));
-  return html`<span class="apwa-meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(v * 100)}"><span class="apwa-fill--${tone}" style="width:${(v * 100).toFixed(0)}%"></span></span>`;
+  return html`<span class="apwa-meter" role="meter" aria-label="${label}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(v * 100)}"><span class="apwa-fill--${tone}" style="width:${(v * 100).toFixed(0)}%"></span></span>`;
 }
 
 export { money, moneyShort };
