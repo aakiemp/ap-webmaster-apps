@@ -10,7 +10,7 @@ import * as ind from '../../assets/js/core/industry.js';
 import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate, menu } from '../../assets/js/core/ui.js';
-import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, avatar } from '../../assets/js/core/components.js';
+import { numsToggle, badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, avatar } from '../../assets/js/core/components.js';
 
 const HOUR = 3600000;
 const href = (p) => router.href(p);
@@ -143,10 +143,10 @@ function listView(ctx) {
   ];
   return {
     title: 'Tickets',
-    subtitle: 'Calls, emails and web requests in one queue, with an owner and a status for each.',
+    subtitle: all.some(TABS.open) ? `${plural(all.filter(TABS.open).length, 'open ticket')}${all.filter(late).length ? `, ${plural(all.filter(late).length, 'reply', 'replies')} overdue` : ''}. Most urgent first.` : 'No open tickets right now.',
     actions: [{ label: 'New ticket', icon: 'plus', kind: 'primary', primary: true, onClick: newTicket }],
     body: html`
-      <div class="apwa-stats sp-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm sp-stats">
         ${stat({ label: 'Open tickets', value: all.filter((t) => t.status === 'open').length, sub: `${plural(all.filter(late).length, 'reply', 'replies')} overdue`, icon: 'inbox', tone: 'pink' })}
         ${stat({ label: 'First reply', value: fr.length ? `${(fr.reduce((a, b) => a + b, 0) / fr.length).toFixed(1)}h` : '—', sub: `Goal: under ${SLA_HOURS} hours`, icon: 'clock', tone: 'blue' })}
         ${stat({ label: 'Resolved this week', value: done.filter((t) => Date.now() - new Date(t.resolvedAt).getTime() < 7 * 24 * HOUR).length, sub: plural(done.length, 'resolved ticket'), icon: 'check-circle', tone: 'green' })}

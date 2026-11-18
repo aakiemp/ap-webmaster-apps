@@ -10,7 +10,7 @@ import * as store from '../../assets/js/core/store.js';
 import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
-import { badge, avatar, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, timeline } from '../../assets/js/core/components.js';
+import { numsToggle, badge, avatar, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, timeline } from '../../assets/js/core/components.js';
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                              */
@@ -544,11 +544,11 @@ function calendarView(ctx) {
 
   return {
     title: 'Calendar',
-    subtitle: 'Click an open time to book it, or open any appointment to manage it.',
+    subtitle: reqs ? `${plural(reqs, 'booking request')} ${reqs === 1 ? 'needs' : 'need'} a yes or no. ${plural(todays.length, 'appointment')} today.` : `${plural(todays.length, 'appointment')} today. No requests waiting.`,
     pageClass: 'apwa-page--wide',
     actions: [{ label: 'New appointment', icon: 'plus', kind: 'primary', primary: true, onClick: () => openApptForm() }],
     body: html`
-      <div class="apwa-stats apwa-stats--4 bk-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm apwa-stats--4 bk-stats">
         ${stat({ label: 'Today', value: todays.length, sub: todays.length ? `Next: ${todays.find((a) => endOf(a) > today) ? fTime.format(new Date(todays.find((a) => endOf(a) > today).start)) : 'done for the day'}` : 'No visits booked', icon: 'calendar', tone: 'blue' })}
         ${stat({ label: 'This week', value: weekList.length, sub: `${money(weekList.reduce((t, a) => t + service(a.serviceId).price, 0))} booked`, icon: 'calendar-check', tone: 'purple' })}
         ${stat({ label: 'Requests waiting', value: reqs, sub: reqs ? 'Need a yes or no' : 'All caught up', icon: 'inbox', tone: 'amber' })}

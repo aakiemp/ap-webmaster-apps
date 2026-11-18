@@ -9,7 +9,7 @@ import * as store from '../../assets/js/core/store.js';
 import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import * as metrics from '../../assets/js/core/metrics.js';
-import { openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
+import { undoToast, openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
 import {
   badge, avatar, userAvatar, contactStatus, dealStatus, CONTACT_STATUS, DEAL_STATUS, button, card, stat,
   emptyState, segmented, bindSegmented, field, formGrid, dataTable, sortRows, timeline, barList, columnChart, meter,
@@ -188,8 +188,9 @@ function reopen(d) {
 async function deleteDeal(d, done) {
   const ok = await confirmDialog({ title: 'Delete opportunity?', message: `${d.name} and its value will be removed from the pipeline.`, confirmLabel: 'Delete', tone: 'danger' });
   if (!ok) return;
+  const snap = store.snapshot(['deals']);
   store.remove('deals', d.id);
-  toast(`${d.name} was deleted.`, { title: 'Opportunity deleted', tone: 'info' });
+  undoToast(`${d.name} was deleted.`, 'Opportunity deleted', snap);
   if (done) done();
 }
 
@@ -569,12 +570,13 @@ async function deleteContact(c) {
     tone: 'danger',
   });
   if (!ok) return;
+  const snap = store.snapshot(['contacts', 'deals', 'activities']);
   store.update((s) => {
     s.contacts = s.contacts.filter((x) => x.id !== c.id);
     s.deals = s.deals.filter((d) => d.contactId !== c.id);
     s.activities = s.activities.filter((a) => a.contactId !== c.id);
   });
-  toast(`${name(c)} was deleted.`, { title: 'Contact deleted', tone: 'info' });
+  undoToast(`${name(c)} was deleted.`, 'Contact deleted', snap, () => router.go(`crm/contacts/${c.id}`));
   router.go('crm/contacts');
 }
 

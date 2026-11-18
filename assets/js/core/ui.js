@@ -4,6 +4,7 @@
  * action sheets, so every overlay feels native on touch screens.
  */
 import { html, raw, el, esc, icon, isPhone, $ } from './dom.js';
+import * as store from './store.js';
 
 let layer = null;
 function overlayRoot() {
@@ -18,7 +19,7 @@ function overlayRoot() {
 
 let toastBox = null;
 export function toast(message, opts = {}) {
-  const { tone = 'success', title = '', timeout = 4200 } = opts;
+  const { tone = 'success', title = '', timeout = 4200, action = null } = opts;
   if (!toastBox) {
     toastBox = el('<div class="apwa-toasts" role="status" aria-live="polite"></div>');
     overlayRoot().appendChild(toastBox);
@@ -27,17 +28,24 @@ export function toast(message, opts = {}) {
   const t = el(html`<div class="apwa-toast apwa-toast--${tone}">
     <span class="apwa-toast__icon">${icon(iconName)}</span>
     <div class="apwa-toast__body">${title ? html`<strong>${title}</strong>` : ''}<span>${message}</span></div>
-    <button type="button" class="apwa-iconbtn apwa-iconbtn--sm" aria-label="Dismiss">${icon('x')}</button>
+    ${action ? html`<button type="button" class="apwa-toast__action" data-toast-action>${action.label}</button>` : ''}
+    <button type="button" class="apwa-iconbtn apwa-iconbtn--sm" aria-label="Dismiss" data-toast-x>${icon('x')}</button>
   </div>`);
   const close = () => {
     t.classList.add('is-leaving');
     setTimeout(() => t.remove(), 180);
   };
-  t.querySelector('button').addEventListener('click', close);
+  t.querySelector('[data-toast-x]').addEventListener('click', close);
+  if (action) t.querySelector('[data-toast-action]').addEventListener('click', () => { close(); action.onClick(); });
   toastBox.appendChild(t);
   requestAnimationFrame(() => t.classList.add('is-in'));
   if (timeout) setTimeout(close, timeout);
   return close;
+}
+
+/** A delete notice with an Undo button. snap comes from store.snapshot(). */
+export function undoToast(message, title, snap, after) {
+  return toast(message, { title, tone: 'info', timeout: 7000, action: { label: 'Undo', onClick: () => { store.restore(snap); toast('Brought back.', { title: 'Undone' }); if (after) after(); } } });
 }
 
 /** The standard truthful notice for anything that would normally contact someone. */

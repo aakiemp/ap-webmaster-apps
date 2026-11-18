@@ -9,8 +9,8 @@ import { html, raw, icon, $, $$, plural, date, ago } from '../../assets/js/core/
 import * as store from '../../assets/js/core/store.js';
 import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
-import { openPanel, toast, confirmDialog } from '../../assets/js/core/ui.js';
-import { badge, button, card, stat, emptyState, segmented, bindSegmented, dataTable, barList } from '../../assets/js/core/components.js';
+import { undoToast, openPanel, toast, confirmDialog } from '../../assets/js/core/ui.js';
+import { numsToggle, badge, button, card, stat, emptyState, segmented, bindSegmented, dataTable, barList } from '../../assets/js/core/components.js';
 
 /* ------------------------------------------------------------------ */
 /* Document types and samples                                          */
@@ -159,8 +159,9 @@ function approve(doc, next = true) {
 function removeDoc(doc) {
   confirmDialog({ title: `Delete ${doc.file}?`, message: 'It disappears from the inbox. Nothing else changes.', confirmLabel: 'Delete', tone: 'danger' }).then((ok) => {
     if (!ok) return;
+    const snap = store.snapshot(['documents']);
     store.remove('documents', doc.id);
-    toast(`${doc.file} deleted.`, { title: 'Document deleted' });
+    undoToast(`${doc.file} deleted.`, 'Document deleted', snap, () => router.go(`document-processor/doc/${doc.id}`));
     router.go('document-processor/inbox');
   });
 }
@@ -271,10 +272,10 @@ function inboxView(ctx) {
   ];
   return {
     title: 'Document inbox',
-    subtitle: 'Invoices, receipts and forms read for you. Check the flagged fields, approve, export.',
+    subtitle: all.some((d) => d.status === 'review') ? `${plural(all.filter((d) => d.status === 'review').length, 'document')} ${all.filter((d) => d.status === 'review').length === 1 ? 'needs' : 'need'} a quick check. Start there.` : 'Everything is checked. New files show up here.',
     actions: [{ label: 'Add documents', icon: 'plus', kind: 'primary', primary: true, fabIcon: 'scan', onClick: openUpload }],
     body: html`
-      <div class="apwa-stats dp-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm dp-stats">
         ${stat({ label: 'Needs review', value: all.filter((d) => d.status === 'review').length, sub: 'Waiting for a quick check', icon: 'alert', tone: 'amber' })}
         ${stat({ label: 'Read this week', value: week.length, sub: plural(fields, 'field'), icon: 'scan', tone: 'blue' })}
         ${stat({ label: 'Read without fixes', value: fields ? `${Math.round((auto / fields) * 100)}%` : '—', sub: 'Fields nobody had to change', icon: 'check-circle', tone: 'green' })}

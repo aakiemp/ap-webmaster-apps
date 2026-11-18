@@ -9,7 +9,7 @@ import * as store from '../../assets/js/core/store.js';
 import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate } from '../../assets/js/core/ui.js';
-import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, avatar, meter } from '../../assets/js/core/components.js';
+import { numsToggle, badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, avatar, meter } from '../../assets/js/core/components.js';
 
 const DAY = 86400000;
 const href = (p) => router.href(p);
@@ -127,10 +127,10 @@ function checklistView(ctx) {
   const group = (title, sub, items) => { const done = items.filter(isDone).length; return card({ title: html`<span class="op-gtitle">${title}<small>${sub}</small></span>`, actions: html`<span class="op-gcount">${done}/${items.length}</span>`, body: html`${meter(items.length ? done / items.length : 0, done === items.length ? 'green' : 'amber')}<ul class="op-duties">${items.map(row)}</ul>` }); };
   return {
     title: 'Today’s checklists',
-    subtitle: 'Recurring duties for each person, ticked off as the day goes.',
+    subtitle: duties.length - doneCount ? `${plural(duties.length - doneCount, 'duty', 'duties')} still open today.` : 'Everything on today’s list is done.',
     actions: [{ label: 'New duty', icon: 'plus', kind: 'primary', primary: true, onClick: () => editDuty(null) }],
     body: html`
-      <div class="apwa-stats op-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm op-stats">
         ${stat({ label: 'Done today', value: `${doneCount} of ${duties.length}`, sub: `${Math.round((doneCount / Math.max(1, duties.length)) * 100)}% complete`, icon: 'clipboard-check', tone: 'green' })}
         ${stat({ label: 'Still open', value: duties.length - doneCount, sub: 'Across the team', icon: 'clock', tone: 'amber' })}
         ${stat({ label: 'Low stock', value: lowItems.length, sub: lowItems.length ? lowItems.slice(0, 2).map((i) => i.name.split(',')[0].split(' ').slice(0, 2).join(' ')).join(', ') : 'All stocked', icon: 'alert', tone: lowItems.length ? 'pink' : 'green' })}

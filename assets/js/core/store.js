@@ -136,6 +136,17 @@ export function remove(col, id) {
   update((s) => { s[col] = (s[col] || []).filter((r) => r.id !== id); }, { type: 'remove', col, id });
 }
 
+/** A copy of some collections, so a delete can be undone. */
+export function snapshot(cols) {
+  const s = get();
+  return JSON.parse(JSON.stringify(Object.fromEntries(cols.map((c) => [c, s[c] || []]))));
+}
+
+/** Put collections back the way snapshot() saw them. */
+export function restore(snap) {
+  update((s) => { Object.assign(s, JSON.parse(JSON.stringify(snap))); }, { type: 'restore' });
+}
+
 /** Start over with fresh sample data. */
 export function reset() {
   state = createSeed();
