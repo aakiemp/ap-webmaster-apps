@@ -6,6 +6,7 @@
  */
 import { html, raw, el, esc, icon, on, $, $$, debounce, money, moneyShort, pct, num, plural, date, dateTime, ago, isoDay, fromDay, isPhone } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import * as metrics from '../../assets/js/core/metrics.js';
 import { openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
@@ -160,7 +161,7 @@ function markWon(d) {
 }
 
 function markLost(d, done) {
-  const reasons = ['Went with another contractor', 'Price too high', 'Postponed the project', 'No response', 'Other'];
+  const reasons = [`Went with another ${ind.type().word}`, 'Price too high', 'Postponed the project', 'No response', 'Other'];
   openPanel({
     title: 'Mark as lost',
     subtitle: d.name,

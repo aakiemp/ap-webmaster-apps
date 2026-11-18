@@ -5,6 +5,7 @@
  * looks current.
  */
 import { SCHEMA_VERSION } from './schema.js';
+import * as ind from './industry.js';
 
 function rng(seed) {
   let s = seed >>> 0;
@@ -95,7 +96,7 @@ const DEALS = [
   ['Parking lot lighting retrofit', 14, 27500, 'negotiation', 'won', 'u1', 'Trade show', 200, -150],
 ];
 
-const NOTES = [
+const NOTE_DEFAULTS = [
   'Asked for financing options. Sent the brochure.',
   'Prefers text over calls during the workday.',
   'Wants work finished before the holidays.',
@@ -118,10 +119,17 @@ const SERVICES = [
 
 const BOOKING_NOTES = ['Gate code is on file.', 'Two dogs, both friendly.', 'Please call on arrival.', 'Park in the driveway.', '', '', ''];
 
+/** Services for the chosen business type (same ids, colors and order). */
+function services() {
+  return SERVICES.map((x, i) => { const o = ind.at('services', i, null); return o ? { ...x, name: o[0], minutes: o[1], price: o[2] } : { ...x }; });
+}
+
 /** Booking settings and appointments, built around the shared contacts. */
 export function bookingSeed(contacts) {
   const r = rng(20261110);
   const pick = (arr) => arr[Math.floor(r() * arr.length)];
+  const SV = services();
+  const NOTES_B = ind.pack().bookingNotes ? [...ind.pack().bookingNotes, '', '', ''] : BOOKING_NOTES;
   const staff = ['u1', 'u2', 'u3'];
   // Each team member has their own visit times, so the week view stays readable.
   const slots = { u1: [[8, 0], [10, 30], [13, 0], [15, 30]], u2: [[9, 0], [11, 30], [14, 0], [16, 0]], u3: [[8, 30], [12, 0], [14, 30], [16, 0]] };
@@ -146,10 +154,10 @@ export function bookingSeed(contacts) {
       serviceId: a.serviceId,
       staffId: a.staffId,
       start: start.toISOString(),
-      minutes: SERVICES.find((s) => s.id === a.serviceId).minutes,
+      minutes: SV.find((s) => s.id === a.serviceId).minutes,
       status: a.status,
       source: a.source || pick(['Phone', 'Online booking', 'Online booking', 'Manual']),
-      notes: a.notes != null ? a.notes : pick(BOOKING_NOTES),
+      notes: a.notes != null ? a.notes : pick(NOTES_B),
       seriesId: a.seriesId || '',
       createdAt: (a.status === 'requested' ? new Date(Date.now() - (1 + Math.floor(r() * 20)) * 3600000) : created).toISOString(),
       updatedAt: created.toISOString(),
@@ -161,7 +169,7 @@ export function bookingSeed(contacts) {
   while ([0, 6].includes(dayAt(base, 9, 0).getDay())) base += 1;
   [base - 7, base, base + 7, base + 14].forEach((offset) => {
     taken.add(`${offset}|u1|0`);
-    add({ offset, h: 8, m: 0, staffId: 'u1', contactId: 'c2', serviceId: 's5', status: offset < 0 ? 'completed' : 'confirmed', source: 'Manual', notes: 'Weekly visit for the lobby and front offices.', seriesId: 'ser1' });
+    add({ offset, h: 8, m: 0, staffId: 'u1', contactId: 'c2', serviceId: 's5', status: offset < 0 ? 'completed' : 'confirmed', source: 'Manual', notes: ind.pack().seriesNote || 'Weekly visit for the lobby and front offices.', seriesId: 'ser1' });
   });
 
   for (let offset = -7; offset <= 10; offset += 1) {
@@ -176,7 +184,7 @@ export function bookingSeed(contacts) {
         taken.add(key);
         const [h, m] = slots[staffId][si];
         const serviceId = pick(['s1', 's1', 's2', 's2', 's3', 's3', 's4', 's5']);
-        const end = dayAt(offset, h, m).getTime() + SERVICES.find((s) => s.id === serviceId).minutes * 60000;
+        const end = dayAt(offset, h, m).getTime() + SV.find((s) => s.id === serviceId).minutes * 60000;
         let status = 'confirmed';
         if (end < Date.now()) {
           const x = r();
@@ -201,7 +209,7 @@ export function bookingSeed(contacts) {
   appointments.sort((a, b) => (a.start < b.start ? -1 : 1));
   return {
     booking: {
-      services: SERVICES.map((s) => ({ ...s })),
+      services: SV,
       staff,
       hours: { days: [1, 2, 3, 4, 5, 6], start: 8, end: 18 },
       rules: { bufferMin: 0, noticeHours: 12, autoConfirm: false },
@@ -209,7 +217,7 @@ export function bookingSeed(contacts) {
         confirmation: true,
         dayBefore: true,
         twoHour: false,
-        message: 'Hi {first_name}, this is a reminder of your {service} with Summit Home Services on {date} at {time}. Reply C to confirm or R to reschedule.',
+        message: `Hi {first_name}, this is a reminder of your {service} with ${ind.name()} on {date} at {time}. Reply C to confirm or R to reschedule.`,
       },
     },
     appointments,
@@ -220,7 +228,7 @@ export function bookingSeed(contacts) {
 export function invoiceSeed(contacts, appointments, deals) {
   const r = rng(20261111);
   const now = Date.now();
-  const svc = Object.fromEntries(SERVICES.map((x) => [x.id, x]));
+  const svc = Object.fromEntries(services().map((x) => [x.id, x]));
   const commercial = new Set(contacts.filter((c) => c.company).map((c) => c.id));
   const drafts = [];
 
@@ -236,7 +244,8 @@ export function invoiceSeed(contacts, appointments, deals) {
   // Won jobs: one invoice each, net 30 for businesses.
   (deals || []).filter((d) => d.status === 'won').forEach((d) => {
     const labor = Math.round((d.value * 0.55) / 10) * 10;
-    drafts.push({ contactId: d.contactId, source: { type: 'deal', id: d.id }, items: [{ desc: `${d.name}: labor`, qty: 1, price: labor }, { desc: `${d.name}: materials`, qty: 1, price: d.value - labor }], issued: new Date(d.closedAt).getTime() + 2 * DAY, terms: commercial.has(d.contactId) ? 30 : 14 });
+    const items = ind.pack().scale ? [{ desc: d.name, qty: 1, price: d.value }] : [{ desc: `${d.name}: labor`, qty: 1, price: labor }, { desc: `${d.name}: materials`, qty: 1, price: d.value - labor }];
+    drafts.push({ contactId: d.contactId, source: { type: 'deal', id: d.id }, items, issued: new Date(d.closedAt).getTime() + 2 * DAY, terms: commercial.has(d.contactId) ? 30 : 14 });
   });
 
   // A few older paid service invoices so reports have history.
@@ -300,7 +309,7 @@ export function invoiceSeed(contacts, appointments, deals) {
         { id: 'after3', offset: 3, on: true, label: '3 days late' },
         { id: 'after10', offset: 10, on: false, label: '10 days late' },
       ],
-      message: 'Hi {first_name}, a friendly reminder that invoice {number} for {amount} is due {due_date}. You can pay online with the link below. Thank you for choosing Summit Home Services!',
+      message: `Hi {first_name}, a friendly reminder that invoice {number} for {amount} is due {due_date}. You can pay online with the link below. Thank you for choosing ${ind.name()}!`,
     },
     invoices,
   };
@@ -308,6 +317,7 @@ export function invoiceSeed(contacts, appointments, deals) {
 
 export function createSeed() {
   const r = rng(20261109);
+  const NOTES = ind.pack().notes || NOTE_DEFAULTS;
   const now = new Date().toISOString();
 
   const contacts = PEOPLE.map((p, i) => {
@@ -335,7 +345,9 @@ export function createSeed() {
   });
 
   const deals = DEALS.map((d, i) => {
-    const [name, ci, value, stageId, status, ownerId, source, created, closeIn] = d;
+    const [name0, ci, value0, stageId, status, ownerId, source, created, closeIn] = d;
+    const name = ind.at('deals', i, name0);
+    const value = ind.money(value0, 10);
     const contact = contacts[ci];
     return {
       id: `d${i + 1}`,
@@ -348,7 +360,7 @@ export function createSeed() {
       source,
       expectedClose: at(-closeIn, 12),
       closedAt: status === 'open' ? null : at(Math.max(0, -closeIn), 15),
-      lostReason: status === 'lost' ? (i % 2 ? 'Went with another contractor' : 'Postponed the project') : '',
+      lostReason: status === 'lost' ? (i % 2 ? `Went with another ${ind.type().word}` : 'Postponed the project') : '',
       createdAt: at(created, 11),
       updatedAt: at(Math.max(0, Math.min(created, 3))),
     };
@@ -391,9 +403,9 @@ export function createSeed() {
     schema: SCHEMA_VERSION,
     seededAt: now,
     updatedAt: now,
-    business: { name: 'Summit Home Services', industry: 'Home services' },
+    business: { name: ind.name(), industry: ind.label(), type: ind.type().id, custom: ind.custom() },
     currentUserId: 'u1',
-    users: USERS,
+    users: USERS.map((u) => ({ ...u, role: (ind.pack().roles || {})[u.id] || u.role })),
     pipelines: [{ id: 'sales', name: 'Sales Pipeline', stages: STAGES }],
     sources: ['Website', 'Referral', 'Google Ads', 'Facebook', 'Phone', 'Trade show', 'Repeat'],
     contacts,

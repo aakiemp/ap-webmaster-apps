@@ -748,6 +748,22 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 .apwa-wel__cta { width: 100%; height: 50px; justify-content: center; font-size: 16px; border-radius: 10px; }
 .apwa-wel__link { min-height: 44px; border: 0; background: none; font: inherit; font-size: 14px; font-weight: 550; color: var(--apwa-brand-600); cursor: pointer; }
 .apwa-wel__link:hover { text-decoration: underline; }
+.apwa-wel__field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+.apwa-wel__field input { height: 48px; padding: 0 14px; border: 1.5px solid var(--apwa-border-strong, #c9d1dc); border-radius: 10px; font: inherit; font-size: 16px; font-weight: 500; color: var(--apwa-text); background: #fff; }
+.apwa-wel__field input:focus { outline: none; border-color: var(--apwa-brand-500); box-shadow: 0 0 0 3px var(--apwa-brand-100); }
+.apwa-wel__label { margin: 2px 0 -6px; font-size: 14px; font-weight: 600; }
+.apwa-wel__types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.apwa-wel__type { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 8px 12px; border-radius: 12px; border: 2px solid var(--apwa-border); background: #fff; font: inherit; font-size: 14.5px; font-weight: 600; text-align: left; color: var(--apwa-text); cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+.apwa-wel__type:last-child:nth-child(odd) { grid-column: span 2; }
+.apwa-wel__field em { font-style: normal; font-weight: 500; color: var(--apwa-text-3); }
+.apwa-wel__field[hidden] { display: none; }
+.apwa-wel__type .apwa-icon { flex-shrink: 0; color: var(--apwa-brand-600); }
+.apwa-wel__type:hover { border-color: var(--apwa-brand-300); }
+.apwa-wel__type.is-on { border-color: var(--apwa-brand-500); box-shadow: 0 0 0 3px var(--apwa-brand-100); background: var(--apwa-brand-50); }
+.apwa-wel__type:focus-visible { outline: 2px solid var(--apwa-brand-600); outline-offset: 2px; }
+.apwa-wel__fine { display: flex; align-items: center; justify-content: center; gap: 6px; margin: -6px 0 0; font-size: 12.5px; color: var(--apwa-text-3); }
+.apwa-wel__fine .apwa-icon { width: 14px; height: 14px; }
+.apwa-guide-card__btns { display: flex; gap: 4px; flex-shrink: 0; }
 .apwa-wel__start { display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 14px; border: 2px solid var(--apwa-brand-500); box-shadow: 0 8px 22px -12px rgba(15, 27, 45, 0.25); }
 .apwa-wel__pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--apwa-accent-600); color: #fff; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 .apwa-wel__app, .apwa-wel__nextapp { display: flex; align-items: center; gap: 14px; }

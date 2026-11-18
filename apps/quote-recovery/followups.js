@@ -6,6 +6,7 @@
  */
 import { html, raw, icon, $, plural, money, moneyShort, pct, date, ago } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate, confirmDialog } from '../../assets/js/core/ui.js';
@@ -14,7 +15,7 @@ import { badge, card, stat, emptyState, segmented, bindSegmented, formGrid, data
 const DAY = 86400000;
 const href = (p) => router.href(p);
 const CH = { sms: ['Text', 'smartphone'], email: ['Email', 'mail'], call: ['Call reminder', 'phone'] };
-const LOST = ['Went with another contractor', 'Price too high', 'Project postponed', 'No response'];
+const LOST_LIST = () => [`Went with another ${ind.type().word}`, 'Price too high', 'Project postponed', 'No response'];
 
 /* ------------------------------------------------------------------ */
 /* Seed                                                                 */
@@ -45,11 +46,13 @@ function seed() {
     ['Ductless mini-split', 9, 6900, 40, 1, 'won', { wonDay: 4 }],
     ['Deck staining', 12, 1800, 45, 0, 'won', { wonDay: 1 }],
     ['Basement waterproofing', 15, 9400, 52, 4, 'won', { wonDay: 18 }],
-    ['Attic insulation', 18, 2650, 60, 4, 'lost', { lost: 'Went with another contractor' }],
+    ['Attic insulation', 18, 2650, 60, 4, 'lost', { lost: `Went with another ${ind.type().word}` }],
     ['Fence repair', 21, 1300, 66, 4, 'lost', { lost: 'No response' }],
     ['Boiler service plan', 24, 720, 75, 2, 'won', { wonDay: 6 }],
   ];
-  const estimates = E.map(([title, ci, amount, sent, done, status, x = {}], i) => {
+  const estimates = E.map(([title0, ci, amount0, sent, done, status, x = {}], i) => {
+    const title = ind.at('estimates', i, title0);
+    const amount = ind.money(amount0);
     const sentAt = now - sent * DAY;
     const followUps = steps.slice(0, done).map((s) => ({ stepId: s.id, channel: s.channel, at: new Date(sentAt + s.day * DAY).toISOString() }));
     return {
@@ -133,7 +136,7 @@ function markLost(e) {
       toast('Follow-ups stopped. The reason shows up in your results.', { title: 'Estimate closed' });
       return true;
     },
-    body: formGrid([{ label: 'Why did it fall through?', name: 'reason', type: 'select', value: LOST[0], options: LOST.map((r) => ({ value: r, label: r })), span: 2 }]),
+    body: formGrid([{ label: 'Why did it fall through?', name: 'reason', type: 'select', value: LOST_LIST()[0], options: LOST_LIST().map((r) => ({ value: r, label: r })), span: 2 }]),
     buttons: [{ label: 'Cancel' }, { label: 'Mark lost', kind: 'primary', type: 'submit' }],
   });
 }
@@ -354,7 +357,7 @@ function resultsView() {
     months.push({ label: d.toLocaleDateString('en-US', { month: 'short' }), value: base + live, highlight: i === 0 });
   }
   const byStep = steps().map((s, i) => ({ label: `Follow-up ${i + 1}`, sub: `Day ${s.day} · ${CH[s.channel][0]}`, value: rec.filter((e) => e.followUps.length === i + 1).length, tone: 'green' }));
-  const lost = LOST.map((r) => ({ label: r, value: all.filter((e) => e.lostReason === r).length, tone: 'gray' })).filter((x) => x.value);
+  const lost = LOST_LIST().map((r) => ({ label: r, value: all.filter((e) => e.lostReason === r).length, tone: 'gray' })).filter((x) => x.value);
   return {
     title: 'Results',
     subtitle: 'How much revenue follow-ups win back that silence would have lost.',

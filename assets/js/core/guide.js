@@ -5,7 +5,8 @@
 import { html, raw, el, icon, $, $$ } from './dom.js';
 import * as store from './store.js';
 import * as router from './router.js';
-import { overlayRoot } from './ui.js';
+import { overlayRoot, toast } from './ui.js';
+import * as ind from './industry.js';
 
 const KEY = 'apwa.guide';
 let st = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } })();
@@ -105,6 +106,7 @@ export function setup(o) {
     }, 50);
   });
   document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-guide-yours]')) { makeItYours(); return; }
     const a = e.target.closest('[data-guide-item]');
     if (!a) return;
     const it = ITEMS[a.dataset.guideItem];
@@ -155,7 +157,10 @@ export function checklistCard() {
         <h2 class="apwa-guide-card__title" id="apwa-guide-card-t">Getting started</h2>
         <p class="apwa-guide-card__sub">Try these to see what the apps can do. ${p.n} of ${p.total} done.</p>
       </div>
-      <button type="button" class="apwa-btn apwa-btn--ghost apwa-btn--sm" data-guide-choose aria-label="Change goal">${icon('target')}<span>Change goal</span></button>
+      <div class="apwa-guide-card__btns">
+        <button type="button" class="apwa-btn apwa-btn--ghost apwa-btn--sm" data-guide-yours aria-label="Make it yours">${icon('sparkles')}<span>Make it yours</span></button>
+        <button type="button" class="apwa-btn apwa-btn--ghost apwa-btn--sm" data-guide-choose aria-label="Change goal">${icon('target')}<span>Change goal</span></button>
+      </div>
     </div>
     ${checklistHtml()}
   </section>`;
@@ -194,6 +199,98 @@ function overlay(cls, label, inner) {
   };
   requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('is-open')));
   return api;
+}
+
+/* ---------------- Make it yours: business name and type ---------------- */
+
+function yoursHtml(o) {
+  const t = ind.type();
+  return html`
+    <div class="apwa-wel__top">
+      <p class="apwa-wel__eyebrow">${o.eyebrow}</p>
+      <button type="button" class="apwa-wel__x" data-wel-look aria-label="Close">${icon('x')}</button>
+    </div>
+    <h2 class="apwa-wel__title" id="apwa-wel-t">${o.title}</h2>
+    <p class="apwa-wel__lead">${o.lead}</p>
+    <label class="apwa-wel__field"><span>Business name</span>
+      <input type="text" maxlength="40" autocomplete="organization" enterkeyhint="done" placeholder="${t.sample}" value="${ind.custom() ? ind.name() : ''}" data-biz-name>
+    </label>
+    <p class="apwa-wel__label" id="apwa-biz-t">Type of business</p>
+    <div class="apwa-wel__types" role="radiogroup" aria-labelledby="apwa-biz-t">
+      ${ind.TYPES.map((x) => html`<button type="button" class="apwa-wel__type ${x.id === t.id ? 'is-on' : ''}" role="radio" aria-checked="${x.id === t.id ? 'true' : 'false'}" data-biz-type="${x.id}">${icon(x.icon)}<span>${x.label}</span></button>`)}
+    </div>
+    <label class="apwa-wel__field" data-biz-whatrow ${t.id === 'other' ? '' : 'hidden'}><span>What do you do? <em>(optional)</em></span>
+      <input type="text" maxlength="40" enterkeyhint="done" placeholder="For example: bakery, pet grooming, tutoring" value="${ind.what()}" data-biz-what>
+    </label>
+    <div class="apwa-wel__actions">
+      <button type="button" class="apwa-btn apwa-btn--primary apwa-wel__cta" data-biz-save>${o.cta}</button>
+      ${raw(o.extra || '')}
+    </div>
+    <p class="apwa-wel__fine">${icon('lock')}<span>Stays in this browser. Nothing is sent anywhere.</span></p>`;
+}
+
+/** Handles clicks inside the form. Returns 'save' when the visitor saved. */
+function yoursClick(e, body) {
+  const tb = e.target.closest('[data-biz-type]');
+  if (tb) {
+    $$('[data-biz-type]', body).forEach((b) => { const on = b === tb; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+    const t = ind.TYPES.find((x) => x.id === tb.dataset.bizType);
+    $('[data-biz-name]', body).placeholder = t ? t.sample : '';
+    $('[data-biz-whatrow]', body).hidden = tb.dataset.bizType !== 'other';
+    return 'type';
+  }
+  return e.target.closest('[data-biz-save]') ? 'save' : '';
+}
+
+/** Saves the choice and reloads the sample data when it changed. */
+function yoursSave(body) {
+  const tb = $('[data-biz-type].is-on', body);
+  ind.set($('[data-biz-name]', body).value, tb ? tb.dataset.bizType : 'home', $('[data-biz-what]', body).value);
+  const b = store.get().business || {};
+  if (b.name === ind.name() && (b.type || 'home') === ind.type().id && b.industry === ind.label()) return false;
+  store.reset();
+  return true;
+}
+
+function focusYours(body) {
+  const fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  const n = fine ? $('[data-biz-name]', body) : $('[data-biz-type].is-on', body);
+  if (n) n.focus({ preventScroll: true });
+}
+
+function yoursKeys(e, body, onSave) {
+  if (e.key === 'Enter' && e.target.matches('[data-biz-name], [data-biz-what]')) { e.preventDefault(); onSave(); return; }
+  const tb = e.target.closest('[data-biz-type]');
+  if (!tb || !['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key)) return;
+  e.preventDefault();
+  const list = $$('[data-biz-type]', body);
+  const nb = list[(list.indexOf(tb) + (e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : -1) + list.length) % list.length];
+  nb.click(); nb.focus();
+}
+
+/** Change the business name and type later, from the menu or dashboard. */
+export function makeItYours() {
+  const o = overlay('apwa-wel', 'apwa-wel-t', html`<div class="apwa-wel__backdrop" data-wel-look></div>
+    <div class="apwa-wel__panel"><div class="apwa-wel__body" data-wel-body></div></div>`);
+  const body = $('[data-wel-body]', o.wrap);
+  body.innerHTML = yoursHtml({
+    eyebrow: 'Make it yours',
+    title: 'Use your business in the demo',
+    lead: 'The demo starts over with sample customers, services and numbers that fit your type of business.',
+    cta: 'Save and start over',
+    extra: html`<button type="button" class="apwa-wel__link" data-wel-look>Cancel</button>`,
+  });
+  const save = () => {
+    const changed = yoursSave(body);
+    o.close();
+    if (changed) toast(`The demo now uses ${ind.name()}.`, { title: 'All set' });
+  };
+  o.wrap.addEventListener('click', (e) => {
+    if (yoursClick(e, body) === 'save') { save(); return; }
+    if (e.target.closest('[data-wel-look]')) o.dismiss();
+  });
+  o.wrap.addEventListener('keydown', (e) => yoursKeys(e, body, save));
+  focusYours(body);
 }
 
 /* ---------------- Welcome: goal picker ---------------- */
@@ -262,6 +359,10 @@ export function welcome() {
       $$('[data-goal]', body).forEach((b) => { const on = b === gb; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
       return;
     }
+    const y = yoursClick(e, body);
+    if (y === 'save') { yoursSave(body); stepOne(); return; }
+    if (y) return;
+    if (e.target.closest('[data-wel-skip]')) { stepOne(); return; }
     if (e.target.closest('[data-wel-next]')) { st.goal = picked; save(); stepTwo(); return; }
     if (e.target.closest('[data-wel-back]')) { stepOne(); return; }
     const go = e.target.closest('[data-wel-go]');
@@ -274,6 +375,7 @@ export function welcome() {
     if (e.target.closest('[data-wel-look]')) o.dismiss();
   });
   o.wrap.addEventListener('keydown', (e) => {
+    if ($('[data-biz-name]', body)) { yoursKeys(e, body, () => { yoursSave(body); stepOne(); }); return; }
     const gb = e.target.closest('[data-goal]');
     if (!gb || !['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key)) return;
     e.preventDefault();
@@ -282,7 +384,15 @@ export function welcome() {
     const nb = list[(i + list.length) % list.length];
     nb.click(); nb.focus();
   });
-  stepOne();
+  if (ind.chosen()) { stepOne(); return; }
+  body.innerHTML = yoursHtml({
+    eyebrow: 'Welcome to the demo',
+    title: 'First, make it yours',
+    lead: 'Type your business name and pick your type. I’ll fill the demo with sample customers that fit.',
+    cta: 'Continue',
+    extra: html`<button type="button" class="apwa-wel__link" data-wel-skip>Skip, use the sample business</button>`,
+  });
+  focusYours(body);
 }
 
 /* ---------------- Success moment ---------------- */

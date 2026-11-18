@@ -6,6 +6,7 @@
  */
 import { html, raw, icon, $, plural, ago, money } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate } from '../../assets/js/core/ui.js';
 import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, avatar, meter } from '../../assets/js/core/components.js';
@@ -59,6 +60,10 @@ function seed() {
     { id: 'i6', name: 'Drop cloths', sku: 'DRP-9X12', qty: 2, min: 6, unit: 'each', cost: 14, vendor: 'Home Depot Pro' },
     { id: 'i7', name: 'Gutter guard sections', sku: 'GTR-4FT', qty: 30, min: 20, unit: 'each', cost: 6.8, vendor: 'ABC Supply' },
   ];
+  duties.forEach((x, i) => { x.title = ind.at('duties', i, x.title); });
+  sops.forEach((x, i) => { Object.assign(x, ind.at('sops', i, {})); });
+  equipment.forEach((x, i) => { const o = ind.at('equipment', i, null); if (o) { x.name = o[0]; x.kind = o[1]; } });
+  inventory.forEach((x, i) => { const o = ind.at('inventory', i, null); if (o) Object.assign(x, { name: o[0], sku: o[1], unit: o[2], cost: o[3], vendor: o[4] }); });
   return { duties, sops, equipment, inventory, opsRuns: {} };
 }
 
@@ -128,7 +133,7 @@ function checklistView(ctx) {
       <div class="apwa-stats op-stats">
         ${stat({ label: 'Done today', value: `${doneCount} of ${duties.length}`, sub: `${Math.round((doneCount / Math.max(1, duties.length)) * 100)}% complete`, icon: 'clipboard-check', tone: 'green' })}
         ${stat({ label: 'Still open', value: duties.length - doneCount, sub: 'Across the team', icon: 'clock', tone: 'amber' })}
-        ${stat({ label: 'Low stock', value: lowItems.length, sub: lowItems.length ? lowItems.slice(0, 2).map((i) => i.name.split(' ')[0]).join(', ') : 'All stocked', icon: 'alert', tone: lowItems.length ? 'pink' : 'green' })}
+        ${stat({ label: 'Low stock', value: lowItems.length, sub: lowItems.length ? lowItems.slice(0, 2).map((i) => i.name.split(',')[0].split(' ').slice(0, 2).join(' ')).join(', ') : 'All stocked', icon: 'alert', tone: lowItems.length ? 'pink' : 'green' })}
         ${stat({ label: 'Equipment needing service', value: dueEq.length, sub: 'Due within 2 weeks', icon: 'zap', tone: 'blue' })}
       </div>
       <div class="op-toolbar">${segmented('who', [{ value: 'all', label: 'Everyone' }, ...users.map((u) => ({ value: u.id, label: u.name.split(' ')[0], count: duties.filter((d) => d.ownerId === u.id && !isDone(d)).length }))], ui.who, { label: 'Show checklist for' })}</div>
@@ -254,7 +259,7 @@ function equipmentView() {
   ];
   return {
     title: 'Equipment',
-    subtitle: 'Trucks, tools and devices: who has them and when each is due for service.',
+    subtitle: ind.pack().equipHint || 'Trucks, tools and devices: who has them and when each is due for service.',
     body: card({ flush: true, className: 'op-table', body: dataTable(cols, list, {
       mobile: (e) => html`<span class="op-mrow"><span class="op-mrow__main"><strong>${e.name}</strong><span>${userName(e.ownerId)} · ${e.kind}</span><span>${dueBadge(e)}</span></span><button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm" data-service="${e.id}">${e.status === 'repair' ? 'Back' : 'Log'}</button></span>`,
     }) }),

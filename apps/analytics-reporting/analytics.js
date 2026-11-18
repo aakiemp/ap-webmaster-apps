@@ -6,6 +6,7 @@
  */
 import { html, raw, icon, $, plural, num, money, moneyShort, pct } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate } from '../../assets/js/core/ui.js';
 import { badge, card, stat, segmented, bindSegmented, formGrid, dataTable, barList } from '../../assets/js/core/components.js';
@@ -42,12 +43,15 @@ const CHANNELS = [
   { id: 'email', label: 'Email', share: 0.04, conv: 0.05, tone: 'pink' },
 ];
 const CLOSE = 0.34; // share of leads that book a job
-const JOB = 640; // average job value
+const JOB_HOME = 640; // average job value
+const JOB = () => ind.pack().job || JOB_HOME;
 
-const PAGES = [['/', 'Home', 0.31], ['/services/furnace-repair/', 'Furnace repair', 0.17], ['/services/ac-repair/', 'AC repair', 0.12], ['/book/', 'Book a visit', 0.09], ['/maintenance-plan/', 'Maintenance plan', 0.07], ['/reviews/', 'Reviews', 0.05]];
+const PAGES_HOME = [['/', 'Home', 0.31], ['/services/furnace-repair/', 'Furnace repair', 0.17], ['/services/ac-repair/', 'AC repair', 0.12], ['/book/', 'Book a visit', 0.09], ['/maintenance-plan/', 'Maintenance plan', 0.07], ['/reviews/', 'Reviews', 0.05]];
+
+const pages = () => PAGES_HOME.map((x, i) => { const o = ind.at('pages', i, null); return o ? [o[0], o[1], x[2]] : x; });
 
 function seed() {
-  return {
+  const out = {
     adCampaigns: [
       { id: 'ad1', platform: 'google', name: 'Furnace repair - Search', spend: 1240, clicks: 980, leads: 44, active: true },
       { id: 'ad2', platform: 'google', name: 'Emergency HVAC - Search', spend: 860, clicks: 512, leads: 31, active: true },
@@ -64,8 +68,11 @@ function seed() {
       { id: 'k5', term: 'emergency plumber', pos: 14, prev: 19, volume: 4400, url: '/services/plumbing/' },
       { id: 'k6', term: 'water heater replacement', pos: 8, prev: 10, volume: 1600, url: '/services/water-heaters/' },
     ],
-    reportSettings: { freq: 'monthly', day: '1', to: 'owner@summithomeservices.example', sections: ['traffic', 'ads', 'seo', 'leads'], lastSent: null },
+    reportSettings: { freq: 'monthly', day: '1', to: `owner@${ind.slug()}.example`, sections: ['traffic', 'ads', 'seo', 'leads'], lastSent: null },
   };
+  out.adCampaigns.forEach((x, i) => { x.name = ind.at('ads', i, x.name); });
+  out.keywords.forEach((x, i) => { const o = ind.at('keywords', i, null); if (o) { x.term = o[0]; x.url = o[1]; } });
+  return out;
 }
 
 const ready = () => store.ensure('adCampaigns', seed);
@@ -127,7 +134,7 @@ function overviewView(ctx) {
   const v = sum(now, 'visitors'); const pv = sum(prev, 'visitors');
   const l = sum(now, 'leads'); const pl = sum(prev, 'leads');
   const ads = adTotals();
-  const rev = Math.round(l * CLOSE * JOB);
+  const rev = Math.round(l * CLOSE * JOB());
   return {
     title: 'Marketing overview',
     subtitle: 'How the website, ads and search turn into leads and booked jobs.',
@@ -145,7 +152,7 @@ function overviewView(ctx) {
       </div>
       <div class="apwa-grid apwa-grid--2 an-grid">
         ${card({ title: 'Leads by channel', actions: html`<a class="an-link" href="${href('analytics-reporting/leads')}">Attribution</a>`, body: barList(CHANNELS.map((c) => ({ label: c.label, sub: `${num(Math.round(v * c.share))} visitors`, value: Math.round(v * c.share * c.conv), tone: c.tone })), { format: (n) => num(n) }) })}
-        ${card({ title: 'Top pages', flush: true, body: html`<ul class="an-pages">${PAGES.map(([url, name, s]) => html`<li><span><strong>${name}</strong><small>${url}</small></span><b>${num(Math.round(v * s))}</b></li>`)}</ul>` })}
+        ${card({ title: 'Top pages', flush: true, body: html`<ul class="an-pages">${pages().map(([url, name, s]) => html`<li><span><strong>${name}</strong><small>${url}</small></span><b>${num(Math.round(v * s))}</b></li>`)}</ul>` })}
       </div>`,
     mount(root) { bindRange(root, ctx); },
   };
@@ -266,7 +273,7 @@ function leadsView(ctx) {
   const rows = CHANNELS.map((c) => {
     const leads = Math.round(v * c.share * c.conv);
     const jobs = Math.round(leads * CLOSE);
-    const revenue = jobs * JOB;
+    const revenue = jobs * JOB();
     const spend = spendOf(c.id);
     return { ...c, leads, jobs, revenue, spend, roi: spend ? revenue / spend : null };
   });
@@ -330,10 +337,10 @@ function reportsView(ctx) {
         <div class="an-report__body">
           <div class="an-report__brand"><span>AP</span>${biz}</div>
           <h2>${num(l)} leads last month, ${l >= sum(prev, 'leads') ? 'up' : 'down'} ${Math.abs(Math.round(((l - sum(prev, 'leads')) / sum(prev, 'leads')) * 100))}%</h2>
-          ${s.sections.includes('traffic') ? html`<section><h3>Website</h3><ul>${line('Visitors', num(v), delta(v, sum(prev, 'visitors')))}${line('Best page', 'Furnace repair')}</ul></section>` : ''}
+          ${s.sections.includes('traffic') ? html`<section><h3>Website</h3><ul>${line('Visitors', num(v), delta(v, sum(prev, 'visitors')))}${line('Best page', pages()[1][1])}</ul></section>` : ''}
           ${s.sections.includes('ads') ? html`<section><h3>Ads</h3><ul>${line('Spend', money(ads.spend))}${line('Leads from ads', num(Math.round(ads.leads)))}${line('Cost per lead', money(ads.leads ? ads.spend / ads.leads : 0))}</ul></section>` : ''}
           ${s.sections.includes('seo') ? html`<section><h3>Search</h3><ul>${line('Keywords on page one', `${kws.filter((k) => k.pos <= 10).length} of ${kws.length}`)}${line('Biggest gain', (kws.slice().sort((a, b) => b.prev - b.pos - (a.prev - a.pos))[0] || {}).term || '—')}</ul></section>` : ''}
-          ${s.sections.includes('leads') ? html`<section><h3>Leads and revenue</h3><ul>${line('Booked jobs', num(Math.round(l * CLOSE)))}${line('Revenue from marketing', moneyShort(Math.round(l * CLOSE * JOB)))}</ul></section>` : ''}
+          ${s.sections.includes('leads') ? html`<section><h3>Leads and revenue</h3><ul>${line('Booked jobs', num(Math.round(l * CLOSE)))}${line('Revenue from marketing', moneyShort(Math.round(l * CLOSE * JOB())))}</ul></section>` : ''}
           ${s.sections.length ? '' : html`<p class="an-muted">Pick at least one section to include.</p>`}
           <p class="an-report__foot">Sent automatically by AP Webmaster Apps. Numbers in this demo are sample data.</p>
         </div>
