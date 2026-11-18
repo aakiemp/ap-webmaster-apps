@@ -26,7 +26,15 @@ apps/demo/sw.js                 -> service worker
 apps/demo/                      -> demo dashboard
 apps/demo/<slug>/...            -> demo dashboard, opened on that app
 apps/                           -> marketplace
+apps/f2f/...                    -> Field to Forest client demo (private link)
 ```
+
+**Field to Forest demo** (`includes/class-f2f.php`, `templates/f2f.php`,
+`assets/f2f/`): a branded, self-contained booking demo for one client. Not on
+the marketplace. Admins can always open it; anyone else needs the private link
+shown under Settings → AP Webmaster Apps (`?k=` key, then a cookie). Its own
+manifest and service worker are scoped to `/apps/f2f/`. Data lives in
+`localStorage` key `f2f.demo.v1`.
 
 The base `apps` can be changed with the `apwa_base_path` filter. When
 `RULES_VERSION` changes in a deploy, rules are flushed once on the next page

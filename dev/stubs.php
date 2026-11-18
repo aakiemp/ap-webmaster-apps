@@ -72,6 +72,10 @@ function add_query_arg( $k, $v, $url ) { return $url . ( false === strpos( $url,
 function status_header( $c ) { http_response_code( $c ); }
 function nocache_headers() { header( 'Cache-Control: no-cache, must-revalidate, max-age=0' ); }
 function get_page_by_path() { return null; }
+function wp_generate_password( $n = 12 ) { return substr( bin2hex( random_bytes( $n ) ), 0, $n ); }
+function is_ssl() { return false; }
+function sanitize_text_field( $s ) { return trim( strip_tags( (string) $s ) ); }
+if ( ! defined( 'DAY_IN_SECONDS' ) ) { define( 'DAY_IN_SECONDS', 86400 ); }
 function add_rewrite_rule( $regex, $query ) { $GLOBALS['apwa_dev']['rules'][ $regex ] = $query; }
 function flush_rewrite_rules() {}
 function get_query_var( $k, $d = '' ) { return isset( $GLOBALS['apwa_dev']['qv'][ $k ] ) ? $GLOBALS['apwa_dev']['qv'][ $k ] : $d; }
