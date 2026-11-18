@@ -4,6 +4,7 @@
 import { html, icon, money, moneyShort, pct, date, ago, plural } from './core/dom.js';
 import * as store from './core/store.js';
 import * as router from './core/router.js';
+import * as guide from './core/guide.js';
 import * as metrics from './core/metrics.js';
 import { stat, card, barList, timeline, emptyState, userAvatar } from './core/components.js';
 
@@ -68,7 +69,7 @@ export default function dashboard() {
       { label: 'New opportunity', icon: 'plus', kind: 'primary', primary: true, onClick: () => router.go('crm/pipeline?new=1') },
     ],
     body: html`
-      ${welcome}
+      ${guide.checklistCard() || welcome}
       <div class="apwa-stats">
         ${stat({ label: 'Open pipeline', value: moneyShort(m.openValue), sub: plural(m.open.length, 'open deal'), icon: 'pipeline', tone: 'blue' })}
         ${stat({ label: 'Won this month', value: moneyShort(m.wonThisMonthValue), sub: `${plural(m.wonThisMonth.length, 'deal')} closed`, icon: 'award', tone: 'green' })}

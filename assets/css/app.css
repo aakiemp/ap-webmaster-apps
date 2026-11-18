@@ -713,3 +713,123 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 	.apwa-topbar__exit .apwa-icon { width: 15px; height: 15px; }
 	.apwa-quotefab { left: max(16px, var(--apwa-safe-left)); right: auto; bottom: calc(var(--apwa-tabbar-h) + var(--apwa-safe-bottom) + 18px); padding: 11px 16px; font-size: 13.5px; }
 }
+
+/* ---------------- Guided first run ---------------- */
+.apwa-lp__group { width: min(760px, 100%); margin: 30px auto 0; }
+.apwa-lp__group[hidden] { display: none; }
+.apwa-lp__gtitle { margin: 0 0 4px; padding: 0 4px; font-size: 12px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255, 255, 255, 0.72); }
+.apwa-lp .apwa-lp__group .apwa-lp__grid { margin: 14px 0 0; width: 100%; }
+.apwa-lp__icon em.is-start { background: var(--apwa-accent-600); color: #fff; }
+
+.apwa-wel, .apwa-win { position: fixed; inset: 0; z-index: 1120; display: flex; align-items: center; justify-content: center; padding: 24px; font-family: var(--apwa-font); color: var(--apwa-text); }
+.apwa-wel__backdrop, .apwa-win__backdrop { position: absolute; inset: 0; background: rgba(10, 18, 32, 0.62); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.2s ease; }
+.apwa-wel__panel, .apwa-win__panel { position: relative; width: min(480px, 100%); max-height: calc(100vh - 48px); overflow-y: auto; background: #fff; border-radius: 18px; box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.45); opacity: 0; transform: translateY(12px) scale(0.98); transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.apwa-wel.is-open .apwa-wel__backdrop, .apwa-win.is-open .apwa-win__backdrop, .apwa-wel.is-open .apwa-wel__panel, .apwa-win.is-open .apwa-win__panel { opacity: 1; transform: none; }
+.apwa-wel__body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 14px; }
+.apwa-wel__top { display: flex; align-items: center; justify-content: space-between; min-height: 40px; }
+.apwa-wel__eyebrow { margin: 0; font-size: 13px; font-weight: 650; color: var(--apwa-brand-600); }
+.apwa-wel__x, .apwa-wel__back { display: inline-flex; align-items: center; gap: 4px; min-width: 40px; height: 40px; padding: 0 8px; margin: 0 -8px; border: 0; border-radius: 10px; background: none; color: var(--apwa-text-2); font: inherit; font-size: 14px; cursor: pointer; justify-content: center; }
+.apwa-wel__x:hover, .apwa-wel__back:hover { background: var(--apwa-gray-100, #eef1f5); color: var(--apwa-text); }
+.apwa-wel__title { margin: 0; font-size: 24px; line-height: 1.25; font-weight: 700; letter-spacing: -0.01em; }
+.apwa-wel__lead { margin: -4px 0 4px; font-size: 15px; line-height: 1.5; color: var(--apwa-text-2); }
+.apwa-wel__goals { display: flex; flex-direction: column; gap: 10px; }
+.apwa-wel__goal { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 70px; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--apwa-border); background: #fff; font: inherit; text-align: left; color: var(--apwa-text); cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+.apwa-wel__goal:hover { border-color: var(--apwa-brand-300); }
+.apwa-wel__goal.is-on { border-color: var(--apwa-brand-500); box-shadow: 0 0 0 3px var(--apwa-brand-100); }
+.apwa-wel__goal:focus-visible { outline: 2px solid var(--apwa-brand-600); outline-offset: 2px; }
+.apwa-wel__gicon { width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; display: grid; place-items: center; background: var(--apwa-brand-50); color: var(--apwa-brand-600); transition: background 0.15s ease, color 0.15s ease; }
+.apwa-wel__goal.is-on .apwa-wel__gicon { background: var(--apwa-brand-500); color: #fff; }
+.apwa-wel__gtext { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.apwa-wel__gtext strong { font-size: 16px; font-weight: 650; }
+.apwa-wel__gtext span { font-size: 13.5px; color: var(--apwa-text-2); }
+.apwa-wel__radio { width: 20px; height: 20px; flex-shrink: 0; border-radius: 50%; box-sizing: border-box; border: 2px solid var(--apwa-navy-300); }
+.apwa-wel__goal.is-on .apwa-wel__radio { border: 6px solid var(--apwa-brand-500); }
+.apwa-wel__actions { display: flex; flex-direction: column; align-items: stretch; gap: 4px; margin-top: 6px; }
+.apwa-wel__cta { width: 100%; height: 50px; justify-content: center; font-size: 16px; border-radius: 10px; }
+.apwa-wel__link { min-height: 44px; border: 0; background: none; font: inherit; font-size: 14px; font-weight: 550; color: var(--apwa-brand-600); cursor: pointer; }
+.apwa-wel__link:hover { text-decoration: underline; }
+.apwa-wel__start { display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 14px; border: 2px solid var(--apwa-brand-500); box-shadow: 0 8px 22px -12px rgba(15, 27, 45, 0.25); }
+.apwa-wel__pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--apwa-accent-600); color: #fff; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.apwa-wel__app, .apwa-wel__nextapp { display: flex; align-items: center; gap: 14px; }
+.apwa-wel__app > span:last-child, .apwa-wel__nextapp > span:not(.apwa-lp__icon) { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.apwa-wel__app strong { font-size: 18px; font-weight: 700; }
+.apwa-wel__app span span, .apwa-wel__nextapp span span { font-size: 14px; color: var(--apwa-text-2); line-height: 1.4; }
+.apwa-lp__icon.apwa-wel__appicon { width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+.apwa-wel__appicon .apwa-icon { width: 26px; height: 26px; }
+.apwa-wel__why { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; }
+.apwa-wel__why li { display: flex; align-items: center; gap: 8px; }
+.apwa-wel__why .apwa-icon { width: 18px; height: 18px; color: var(--apwa-brand-600); stroke-width: 2.4; }
+.apwa-wel__nextapp { padding: 14px; border-radius: 14px; border: 1px solid var(--apwa-border); color: var(--apwa-text) !important; text-decoration: none; }
+.apwa-wel__nextapp:hover { border-color: var(--apwa-brand-300); }
+.apwa-wel__nextapp em { font-style: normal; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--apwa-text-2); }
+.apwa-wel__nextapp strong { font-size: 16px; }
+.apwa-wel__nextapp > .apwa-icon { color: var(--apwa-text-3); }
+.apwa-wel__nextapp .apwa-wel__appicon { width: 44px; height: 44px; border-radius: 12px; }
+
+.apwa-win__panel { padding: 14px 24px 24px; display: flex; flex-direction: column; align-items: stretch; gap: 14px; text-align: center; }
+.apwa-win__grab { display: none; }
+.apwa-win__check { align-self: center; width: 64px; height: 64px; margin-top: 8px; border-radius: 50%; display: grid; place-items: center; background: #e4f5ec; color: #1b7a4b; animation: apwa-pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) both 0.1s; }
+.apwa-win__check .apwa-icon { width: 32px; height: 32px; stroke-width: 2.6; }
+@keyframes apwa-pop { from { transform: scale(0.4); opacity: 0; } to { transform: none; opacity: 1; } }
+.apwa-win__title { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.25; }
+.apwa-win__text { margin: -4px auto 0; max-width: 340px; font-size: 15px; line-height: 1.5; color: var(--apwa-text-2); }
+.apwa-win__list { text-align: left; padding: 14px 16px; border: 1px solid var(--apwa-border); border-radius: 14px; }
+.apwa-win__listhead { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; margin-bottom: 10px; }
+.apwa-win__listhead span { font-size: 13px; color: var(--apwa-text-2); }
+
+.apwa-guide-list__bar { height: 6px; border-radius: 3px; background: var(--apwa-gray-200, #e3e8ef); overflow: hidden; }
+.apwa-guide-list__bar span { display: block; height: 100%; background: #1b7a4b; border-radius: 3px; transition: width 0.4s ease; }
+.apwa-guide-list ul { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; }
+.apwa-guide-list li { display: flex; align-items: center; gap: 10px; min-height: 40px; font-size: 14.5px; }
+.apwa-guide-list__dot { width: 22px; height: 22px; flex-shrink: 0; box-sizing: border-box; border-radius: 50%; border: 2px solid var(--apwa-navy-300); display: grid; place-items: center; }
+.apwa-guide-list li.is-done .apwa-guide-list__dot { border: 0; background: #1b7a4b; color: #fff; }
+.apwa-guide-list__dot .apwa-icon { width: 13px; height: 13px; stroke-width: 3.2; }
+.apwa-guide-list li.is-done .apwa-guide-list__label { color: var(--apwa-text-2); text-decoration: line-through; }
+.apwa-guide-list a.apwa-guide-list__label { color: var(--apwa-brand-600); font-weight: 600; text-decoration: none; }
+.apwa-guide-list a.apwa-guide-list__label:hover { text-decoration: underline; }
+.apwa-guide-card { padding: 16px 18px; margin-bottom: 16px; }
+.apwa-guide-card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.apwa-guide-card__title { margin: 0; font-size: 16px; font-weight: 650; }
+.apwa-guide-card__sub { margin: 2px 0 0; font-size: 13.5px; color: var(--apwa-text-2); }
+
+.apwa-tour { position: fixed; inset: 0; z-index: 1150; font-family: var(--apwa-font); color: var(--apwa-text); }
+.apwa-tour__shield { position: absolute; inset: 0; }
+.apwa-tour__spot { position: fixed; border-radius: 12px; box-shadow: 0 0 0 4px #fff, 0 0 0 8px var(--apwa-brand-500), 0 0 0 9999px rgba(11, 20, 34, 0.6); pointer-events: none; opacity: 0; transition: left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease, opacity 0.2s ease; }
+.apwa-tour__tip { position: fixed; box-sizing: border-box; padding: 16px; border-radius: 14px; background: #fff; box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.45); opacity: 0; transition: opacity 0.2s ease, top 0.25s ease, left 0.25s ease; }
+.apwa-tour.is-open .apwa-tour__spot, .apwa-tour.is-open .apwa-tour__tip { opacity: 1; }
+.apwa-tour__arrow { position: absolute; width: 16px; height: 16px; background: #fff; transform: rotate(45deg); }
+.apwa-tour__arrow[data-side="top"] { top: -7px; }
+.apwa-tour__arrow[data-side="bottom"] { bottom: -7px; }
+.apwa-tour__arrow[data-side="none"] { display: none; }
+.apwa-tour__head { display: flex; align-items: center; justify-content: space-between; margin: -6px 0 2px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--apwa-brand-600); }
+.apwa-tour__skip { min-height: 36px; padding: 0 8px; margin-right: -8px; border: 0; background: none; font: inherit; font-size: 13.5px; font-weight: 550; letter-spacing: 0; text-transform: none; color: var(--apwa-text-2); cursor: pointer; border-radius: 8px; }
+.apwa-tour__skip:hover { background: var(--apwa-gray-100, #eef1f5); color: var(--apwa-text); }
+.apwa-tour__title { margin: 0 0 4px; font-size: 17px; font-weight: 700; line-height: 1.3; }
+.apwa-tour__text { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--apwa-text-2); }
+.apwa-tour__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.apwa-tour__dots { display: flex; gap: 5px; }
+.apwa-tour__dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--apwa-navy-100); }
+.apwa-tour__dots span.is-on { background: var(--apwa-brand-600); }
+.apwa-tour__btns { display: flex; gap: 8px; }
+.apwa-tour__btns .apwa-btn { min-height: 40px; padding: 0 16px; }
+
+@media (max-width: 640px) {
+	.apwa-lp__group { margin-top: 24px; }
+	.apwa-lp .apwa-lp__group .apwa-lp__grid { margin-top: 12px; }
+	.apwa-wel { padding: 0; align-items: stretch; }
+	.apwa-wel__panel { width: 100%; max-height: none; height: 100%; border-radius: 0; }
+	.apwa-wel__body { min-height: 100%; box-sizing: border-box; padding: 12px 20px calc(20px + env(safe-area-inset-bottom)); }
+	.apwa-wel__actions { margin-top: auto; padding-top: 8px; }
+	.apwa-win { padding: 0; align-items: flex-end; }
+	.apwa-win__panel { width: 100%; border-radius: 22px 22px 0 0; max-height: 92vh; padding-bottom: calc(22px + env(safe-area-inset-bottom)); transform: translateY(40px); }
+	.apwa-win__grab { display: block; align-self: center; width: 40px; height: 5px; border-radius: 3px; background: var(--apwa-navy-100); }
+	.apwa-guide-card__head .apwa-btn span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.apwa-wel__panel, .apwa-win__panel, .apwa-tour__spot, .apwa-tour__tip { transition: none; }
+	.apwa-win__check { animation: none; }
+}
+@media (min-width: 861px) {
+	.apwa-guide-card .apwa-guide-list ul { flex-direction: row; flex-wrap: wrap; gap: 4px 28px; }
+	.apwa-guide-card__head { margin-bottom: 10px; }
+}

@@ -6,6 +6,7 @@
  */
 import { html, raw, icon, $, $$, plural, date, ago } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate, menu } from '../../assets/js/core/ui.js';
 import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, avatar } from '../../assets/js/core/components.js';
@@ -227,7 +228,7 @@ function ticketView(ctx) {
         });
         draft.text = '';
         if (note) toast('Note added. Only your team can see it.', { title: 'Note saved' });
-        else simulated(`Your reply would be emailed to ${c ? store.contactName(c) : 'the customer'}. The ticket now waits on them.`);
+        else { simulated(`Your reply would be emailed to ${c ? store.contactName(c) : 'the customer'}. The ticket now waits on them.`); guide.done('ticket'); }
       });
       root.addEventListener('change', (e) => {
         if (!e.target.matches('[data-meta]')) return;

@@ -124,3 +124,33 @@
 	.crm-deal__next { margin-left: 0; flex-basis: 100% !important; }
 	.crm-quicknote .apwa-btn span { display: none; }
 }
+
+/* Today: the calm first screen */
+.crm-today { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.crm-today__col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.crm-today .apwa-card { padding: 6px 0; }
+.crm-today__h { margin: 0; padding: 10px 16px 6px; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--apwa-text-2); }
+.crm-today__hrow { display: flex; align-items: center; justify-content: space-between; padding-right: 16px; }
+.crm-today__list { list-style: none; margin: 0; padding: 0; }
+.crm-today__list li + li { border-top: 1px solid var(--apwa-border); }
+.crm-today__row { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 8px 16px; color: var(--apwa-text) !important; text-decoration: none; }
+.crm-today__row:hover { background: var(--apwa-surface-muted); }
+.crm-today__row > .apwa-icon { color: var(--apwa-text-3); flex-shrink: 0; }
+.crm-today__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.crm-today__main strong { font-size: 15px; font-weight: 600; }
+.crm-today__main span { font-size: 13.5px; color: var(--apwa-text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crm-today__tag { flex-shrink: 0; padding: 4px 9px; border-radius: 999px; background: #fdf0d5; color: #7a4a00; font-size: 12px; font-weight: 650; }
+.crm-today__none { margin: 0; padding: 8px 16px 14px; font-size: 14px; color: var(--apwa-text-2); }
+.crm-today__nums summary { display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 16px; font-size: 15px; font-weight: 600; cursor: pointer; list-style: none; }
+.crm-today__nums summary::-webkit-details-marker { display: none; }
+.crm-today__nums summary .apwa-icon { color: var(--apwa-text-3); transition: transform 0.2s ease; }
+.crm-today__nums[open] summary .apwa-icon { transform: rotate(180deg); }
+.crm-today__nums dl { margin: 0; padding: 0 16px; }
+.crm-today__nums dl div { display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--apwa-border); font-size: 14.5px; }
+.crm-today__nums dt { color: var(--apwa-text-2); }
+.crm-today__nums dd { margin: 0; font-weight: 650; }
+.crm-today__links { display: flex; gap: 18px; margin: 0; padding: 8px 16px 12px; font-size: 14px; }
+@media (max-width: 860px) {
+	.crm-today { grid-template-columns: minmax(0, 1fr); }
+	.crm-today__tag { display: none; }
+}

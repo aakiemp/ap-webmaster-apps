@@ -9,6 +9,7 @@ import * as store from './store.js';
 import * as router from './router.js';
 import { menu, popover, openPanel, toast, confirmDialog, closeMenu, overlayRoot } from './ui.js';
 import { avatar, emptyState, button } from './components.js';
+import * as guide from './guide.js';
 
 const CONFIG = window.APWA_CONFIG || {};
 
@@ -171,12 +172,13 @@ export function mount(container) {
   </div>`;
 
   bindGlobal();
+  guide.setup({ quoteUrl: quoteHref(), launcher });
   store.subscribe(() => queueRender());
   mqPhone.addEventListener('change', () => queueRender());
   render({ type: 'initial' });
-  // Landing on the demo home opens the app launcher so visitors see every app first.
-  // Deep links straight into an app skip it.
-  if (!router.path()) launcher();
+  // A first visit to the demo home starts with the goal picker; later visits open the app launcher.
+  // Deep links straight into an app skip both.
+  if (!router.path()) { if (guide.seen()) launcher(); else guide.welcome(); }
 }
 
 function queueRender() {
@@ -285,6 +287,7 @@ function render(ev) {
     window.scrollTo(0, 0);
     if (ev.type === 'push' || ev.type === 'pop') main.focus({ preventScroll: true });
   }
+  if (ev.type !== 'data') guide.onRoute(r.slug);
 }
 
 /* ---------------- Built-in views ---------------- */
@@ -355,6 +358,7 @@ function bindGlobal() {
     if (act === 'search') openSearchSheet();
     if (act === 'apps-sheet' || act === 'launcher') launcher();
   });
+  on(root, 'click', '[data-guide-choose]', () => guide.welcome());
 
   // Desktop search.
   const input = $('[data-search]', root);
@@ -454,12 +458,28 @@ function suiteUrl() {
 
 let launcherOpen = null;
 
+// Launcher sections, by what the visitor wants to get done. The suggested first app sits under Start here.
+const LP_GROUPS = [
+  { title: 'Win and keep customers', slugs: ['crm', 'quote-recovery', 'email-automation', 'customer-support', 'client-portal'] },
+  { title: 'Get booked and paid', slugs: ['booking-manager', 'invoice-automation'] },
+  { title: 'Run the business', slugs: ['document-processor', 'business-operations', 'analytics-reporting', 'ai-assistant'] },
+];
+
 /** Full-screen app grid, like a laptop launcher or a phone home screen. */
 function launcher() {
   if (launcherOpen) { launcherOpen(); return; }
   const apps = CONFIG.apps || [];
   const live = apps.filter((a) => a.status === 'demo').length;
   const prevFocus = document.activeElement;
+  const startSlug = guide.startHereSlug();
+  let n = 0;
+  const groups = [{ title: 'Start here', start: true, tiles: [{ dash: true, i: n++ }] }]
+    .concat(LP_GROUPS.map((g) => ({ title: g.title, tiles: [] })));
+  apps.forEach((a) => {
+    if (a.slug === startSlug) { groups[0].tiles.push({ a, i: n++, start: true }); return; }
+    const gi = LP_GROUPS.findIndex((g) => g.slugs.includes(a.slug));
+    groups[gi < 0 ? groups.length - 1 : gi + 1].tiles.push({ a, i: n++ });
+  });
   const wrap = el(html`<div class="apwa-lp" role="dialog" aria-modal="true" aria-label="All apps">
     <div class="apwa-lp__backdrop" data-lp-close></div>
     <div class="apwa-lp__inner">
@@ -468,18 +488,21 @@ function launcher() {
         <button type="button" class="apwa-lp__close" data-lp-close aria-label="Close">${icon('x')}</button>
       </div>
       <p class="apwa-lp__sub">${live} live demos${apps.length > live ? ` · ${apps.length - live} more on the way` : ", all ready to try"}</p>
-      <div class="apwa-lp__grid" data-lp-grid>
-        <a class="apwa-lp__app" href="${router.href('')}" style="--i:0" data-name="dashboard home overview">
+      ${groups.map((g) => html`<section class="apwa-lp__group ${g.start ? 'apwa-lp__group--start' : ''}" data-lp-group>
+        <h2 class="apwa-lp__gtitle">${g.title}</h2>
+        <div class="apwa-lp__grid">${g.tiles.map((t) => (t.dash
+          ? html`<a class="apwa-lp__app" href="${router.href('')}" style="--i:${t.i}" data-name="dashboard home overview">
           <span class="apwa-lp__icon apwa-lp--navy">${icon('home')}</span>
           <span class="apwa-lp__name">Dashboard</span>
-        </a>
-        ${apps.map((a, i) => html`<a class="apwa-lp__app ${a.status !== 'demo' ? 'is-soon' : ''}" href="${router.href(`${a.slug}/`)}" style="--i:${i + 1}" data-name="${(a.name + ' ' + (a.shortName || '')).toLowerCase()}">
-          <span class="apwa-lp__icon apwa-lp--${a.color}">${icon(a.icon)}${a.status !== 'demo' ? html`<em>Soon</em>` : ''}</span>
-          <span class="apwa-lp__name">${a.shortName || a.name}</span>
-        </a>`)}
-      </div>
+        </a>`
+          : html`<a class="apwa-lp__app ${t.a.status !== 'demo' ? 'is-soon' : ''}" href="${router.href(`${t.a.slug}/`)}" style="--i:${t.i}" data-name="${(t.a.name + ' ' + (t.a.shortName || '')).toLowerCase()}">
+          <span class="apwa-lp__icon apwa-lp--${t.a.color}">${icon(t.a.icon)}${t.a.status !== 'demo' ? html`<em>Soon</em>` : (t.start ? html`<em class="is-start">Start</em>` : '')}</span>
+          <span class="apwa-lp__name">${t.a.shortName || t.a.name}</span>
+        </a>`))}</div>
+      </section>`)}
       <p class="apwa-lp__empty" data-lp-empty hidden>No apps match that search.</p>
       <div class="apwa-lp__foot">
+        <button type="button" class="apwa-lp__chip" data-lp="choose">${icon('target')}<span>Help me choose</span></button>
         <button type="button" class="apwa-lp__chip" data-lp="demo">${icon('info')}<span>About this demo</span></button>
         <button type="button" class="apwa-lp__chip" data-lp="reset">${icon('refresh')}<span>Reset demo data</span></button>
         <a class="apwa-lp__chip apwa-lp__chip--exit" href="${suiteUrl()}">${icon('log-out')}<span>Exit demo</span></a>
@@ -513,12 +536,14 @@ function launcher() {
     const act = e.target.closest('[data-lp]');
     if (act && act.dataset.lp === 'demo') close(() => demoInfo($('[data-action="demo-info"]', root) || act));
     if (act && act.dataset.lp === 'reset') close(resetDemo);
+    if (act && act.dataset.lp === 'choose') close(() => guide.welcome());
   });
   const q = $('[data-lp-q]', wrap);
   q.addEventListener('input', () => {
     const v = q.value.trim().toLowerCase();
     let shown = 0;
     $$('.apwa-lp__app', wrap).forEach((n) => { const ok = !v || n.dataset.name.includes(v); n.hidden = !ok; if (ok) shown += 1; });
+    $$('[data-lp-group]', wrap).forEach((g) => { g.hidden = !$$('.apwa-lp__app', g).some((a) => !a.hidden); });
     $('[data-lp-empty]', wrap).hidden = shown > 0;
   });
   overlayRoot().appendChild(wrap);

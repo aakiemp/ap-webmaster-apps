@@ -754,6 +754,64 @@ function reportsView() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Today: the calm first screen                                         */
+/* ------------------------------------------------------------------ */
+
+function todayView() {
+  const now = Date.now();
+  const needs = store.all('deals').filter((d) => d.status === 'open')
+    .sort((a, b) => (a.updatedAt < b.updatedAt ? -1 : 1)).slice(0, 3);
+  const bk = store.get().booking;
+  const svcName = (id) => ((bk && bk.services) || []).find((s) => s.id === id)?.name || 'Appointment';
+  const upcoming = store.all('appointments')
+    .filter((a) => a.status !== 'cancelled' && new Date(a.start).getTime() > now)
+    .sort((a, b) => (a.start < b.start ? -1 : 1)).slice(0, 2);
+  const recent = store.all('contacts').slice()
+    .sort((a, b) => ((a.lastActivityAt || '') < (b.lastActivityAt || '') ? 1 : -1)).slice(0, 4);
+  const m = metrics.pipeline();
+  const row = (c, sub, side = '') => html`<li><a class="crm-today__row" href="${contactHref(c)}">${avatar(name(c))}<span class="crm-today__main"><strong>${name(c)}</strong><span>${sub}</span></span>${side}${icon('chevron-right')}</a></li>`;
+
+  return {
+    title: 'Today',
+    subtitle: needs.length ? `${plural(needs.length, 'customer')} could use a follow-up. Start there.` : 'Nobody is waiting on you right now.',
+    actions: [{ label: 'Add a customer', icon: 'user-plus', kind: 'primary', primary: true, fabIcon: 'user-plus', onClick: () => openContactForm() }],
+    body: html`<div class="crm-today">
+      <div class="crm-today__col">
+        <section class="apwa-card" data-tour="today" aria-labelledby="crm-today-needs">
+          <h2 class="crm-today__h" id="crm-today-needs">Needs you today</h2>
+          ${needs.length ? html`<ul class="crm-today__list">${needs.map((d) => {
+            const c = store.contact(d.contactId);
+            return c ? row(c, `${d.name} · ${metrics.stageName(d.stageId)}`, html`<span class="crm-today__tag">Follow up</span>`) : '';
+          })}</ul>` : emptyState({ icon: 'check-circle', title: 'All caught up' })}
+        </section>
+        <section class="apwa-card" aria-labelledby="crm-today-next">
+          <h2 class="crm-today__h" id="crm-today-next">Coming up</h2>
+          ${upcoming.length ? html`<ul class="crm-today__list">${upcoming.map((a) => {
+            const c = store.contact(a.contactId);
+            return c ? row(c, `${svcName(a.serviceId)} · ${dateTime(a.start)}`) : '';
+          })}</ul>` : html`<p class="crm-today__none">Nothing booked yet.</p>`}
+        </section>
+      </div>
+      <div class="crm-today__col">
+        <section class="apwa-card" data-tour="recent" aria-labelledby="crm-today-recent">
+          <div class="crm-today__hrow"><h2 class="crm-today__h" id="crm-today-recent">Recent customers</h2><a class="apwa-link" href="${href('crm/contacts')}">See all</a></div>
+          <ul class="crm-today__list">${recent.map((c) => row(c, c.lastActivityAt ? `Last contact ${ago(c.lastActivityAt)}` : (c.company || c.email || '')))}</ul>
+        </section>
+        <details class="apwa-card crm-today__nums">
+          <summary><span>Show the numbers</span>${icon('chevron-down')}</summary>
+          <dl>
+            <div><dt>Open opportunities</dt><dd>${m.open.length}</dd></div>
+            <div><dt>Won in the last 90 days</dt><dd>${m.won90.length}</dd></div>
+            <div><dt>Win rate</dt><dd>${pct(m.winRate)}</dd></div>
+          </dl>
+          <p class="crm-today__links"><a class="apwa-link" href="${href('crm/pipeline')}">Open the pipeline</a><a class="apwa-link" href="${href('crm/reports')}">Full reports</a></p>
+        </details>
+      </div>
+    </div>`,
+  };
+}
+
+/* ------------------------------------------------------------------ */
 /* Global search provider                                               */
 /* ------------------------------------------------------------------ */
 
@@ -777,12 +835,14 @@ function search(q) {
 export default {
   slug: 'crm',
   nav: [
+    { id: 'crm-today', path: 'crm/today', label: 'Today', icon: 'home' },
     { id: 'crm-contacts', path: 'crm/contacts', label: 'Contacts', icon: 'users' },
     { id: 'crm-pipeline', path: 'crm/pipeline', label: 'Pipeline', icon: 'pipeline' },
     { id: 'crm-reports', path: 'crm/reports', label: 'Reports', icon: 'bar-chart' },
   ],
   routes: [
-    { pattern: 'crm', redirect: 'crm/pipeline' },
+    { pattern: 'crm', redirect: 'crm/today' },
+    { pattern: 'crm/today', view: todayView, nav: 'crm-today' },
     { pattern: 'crm/contacts', view: contactsView, nav: 'crm-contacts' },
     { pattern: 'crm/contacts/:id', view: contactDetailView, nav: 'crm-contacts' },
     { pattern: 'crm/pipeline', view: pipelineView, nav: 'crm-pipeline' },
