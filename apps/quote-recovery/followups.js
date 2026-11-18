@@ -10,7 +10,7 @@ import * as ind from '../../assets/js/core/industry.js';
 import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate, confirmDialog } from '../../assets/js/core/ui.js';
-import { badge, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, columnChart } from '../../assets/js/core/components.js';
+import { numsToggle, badge, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, columnChart } from '../../assets/js/core/components.js';
 
 const DAY = 86400000;
 const href = (p) => router.href(p);
@@ -189,10 +189,10 @@ function listView(ctx) {
   ];
   return {
     title: 'Estimates',
-    subtitle: 'Every open estimate gets a polite follow-up on schedule until the customer answers.',
+    subtitle: due.length ? `${plural(due.length, 'follow-up')} ${due.length === 1 ? 'is' : 'are'} ready to send. Start there.` : 'All caught up. Every open estimate is on schedule.',
     actions: [{ label: 'Add estimate', icon: 'plus', kind: 'primary', primary: true, onClick: newEstimate }],
     body: html`
-      <div class="apwa-stats fu-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm fu-stats">
         ${stat({ label: 'Open estimates', value: moneyShort(open.reduce((t, e) => t + e.amount, 0)), sub: plural(open.length, 'estimate'), icon: 'receipt', tone: 'blue' })}
         ${stat({ label: 'Follow-ups due', value: due.length, sub: due.length ? 'Ready to send' : 'All caught up', icon: 'clock', tone: due.length ? 'amber' : 'green' })}
         ${stat({ label: 'Recovered (90 days)', value: moneyShort(rec.reduce((t, e) => t + e.amount, 0)), sub: `Won after a follow-up`, icon: 'trending-up', tone: 'green' })}

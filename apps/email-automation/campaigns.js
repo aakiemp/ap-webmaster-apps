@@ -9,8 +9,8 @@ import { html, raw, icon, $, $$, plural, date, ago } from '../../assets/js/core/
 import * as store from '../../assets/js/core/store.js';
 import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
-import { openPanel, toast, simulated, confirmDialog, formData, validate } from '../../assets/js/core/ui.js';
-import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, columnChart, meter } from '../../assets/js/core/components.js';
+import { undoToast, openPanel, toast, simulated, confirmDialog, formData, validate } from '../../assets/js/core/ui.js';
+import { numsToggle, badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, columnChart, meter } from '../../assets/js/core/components.js';
 
 const DAY = 86400000;
 const href = (p) => router.href(p);
@@ -204,7 +204,7 @@ function listView(ctx) {
     subtitle: 'Emails to the customers already in Customer Manager. Write once, send to the right people.',
     actions: [{ label: 'New campaign', icon: 'plus', kind: 'primary', primary: true, onClick: newCampaign }],
     body: html`
-      <div class="apwa-stats ec-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm ec-stats">
         ${stat({ label: 'Emails sent', value: sum('recipients'), sub: 'Last 90 days', icon: 'send', tone: 'pink' })}
         ${stat({ label: 'Open rate', value: `${pct(sum('opened'), sum('recipients'))}%`, sub: 'Typical for local services: 35 to 45%', icon: 'mail', tone: 'blue' })}
         ${stat({ label: 'Click rate', value: `${pct(sum('clicked'), sum('recipients'))}%`, sub: plural(sum('clicked'), 'click'), icon: 'zap', tone: 'purple' })}
@@ -309,8 +309,9 @@ function campaignView(ctx) {
         if (!e.target.closest('[data-del]')) return;
         confirmDialog({ title: 'Delete this draft?', message: `"${c.name}" will be removed.`, confirmLabel: 'Delete', tone: 'danger' }).then((ok) => {
           if (!ok) return;
+          const snap = store.snapshot(['campaigns']);
           store.remove('campaigns', c.id);
-          toast('Draft deleted.', { title: 'Deleted' });
+          undoToast('Draft deleted.', 'Deleted', snap, () => router.go(`email-automation/campaign/${c.id}`));
           router.go('email-automation/campaigns');
         });
       });
@@ -435,8 +436,9 @@ function audiencesView() {
         const s = store.find('segments', b.dataset.rm);
         const used = campaigns().some((c) => c.segmentId === s.id && c.status !== 'sent');
         if (used) { toast('A draft or scheduled campaign uses this audience. Change that campaign first.', { tone: 'danger', title: 'Still in use' }); return; }
+        const snap = store.snapshot(['segments']);
         store.remove('segments', s.id);
-        toast(`${s.name} deleted. Your contacts are untouched.`, { title: 'Audience deleted' });
+        undoToast(`${s.name} deleted. Your contacts are untouched.`, 'Audience deleted', snap);
       });
     },
   };

@@ -65,6 +65,20 @@ export function card({ title, actions = '', body, flush = false, className = '' 
   </section>`;
 }
 
+/* On phones, an app's first screen leads with what needs attention and
+   tucks the number tiles behind this toggle. The choice lasts the visit. */
+let numsOpen = false;
+export function numsToggle() {
+  return html`<button type="button" class="apwa-nums" aria-expanded="${numsOpen ? 'true' : 'false'}" data-nums>${icon('bar-chart')}<span>${numsOpen ? 'Hide the numbers' : 'Show the numbers'}</span>${icon('chevron-down', 'apwa-nums__chev')}</button>`;
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-nums]');
+  if (!b) return;
+  numsOpen = b.getAttribute('aria-expanded') !== 'true';
+  b.setAttribute('aria-expanded', numsOpen ? 'true' : 'false');
+  b.querySelector('span').textContent = numsOpen ? 'Hide the numbers' : 'Show the numbers';
+});
+
 export function stat({ label, value, sub = '', icon: ic = '', tone = 'blue', trend = null }) {
   return html`<div class="apwa-stat">
     <div class="apwa-stat__top">

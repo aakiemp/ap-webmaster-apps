@@ -10,7 +10,7 @@ import * as store from '../../assets/js/core/store.js';
 import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate } from '../../assets/js/core/ui.js';
-import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, meter } from '../../assets/js/core/components.js';
+import { numsToggle, badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, meter } from '../../assets/js/core/components.js';
 
 const DAY = 86400000;
 const href = (p) => router.href(p);
@@ -187,10 +187,10 @@ function listView(ctx) {
   const reqs = all.reduce((t, p) => t + openReq(p).length, 0);
   return {
     title: 'Projects',
-    subtitle: 'Every client job in one place. Clients follow along in their own portal.',
+    subtitle: waiting || reqs ? [waiting ? `${plural(waiting, 'approval')} waiting on clients` : '', reqs ? `${plural(reqs, 'new client request')}` : ''].filter(Boolean).join(' and ') + '.' : 'Every client is up to date.',
     actions: [{ label: 'Client view', icon: 'external', onClick: () => router.go(`client-portal/client/${(active[0] || all[0]).id}`) }],
     body: html`
-      <div class="apwa-stats cp-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm cp-stats">
         ${stat({ label: 'Active projects', value: active.length, sub: `${plural(all.length - active.length, 'finished')}`, icon: 'briefcase', tone: 'purple' })}
         ${stat({ label: 'Waiting on clients', value: waiting, sub: 'Approvals not answered yet', icon: 'clock', tone: 'amber' })}
         ${stat({ label: 'New requests', value: reqs, sub: 'From client portals', icon: 'inbox', tone: 'pink' })}

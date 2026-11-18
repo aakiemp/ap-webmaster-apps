@@ -186,6 +186,11 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 .apwa-card__body--flush { padding: 0; }
 .apwa-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
 .apwa-stats--6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.apwa-nums { display: none; align-items: center; gap: 8px; width: 100%; min-height: 46px; margin: 0 0 12px; padding: 0 14px; border: 1px solid var(--apwa-border); border-radius: 12px; background: #fff; font: inherit; font-size: 15px; font-weight: 600; color: var(--apwa-text); cursor: pointer; }
+.apwa-nums > .apwa-icon:first-child { color: var(--apwa-brand-600); }
+.apwa-nums span { flex: 1; text-align: left; }
+.apwa-nums__chev { color: var(--apwa-text-3); transition: transform 0.2s ease; }
+.apwa-nums[aria-expanded="true"] .apwa-nums__chev { transform: rotate(180deg); }
 .apwa-stat { background: #fff; border: 1px solid var(--apwa-border); border-radius: var(--apwa-radius-lg); padding: 14px 16px; box-shadow: var(--apwa-shadow-sm); min-width: 0; }
 .apwa-stat__top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .apwa-stat__label { font-size: 12.5px; color: var(--apwa-text-2); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -437,6 +442,8 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 .apwa-toast--warning .apwa-toast__icon, .apwa-toast--danger .apwa-toast__icon { color: #ffb35c; }
 .apwa-toast__body { flex: 1; min-width: 0; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column; color: #d5deea; }
 .apwa-toast__body strong { color: #fff; font-weight: 600; }
+.apwa-toast__action { flex-shrink: 0; min-height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: rgba(255, 255, 255, 0.12); color: #fff; font: inherit; font-size: 13.5px; font-weight: 650; cursor: pointer; }
+.apwa-toast__action:hover { background: rgba(255, 255, 255, 0.22); }
 .apwa-toast .apwa-iconbtn { color: #9fb0c6; margin-top: -3px; }
 .apwa-toast .apwa-iconbtn:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
 
@@ -492,6 +499,8 @@ html.apwa-noscroll, html.apwa-noscroll body { overflow: hidden; }
 }
 @media (max-width: 991.98px) {
 	.apwa-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.apwa-nums { display: flex; }
+	.apwa-nums[aria-expanded="false"] + .apwa-stats--calm { display: none; }
 	.apwa-stats--6 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.apwa-grid--2, .apwa-grid--dash { grid-template-columns: minmax(0, 1fr); }
 	.apwa-span-2 { grid-column: auto; }

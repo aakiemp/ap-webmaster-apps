@@ -9,8 +9,8 @@ import { html, raw, icon, $, debounce, money, plural, isoDay, fromDay, date } fr
 import * as store from '../../assets/js/core/store.js';
 import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
-import { openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
-import { badge, avatar, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList } from '../../assets/js/core/components.js';
+import { undoToast, openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
+import { numsToggle, badge, avatar, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList } from '../../assets/js/core/components.js';
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                              */
@@ -140,8 +140,9 @@ function voidInvoice(inv) {
 function removeDraft(inv, after) {
   confirmDialog({ title: `Delete draft ${inv.number}?`, message: 'This draft has not been sent, so nobody will notice.', confirmLabel: 'Delete draft', tone: 'danger' }).then((ok) => {
     if (!ok) return;
+    const snap = store.snapshot(['invoices']);
     store.remove('invoices', inv.id);
-    toast(`Draft ${inv.number} deleted.`, { title: 'Draft deleted' });
+    undoToast(`Draft ${inv.number} deleted.`, 'Draft deleted', snap);
     if (after) after();
   });
 }
@@ -455,10 +456,10 @@ function overviewView() {
   const row = (i, right) => html`<li><button type="button" class="inv-row" data-open="${i.id}">${avatar(custName(i), { size: 'sm' })}<span class="inv-row__main"><strong>${custName(i)}</strong><span>${i.number} · ${dueLabel(i)}</span></span>${right}</button></li>`;
   return {
     title: 'Invoices overview',
-    subtitle: 'What you are owed, what came in, and the reminders working for you.',
+    subtitle: late.length ? `${plural(late.length, 'invoice')} overdue${ready.length ? ` and ${plural(ready.length, 'finished job')} to invoice` : ''}. Start there.` : ready.length ? `${plural(ready.length, 'finished job')} ready to invoice. Start there.` : 'Nothing overdue. Reminders are handling the rest.',
     actions: [{ label: 'New invoice', icon: 'plus', kind: 'primary', primary: true, onClick: () => openEditor() }],
     body: html`
-      <div class="apwa-stats inv-stats">
+      ${numsToggle()}<div class="apwa-stats apwa-stats--calm inv-stats">
         ${stat({ label: 'Outstanding', value: money(open.reduce((t, i) => t + balance(i), 0)), sub: plural(open.length, 'unpaid invoice'), icon: 'receipt', tone: 'blue' })}
         ${stat({ label: 'Overdue', value: money(late.reduce((t, i) => t + balance(i), 0)), sub: late.length ? plural(late.length, 'invoice') : 'Nothing late', icon: 'alert', tone: late.length ? 'red' : 'green' })}
         ${stat({ label: 'Collected, last 30 days', value: money(collected), sub: 'Card, check and transfer', icon: 'dollar', tone: 'green' })}
