@@ -7,6 +7,7 @@
  */
 import { html, raw, icon, $, $$, plural, date, ago } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate } from '../../assets/js/core/ui.js';
 import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, meter } from '../../assets/js/core/components.js';
@@ -61,6 +62,19 @@ function seed() {
       requests: [],
     },
   ];
+  (ind.pack().projects || []).forEach((o, i) => {
+    const p = projects[i];
+    if (!p || !o) return;
+    p.name = o.name;
+    p.value = ind.money(p.value, 10);
+    const each = (list, src, fn) => { if (src) list.forEach((x, j) => { if (src[j] != null) fn(x, src[j]); }); };
+    each(p.phases, o.phases, (x, v) => { x.name = v; });
+    each(p.onboarding, o.ob, (x, v) => { x.t = v; });
+    each(p.approvals, o.ap, (x, v) => { x.title = v[0]; x.note = v[1]; });
+    each(p.files, o.files, (x, v) => { x.name = v; });
+    each(p.updates, o.up, (x, v) => { x.text = v; });
+    each(p.requests, o.req, (x, v) => { x.text = v; });
+  });
   return { projects };
 }
 

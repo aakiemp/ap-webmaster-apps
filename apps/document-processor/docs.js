@@ -7,6 +7,7 @@
  */
 import { html, raw, icon, $, $$, plural, date, ago } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, confirmDialog } from '../../assets/js/core/ui.js';
 import { badge, button, card, stat, emptyState, segmented, bindSegmented, dataTable, barList } from '../../assets/js/core/components.js';
@@ -42,7 +43,7 @@ function samples() {
   const d = (n) => date(new Date(Date.now() - n * DAY).toISOString(), true);
   const w1 = pick(5);
   const w2 = pick(11);
-  return [
+  const out = [
     { type: 'invoice', file: 'acme-supply-inv-20931.pdf', from: 'Email inbox', f: { vendor: f('Acme Supply Co.'), number: f('20931'), date: f(d(2)), due: f(d(-28), 0.71), subtotal: f('$1,148.15'), tax: f('$91.85'), total: f('$1,240.00') }, lines: [['Copper pipe 3/4" x 10ft', 12, '$418.80'], ['PEX fittings, box', 6, '$329.70'], ['Shutoff valves', 15, '$399.65']] },
     { type: 'receipt', file: 'IMG_4471.jpg', from: 'Phone scan', f: { merchant: f('Lakeside Fuel Stop'), date: f(d(1)), category: f('Fuel'), payment: f('Card ending 4417', 0.97), total: f('$86.40') } },
     { type: 'intake', file: 'new-customer-form-scan.pdf', from: 'Upload', f: { first: f('Dana'), last: f('Whitfield'), phone: f('(330) 555-0188', 0.82), email: f('dana.whitfield@example.com'), city: f('Lakewood'), service: f('Gutter cleaning'), when: f('Next Tuesday morning', 0.76) } },
@@ -50,6 +51,16 @@ function samples() {
     { type: 'workorder', file: 'work-order-5517.pdf', from: 'Upload', contactId: w2 && w2.id, f: { number: f('WO-5517'), customer: f(w2 ? store.contactName(w2) : 'Customer'), tech: f('Priya Shah'), work: f('Annual furnace tune-up'), hours: f('1.5'), amount: f('$129.00') } },
     { type: 'invoice', file: 'brightline-electric-7781.pdf', from: 'Email inbox', f: { vendor: f('Brightline Electric Supply'), number: f('7781'), date: f(d(9)), due: f(d(-21)), subtotal: f('$612.00'), tax: f('$48.96'), total: f('$666.96', 0.68) }, lines: [['20A breakers', 12, '$228.00'], ['12/2 wire, 250ft', 2, '$384.00']] },
   ];
+  const P = ind.pack().docs;
+  if (P) {
+    const ren = (o, k, v) => { o.f[k] = f(v, o.f[k].c); };
+    ren(out[0], 'vendor', P.vendor); out[0].lines.forEach((l, i) => { l[0] = P.lines[i] || l[0]; }); out[0].file = `${P.vendor.toLowerCase().replace(/[^a-z]+/g, '-')}inv-20931.pdf`;
+    ren(out[1], 'merchant', P.merchant); ren(out[1], 'category', P.category);
+    ren(out[2], 'service', P.service);
+    ren(out[3], 'work', P.work1); ren(out[4], 'work', P.work2);
+    ren(out[5], 'vendor', P.vendor2); out[5].lines.forEach((l, i) => { l[0] = P.lines2[i] || l[0]; }); out[5].file = `${P.vendor2.toLowerCase().replace(/[^a-z]+/g, '-')}-7781.pdf`;
+  }
+  return out;
 }
 
 function makeDoc(sample, status, receivedAt) {
@@ -76,7 +87,8 @@ function seed() {
   ].map(([smp, st, h], i) => ({ id: `doc${i + 1}`, createdAt: iso(h), ...makeDoc(smp, st, iso(h)) }));
   // Older history, already exported.
   const old = [['Acme Supply Co.', 'invoice', 4], ['Lakeside Fuel Stop', 'receipt', 6], ['Northgate Hardware', 'receipt', 8], ['Brightline Electric Supply', 'invoice', 11], ['Acme Supply Co.', 'invoice', 15], ['City Water Dept.', 'invoice', 19]];
-  old.forEach(([name, type, days], i) => {
+  old.forEach(([name0, type, days], i) => {
+    const name = ((ind.pack().docs || {}).old || [])[i] || name0;
     const base = samples().find((x) => x.type === type);
     const doc = makeDoc({ ...base, f: { ...base.f, [TYPES[type].key]: f(name), [TYPES[type].amount]: f(`$${(120 + i * 97.35).toFixed(2)}`) } }, 'exported', new Date(now - days * DAY).toISOString());
     doc.fields.forEach((x) => { x.c = Math.max(x.c, 0.9); });
@@ -87,7 +99,7 @@ function seed() {
   });
   return {
     documents: rows,
-    docSettings: { autoApprove: true, checkTotals: true, threshold: 0.9, exportTo: 'CSV file', inbox: 'docs@summit-home.example' },
+    docSettings: { autoApprove: true, checkTotals: true, threshold: 0.9, exportTo: 'CSV file', inbox: `docs@${ind.slug()}.example` },
   };
 }
 

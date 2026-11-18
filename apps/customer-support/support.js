@@ -6,6 +6,7 @@
  */
 import { html, raw, icon, $, $$, plural, date, ago } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate, menu } from '../../assets/js/core/ui.js';
@@ -59,6 +60,16 @@ function seed() {
   const feedback = [
     [5, 'Marcus was on time and explained everything.', 20], [5, 'Fast fix, super friendly.', 50], [4, 'Great work, just a bit late.', 70], [5, '', 95], [3, 'Fixed, but I had to call twice to get a time.', 120], [5, 'Best service company we have used.', 160], [4, '', 200], [5, 'Clean, careful and quick.', 230],
   ].map(([score, text, h], i) => ({ id: `fb${i + 1}`, score, text, contactId: c(i * 3 + 2), at: iso(h) }));
+  (ind.pack().tickets || []).forEach((o, i) => {
+    if (!o || !tickets[i]) return;
+    tickets[i].subject = o[0];
+    tickets[i].messages.forEach((m, j) => { if (o[j + 1] != null) m.text = o[j + 1]; });
+  });
+  (ind.pack().articles || []).forEach((o, i) => {
+    if (!o || !articles[i]) return;
+    Object.assign(articles[i], { title: o[0], body: o[1] }, o[2] ? { cat: o[2] } : {});
+  });
+  feedback.forEach((x, i) => { x.text = ind.at('feedback', i, x.text); });
   return { tickets, articles, feedback };
 }
 
@@ -211,7 +222,7 @@ function ticketView(ctx) {
       ta.addEventListener('input', () => { draft.text = ta.value; });
       bindSegmented(root, { cmode: (v) => { draft.mode = v; draft.text = ta.value; ctx.rerender(); } });
       $('[data-saved]', root).addEventListener('click', (e) => {
-        menu(e.currentTarget, SAVED.map(([l, text]) => ({ label: l, icon: 'note', onClick: () => { ta.value = fillName(text, c); draft.text = ta.value; ta.focus(); } })));
+        menu(e.currentTarget, SAVED.map((s, i) => ind.at('saved', i, s)).map(([l, text]) => ({ label: l, icon: 'note', onClick: () => { ta.value = fillName(text, c); draft.text = ta.value; ta.focus(); } })));
       });
       form.addEventListener('submit', (e) => {
         e.preventDefault();

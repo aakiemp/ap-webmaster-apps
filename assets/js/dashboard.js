@@ -33,7 +33,7 @@ export default function dashboard() {
     <span class="apwa-callout__icon">${icon('info')}</span>
     <div class="apwa-callout__body">
       <strong>Welcome to the AP Webmaster Apps demo.</strong>
-      <span>${b.name} is a fictional business. Add contacts, drag deals through the pipeline and log activity. Everything stays in your browser.</span>
+      <span>${b.custom ? `Sample data made for ${b.name}.` : `${b.name} is a fictional business.`} Add contacts, drag deals through the pipeline and log activity. Everything stays in your browser.</span>
     </div>
     <div class="apwa-callout__actions">
       <a class="apwa-btn apwa-btn--primary apwa-btn--sm" href="${router.href('crm/pipeline')}">${icon('pipeline')}<span>Open the pipeline</span></a>

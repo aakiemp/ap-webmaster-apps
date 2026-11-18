@@ -7,6 +7,7 @@
  */
 import { html, raw, icon, $, $$, plural, date, ago } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, confirmDialog, formData, validate } from '../../assets/js/core/ui.js';
 import { badge, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, columnChart, meter } from '../../assets/js/core/components.js';
@@ -44,14 +45,17 @@ function ruleText(seg) {
 /* Templates and seed                                                   */
 /* ------------------------------------------------------------------ */
 
-const TEMPLATES = {
+const TEMPLATES_HOME = {
   seasonal: { label: 'Seasonal offer', icon: 'tag', subject: 'Get your home ready for winter', preview: 'Book a furnace tune-up this month and save 15%.', heading: 'Winter is coming, {first_name}', body: 'Cold nights are around the corner. Book a furnace tune-up before December 15 and take 15% off. It takes about an hour and keeps surprise breakdowns away.', cta: 'Book a tune-up' },
   review: { label: 'Review request', icon: 'star', subject: 'How did we do?', preview: 'A quick review helps neighbors find us.', heading: 'Thanks for choosing us, {first_name}', body: 'If we did a good job, would you leave a short review? It takes a minute and helps other families in town find a team they can trust.', cta: 'Leave a review' },
   newsletter: { label: 'Monthly newsletter', icon: 'mail', subject: 'Your home checklist for November', preview: 'Three quick jobs that save money this season.', heading: 'November home checklist', body: 'Swap your furnace filter, clean the gutters before the first freeze and test your smoke detectors. Want us to handle any of it? Reply to this email or book online.', cta: 'See this month’s tips' },
   winback: { label: 'We miss you', icon: 'repeat', subject: 'It has been a while, {first_name}', preview: 'Here is $25 off your next visit.', heading: 'We’d love to see you again', body: 'It has been a while since your last visit. Here is $25 off your next service as a thank you for being a customer. The offer is good through the end of the month.', cta: 'Claim $25 off' },
 };
 
+const tpl = () => Object.fromEntries(Object.entries(TEMPLATES_HOME).map(([k, v]) => [k, { ...v, ...((ind.pack().templates || {})[k] || {}) }]));
+
 function seed() {
+  const TEMPLATES = tpl();
   const now = Date.now();
   const iso = (d) => new Date(now - d * DAY).toISOString();
   const segments = [
@@ -63,7 +67,7 @@ function seed() {
   ];
   const sent = (id, t, seg, days, n, o, c, b) => ({ id, ...copy(TEMPLATES[t]), template: t, name: `${TEMPLATES[t].label}: ${new Date(now - days * DAY).toLocaleString('en-US', { month: 'long' })}`, segmentId: seg, status: 'sent', createdAt: iso(days + 2), sentAt: iso(days), stats: { recipients: n, opened: o, clicked: c, unsub: Math.round(n * 0.006), booked: b, curve: curve(o) } });
   const campaigns = [
-    { id: 'cmp1', ...copy(TEMPLATES.seasonal), template: 'seasonal', name: 'Winter tune-up offer', segmentId: 'seg1', status: 'draft', createdAt: iso(0.2) },
+    { id: 'cmp1', ...copy(TEMPLATES.seasonal), template: 'seasonal', name: ind.pack().offerName || 'Winter tune-up offer', segmentId: 'seg1', status: 'draft', createdAt: iso(0.2) },
     { id: 'cmp2', ...copy(TEMPLATES.newsletter), template: 'newsletter', name: 'November newsletter', segmentId: 'seg5', status: 'scheduled', scheduledFor: new Date(now + 2 * DAY).toISOString(), createdAt: iso(1) },
     sent('cmp3', 'review', 'seg4', 6, 14, 9, 5, 0),
     sent('cmp4', 'winback', 'seg1', 19, 26, 12, 6, 3),
@@ -71,12 +75,12 @@ function seed() {
     sent('cmp6', 'seasonal', 'seg1', 61, 25, 13, 6, 4),
   ];
   const sequences = [
-    { id: 'seq1', name: 'Welcome new leads', trigger: 'A new lead is added in Customer Manager', on: true, enrolled: 7, done: 18, steps: [{ wait: 0, subject: 'Thanks for reaching out, {first_name}' }, { wait: 2, subject: 'What our customers say about us' }, { wait: 5, subject: 'Ready when you are: book a free estimate' }] },
-    { id: 'seq2', name: 'After every job', trigger: 'A booking is marked completed', on: true, enrolled: 4, done: 41, steps: [{ wait: 1, subject: 'How did we do?' }, { wait: 7, subject: 'A quick tip to keep things running' }] },
+    { id: 'seq1', name: 'Welcome new leads', trigger: 'A new lead is added in Customer Manager', on: true, enrolled: 7, done: 18, steps: [{ wait: 0, subject: 'Thanks for reaching out, {first_name}' }, { wait: 2, subject: 'What our customers say about us' }, { wait: 5, subject: ind.at('seqSubjects', 0, 'Ready when you are: book a free estimate') }] },
+    { id: 'seq2', name: 'After every job', trigger: 'A booking is marked completed', on: true, enrolled: 4, done: 41, steps: [{ wait: 1, subject: 'How did we do?' }, { wait: 7, subject: ind.at('seqSubjects', 1, 'A quick tip to keep things running') }] },
     { id: 'seq3', name: 'Paid invoice thank-you', trigger: 'An invoice is paid in full', on: true, enrolled: 2, done: 29, steps: [{ wait: 0, subject: 'Thank you for your payment' }] },
     { id: 'seq4', name: 'Win back quiet customers', trigger: 'No booking in 6 months', on: false, enrolled: 0, done: 9, steps: [{ wait: 0, subject: 'It has been a while, {first_name}' }, { wait: 10, subject: 'Your $25 credit ends soon' }] },
   ];
-  return { campaigns, sequences, segments, emailSettings: { fromName: store.get().business.name, replyTo: 'hello@summit-home.example', unsubscribed: ['c9', 'c23'] } };
+  return { campaigns, sequences, segments, emailSettings: { fromName: store.get().business.name, replyTo: `hello@${ind.slug()}.example`, unsubscribed: ['c9', 'c23'] } };
 }
 
 function copy(t) { return { subject: t.subject, preview: t.preview, heading: t.heading, body: t.body, cta: t.cta }; }
@@ -122,10 +126,10 @@ function newCampaign() {
     title: 'New campaign',
     subtitle: 'Start from a template. You can change every word.',
     size: 'md',
-    body: html`<div class="ec-tpls">${Object.entries(TEMPLATES).map(([k, t], i) => html`<label class="ec-tpl"><input type="radio" name="tpl" value="${k}" ${i === 0 ? raw('checked') : ''}><span>${icon(t.icon)}<strong>${t.label}</strong><small>${t.preview}</small></span></label>`)}</div>`,
+    body: html`<div class="ec-tpls">${Object.entries(tpl()).map(([k, t], i) => html`<label class="ec-tpl"><input type="radio" name="tpl" value="${k}" ${i === 0 ? raw('checked') : ''}><span>${icon(t.icon)}<strong>${t.label}</strong><small>${t.preview}</small></span></label>`)}</div>`,
     buttons: [{ label: 'Cancel' }, { label: 'Create draft', kind: 'primary', onClick: (close, panel) => {
       const k = $('input[name=tpl]:checked', panel).value;
-      const row = store.insert('campaigns', { ...copy(TEMPLATES[k]), template: k, name: `${TEMPLATES[k].label} (new)`, segmentId: k === 'review' ? 'seg4' : 'seg1', status: 'draft' });
+      const row = store.insert('campaigns', { ...copy(tpl()[k]), template: k, name: `${tpl()[k].label} (new)`, segmentId: k === 'review' ? 'seg4' : 'seg1', status: 'draft' });
       router.go(`email-automation/campaign/${row.id}`);
       return true;
     } }],

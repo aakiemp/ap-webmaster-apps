@@ -409,14 +409,14 @@ function searchResults(q) {
 function openSearchSheet() {
   const box = el(html`<div class="apwa-sheetsearch">
     <div class="apwa-search apwa-search--sheet">${icon('search')}<input type="search" placeholder="Search contacts and deals" aria-label="Search contacts and deals" autocomplete="off" autofocus></div>
-    <div class="apwa-sheetsearch__results"><p class="apwa-text-3 apwa-sheetsearch__hint">Try “kitchen”, “Delgado” or “HVAC”.</p></div>
+    <div class="apwa-sheetsearch__results"><p class="apwa-text-3 apwa-sheetsearch__hint">Try “Delgado” or “invoice”.</p></div>
   </div>`);
   const p = openPanel({ title: 'Search', body: box, size: 'lg' });
   const input = $('input', box);
   const out = $('.apwa-sheetsearch__results', box);
   input.addEventListener('input', debounce(() => {
     const q = input.value.trim();
-    out.innerHTML = q ? String(searchResults(q)) : '<p class="apwa-text-3 apwa-sheetsearch__hint">Try “kitchen”, “Delgado” or “HVAC”.</p>';
+    out.innerHTML = q ? String(searchResults(q)) : '<p class="apwa-text-3 apwa-sheetsearch__hint">Try “Delgado” or “invoice”.</p>';
   }, 80));
   out.addEventListener('click', (e) => { if (e.target.closest('a')) p.close(); });
 }
@@ -430,6 +430,7 @@ function demoInfo(btn) {
       <li>${icon('alert')}<span>Please don't enter real personal, medical or financial information.</span></li>
     </ul>
     <div class="apwa-demoinfo__actions">
+      <button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm" data-guide-yours>${icon('sparkles')}<span>Make it yours</span></button>
       <button type="button" class="apwa-btn apwa-btn--secondary apwa-btn--sm" data-demo-reset>${icon('refresh')}<span>Reset demo data</span></button>
       <a class="apwa-btn apwa-btn--primary apwa-btn--sm" href="${quoteHref(current && current.slug)}">${icon('send')}<span>Like what you see? Get a quote</span></a>
     </div>
@@ -437,6 +438,7 @@ function demoInfo(btn) {
   </div>`);
   const p = popover(btn, { title: 'Demo mode', body, width: 340 });
   body.querySelector('[data-demo-reset]').addEventListener('click', () => { p.close(); resetDemo(); });
+  body.querySelector('[data-guide-yours]').addEventListener('click', () => p.close());
 }
 
 function userMenu(btn) {
@@ -502,6 +504,7 @@ function launcher() {
       </section>`)}
       <p class="apwa-lp__empty" data-lp-empty hidden>No apps match that search.</p>
       <div class="apwa-lp__foot">
+        <button type="button" class="apwa-lp__chip" data-lp="yours">${icon('sparkles')}<span>Make it yours</span></button>
         <button type="button" class="apwa-lp__chip" data-lp="choose">${icon('target')}<span>Help me choose</span></button>
         <button type="button" class="apwa-lp__chip" data-lp="demo">${icon('info')}<span>About this demo</span></button>
         <button type="button" class="apwa-lp__chip" data-lp="reset">${icon('refresh')}<span>Reset demo data</span></button>
@@ -537,6 +540,7 @@ function launcher() {
     if (act && act.dataset.lp === 'demo') close(() => demoInfo($('[data-action="demo-info"]', root) || act));
     if (act && act.dataset.lp === 'reset') close(resetDemo);
     if (act && act.dataset.lp === 'choose') close(() => guide.welcome());
+    if (act && act.dataset.lp === 'yours') close(() => guide.makeItYours());
   });
   const q = $('[data-lp-q]', wrap);
   q.addEventListener('input', () => {

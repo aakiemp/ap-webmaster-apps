@@ -7,6 +7,7 @@
  */
 import { html, raw, icon, on, $, debounce, money, plural, ago, isoDay, isPhone, uid } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as ind from '../../assets/js/core/industry.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
 import { badge, avatar, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, timeline } from '../../assets/js/core/components.js';
@@ -742,7 +743,7 @@ function bookingPageView(ctx) {
     pageClass: 'apwa-page--wide',
     body: html`<div class="bk-bp">
       <div class="bk-bp__frame">
-        <div class="bk-bp__bar"><i></i><i></i><i></i><span>${icon('lock')}summithomeservices.example/book</span></div>
+        <div class="bk-bp__bar"><i></i><i></i><i></i><span>${icon('lock')}${ind.slug()}.example/book</span></div>
         <div class="bk-bp__inner">
           <div class="bk-bp__brand"><span class="bk-bp__logo">S</span><div><strong>${biz}</strong><span>Book a visit online</span></div></div>
           ${widget}
