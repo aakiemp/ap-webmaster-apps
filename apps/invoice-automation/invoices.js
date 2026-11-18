@@ -7,6 +7,7 @@
  */
 import { html, raw, icon, $, debounce, money, plural, isoDay, fromDay, date } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, confirmDialog, menu, formData, validate } from '../../assets/js/core/ui.js';
 import { badge, avatar, button, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList } from '../../assets/js/core/components.js';
@@ -104,6 +105,7 @@ function send(inv) {
   store.patch('invoices', inv.id, { status: 'sent', issuedAt: new Date(now).toISOString(), dueAt: new Date(now + Math.max(0, terms) * DAY).toISOString(), events: event(inv, 'sent', 'Invoice emailed to the customer') });
   log(inv, `Invoice ${inv.number} sent for ${usd(total(inv))}`, 'invoice', { simulated: true });
   simulated(`Invoice ${inv.number} to ${custName(inv)}.`);
+  guide.done('invoice');
 }
 
 function remind(inv) {

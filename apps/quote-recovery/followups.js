@@ -6,6 +6,7 @@
  */
 import { html, raw, icon, $, plural, money, moneyShort, pct, date, ago } from '../../assets/js/core/dom.js';
 import * as store from '../../assets/js/core/store.js';
+import * as guide from '../../assets/js/core/guide.js';
 import * as router from '../../assets/js/core/router.js';
 import { openPanel, toast, simulated, formData, validate, confirmDialog } from '../../assets/js/core/ui.js';
 import { badge, card, stat, emptyState, segmented, bindSegmented, formGrid, dataTable, barList, columnChart } from '../../assets/js/core/components.js';
@@ -114,6 +115,7 @@ function sendNext(e) {
   store.patch('estimates', e.id, { followUps: [...cur.followUps, { stepId: n.step.id, channel: n.step.channel, at: new Date().toISOString(), manual: true }] });
   if (n.step.channel === 'call') toast(`Call reminder logged for ${who(e)}.`, { title: 'Marked as done' });
   else simulated(`Follow-up ${n.n} would go to ${who(e)} by ${CH[n.step.channel][0].toLowerCase()}.`);
+  guide.done('followup');
 }
 
 function markWon(e) {
@@ -211,6 +213,7 @@ function listView(ctx) {
           list.forEach((e) => { const n = nextStep(e); const cur = store.find('estimates', e.id); store.quietly(() => { cur.followUps.push({ stepId: n.step.id, channel: n.step.channel, at: new Date().toISOString(), manual: true }); }); });
           store.update(() => {});
           simulated(`${plural(list.length, 'follow-up')} would go out to ${list.map(who).join(', ')}.`);
+          guide.done('followup');
           return;
         }
         const tr = ev.target.closest('tr[data-href]');
