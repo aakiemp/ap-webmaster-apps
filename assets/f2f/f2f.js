@@ -617,7 +617,7 @@ function frame() {
   const ns = owner ? needs().length : 0;
   const reqN = db.requests.filter((r) => r.status !== 'approved').length;
   const tabs = owner
-    ? [['today', 'home', 'Today', ns], ['requests', 'inbox', 'Requests', reqN], ['schedule', 'calendar', 'Calendar', 0], ['invoices', 'receipt', 'Invoices', 0]]
+    ? [['today', 'home', 'Home', ns], ['requests', 'inbox', 'Requests', reqN], ['schedule', 'calendar', 'Calendar', 0], ['invoices', 'receipt', 'Invoices', 0]]
     : [['open', 'search', 'Open jobs', openForMe().filter((j) => !j.interested.some((i) => i.id === ME)).length], ['mine', 'calendar-check', 'My jobs', 0]];
   const cur = owner ? ui.tab : ui.stab;
   const view = owner ? { today: viewToday, requests: viewRequests, schedule: viewSchedule, invoices: viewInvoices }[ui.tab]() : ui.stab === 'mine' ? viewSitterMine() : viewSitterOpen();
