@@ -28,6 +28,19 @@ a { color: var(--green); }
 /* App frame */
 .app { min-height: 100vh; display: flex; flex-direction: column; }
 .top { position: sticky; top: 0; z-index: 20; height: calc(env(safe-area-inset-top, 0px) + 62px); background: var(--top-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding: env(safe-area-inset-top, 0px) 16px 0; display: flex; align-items: center; gap: 8px; }
+.exit { display: inline-flex; align-items: center; gap: 2px; height: 34px; padding: 0 10px 0 4px; margin-right: 2px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; flex: none; }
+.exit .f2f-icon { width: 18px; height: 18px; color: var(--muted); }
+.exit:hover { border-color: var(--sage); }
+a.menu-item { text-decoration: none; color: inherit; }
+@media (max-width: 479.98px) {
+  .exit { width: 34px; padding: 0; justify-content: center; }
+  .exit .exit-l { display: none; }
+  .has-exit .brand img { display: none; }
+}
+@media (max-width: 359.98px) {
+  .has-exit .brand b { font-size: 15px; }
+  .has-exit .icon-btn { width: 34px; }
+}
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .brand img { width: 38px; height: auto; display: block; }
 .brand b { display: block; font-weight: 700; font-size: 16px; line-height: 1.2; white-space: nowrap; }

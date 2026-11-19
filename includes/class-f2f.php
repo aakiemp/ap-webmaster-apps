@@ -236,6 +236,9 @@ final class F2f {
 			),
 			'img'      => APWA_URL . 'assets/f2f/img/',
 			'quoteUrl' => Router::url( 'contact/' ),
+			// Public builds link back to the Custom builds section; the private
+			// client demo has nowhere to exit to.
+			'exitUrl'  => $brand['private'] ? '' : Router::url() . '#builds',
 			'icons'    => $icons,
 		);
 		include APWA_DIR . 'templates/f2f.php';

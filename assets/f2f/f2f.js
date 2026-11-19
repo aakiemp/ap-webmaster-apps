@@ -582,6 +582,7 @@ function sheetRole() {
     <button class="menu-item" data-act="coach">${icon('sparkles')} Show me around</button>
     <button class="menu-item" data-act="install">${icon('smartphone')} Put it on your home screen</button>
     <button class="menu-item" data-act="reset">${icon('refresh')} Start over with fresh sample data</button>
+    ${CFG.exitUrl ? html`<a class="menu-item" href="${CFG.exitUrl}">${icon('log-out')} Exit demo</a>` : ''}
     <p class="foot">A demo by AP Webmaster. Sample families and sitters only. Nothing is sent, posted or charged.</p>`;
   return sheetShell('Switch view', body);
 }
@@ -623,7 +624,7 @@ function frame() {
   const view = owner ? { today: viewToday, requests: viewRequests, schedule: viewSchedule, invoices: viewInvoices }[ui.tab]() : ui.stab === 'mine' ? viewSitterMine() : viewSitterOpen();
   const newAct = db.history.length > (db.seenAct || 0);
   const app = html`<div class="app ${owner ? 'owner' : 'sitter'}">
-    <header class="top"><div class="brand"><img src="${IMG}${BRAND.mark}" alt=""><div><b>${BRAND.name}</b><small>${owner ? 'Bookings' : 'Sitter app'}<span class="demo-tag">Demo</span></small></div></div><span class="grow"></span>
+    <header class="top ${CFG.exitUrl ? 'has-exit' : ''}">${CFG.exitUrl ? html`<a class="exit" href="${CFG.exitUrl}" aria-label="Exit demo">${icon('chevron-left')}<span class="exit-l">Exit demo</span></a>` : ''}<div class="brand"><img src="${IMG}${BRAND.mark}" alt=""><div><b>${BRAND.name}</b><small>${owner ? 'Bookings' : 'Sitter app'}<span class="demo-tag">Demo</span></small></div></div><span class="grow"></span>
       ${owner ? html`<button class="icon-btn" data-act="activity" aria-label="Activity">${icon('bell')}${newAct ? raw('<span class="dot"></span>') : ''}</button>` : ''}
       <button class="who" data-act="role" data-coach="who" aria-label="Switch view">${av(owner ? 'staff' : ME, 'sm')}<span>${owner ? 'Staff' : 'Sitter'}<span class="wide-only"> view</span></span>${icon('chevron-down', 'chev')}</button></header>
     <nav class="tabs" aria-label="Main">${tabs.map(([id, ic, label, badge]) => html`<button class="tab ${cur === id ? 'on' : ''}" data-act="tab" data-tab="${id}" data-coach="tab-${id}" aria-current="${cur === id ? 'page' : 'false'}"><span class="tab-ic">${icon(ic)}</span><span class="tab-l">${label}</span>${badge ? html`<span class="badge">${badge}</span>` : ''}</button>`)}
