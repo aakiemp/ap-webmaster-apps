@@ -83,7 +83,7 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { tr
 .apwa-mkt-nav.is-open .apwa-mkt-nav__close { display: block !important; }
 
 /* Hero */
-.apwa-mkt-hero { background: linear-gradient(to bottom, var(--mkt-dark) 0, var(--mkt-dark) calc(100% - 200px), #eef7fa calc(100% - 200px)); color: #fff; padding-top: 84px; overflow: hidden; }
+.apwa-mkt-hero { background: linear-gradient(to bottom, var(--mkt-dark) 0, var(--mkt-dark) calc(100% - 200px), #eef7fa calc(100% - 200px)); color: #fff; padding-top: 84px; padding-bottom: 72px; overflow: hidden; }
 .apwa-mkt-hero__inner { text-align: center; display: flex; flex-direction: column; align-items: center; }
 .apwa-mkt-pill { display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--mkt-line-dark); color: var(--mkt-on-dark-2) !important; font-size: 14px; font-weight: 500; text-decoration: none; transition: border-color 0.15s ease, background-color 0.15s ease; max-width: 100%; }
 .apwa-mkt-pill:hover { border-color: rgba(255, 255, 255, 0.28); background: rgba(255, 255, 255, 0.1); color: #fff !important; }
@@ -96,7 +96,7 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { tr
 .apwa-mkt-hero__meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; margin-top: 26px; color: var(--mkt-on-dark-3); font-size: 14px; }
 .apwa-mkt-hero__meta li { display: inline-flex; align-items: center; gap: 7px; }
 .apwa-mkt-hero__meta .apwa-icon { width: 16px; height: 16px; color: var(--apwa-brand-300); }
-.apwa-mkt-hero__visual { position: relative; margin-top: 64px; max-width: 1152px; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 140px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 140px), transparent); }
+.apwa-mkt-hero__visual { position: relative; margin-top: 64px; max-width: 1152px; }
 
 /* Device frames */
 .apwa-mkt-frame { position: relative; margin: 0; }
@@ -586,7 +586,7 @@ html.apwa-mkt-lock { overflow: hidden; }
 	.apwa-mkt-btn--sm { height: 38px; padding: 0 12px; }
 	html:has(.apwa-mkt) { scroll-padding-top: 72px; }
 
-	.apwa-mkt-hero { padding-top: 48px; background: linear-gradient(to bottom, var(--mkt-dark) 0, var(--mkt-dark) calc(100% - 90px), #fff calc(100% - 90px)); }
+	.apwa-mkt-hero { padding-top: 48px; padding-bottom: 40px; background: linear-gradient(to bottom, var(--mkt-dark) 0, var(--mkt-dark) calc(100% - 130px), #eef7fa calc(100% - 130px)); }
 	.apwa-mkt-pill { font-size: 13px; text-align: left; padding: 8px 14px 8px 10px; border-radius: 16px; line-height: 1.4; }
 	.apwa-mkt-hero__title { margin-top: 22px; letter-spacing: -0.035em; }
 	.apwa-mkt-hero__lead { margin-top: 18px; }
