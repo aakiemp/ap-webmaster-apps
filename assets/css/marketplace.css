@@ -83,7 +83,7 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { tr
 .apwa-mkt-nav.is-open .apwa-mkt-nav__close { display: block !important; }
 
 /* Hero */
-.apwa-mkt-hero { background: linear-gradient(to bottom, var(--mkt-dark) 0, var(--mkt-dark) calc(100% - 200px), #fff calc(100% - 200px)); color: #fff; padding-top: 84px; overflow: hidden; }
+.apwa-mkt-hero { background: linear-gradient(to bottom, var(--mkt-dark) 0, var(--mkt-dark) calc(100% - 200px), #eef7fa calc(100% - 200px)); color: #fff; padding-top: 84px; overflow: hidden; }
 .apwa-mkt-hero__inner { text-align: center; display: flex; flex-direction: column; align-items: center; }
 .apwa-mkt-pill { display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--mkt-line-dark); color: var(--mkt-on-dark-2) !important; font-size: 14px; font-weight: 500; text-decoration: none; transition: border-color 0.15s ease, background-color 0.15s ease; max-width: 100%; }
 .apwa-mkt-pill:hover { border-color: rgba(255, 255, 255, 0.28); background: rgba(255, 255, 255, 0.1); color: #fff !important; }
@@ -96,7 +96,7 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { tr
 .apwa-mkt-hero__meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; margin-top: 26px; color: var(--mkt-on-dark-3); font-size: 14px; }
 .apwa-mkt-hero__meta li { display: inline-flex; align-items: center; gap: 7px; }
 .apwa-mkt-hero__meta .apwa-icon { width: 16px; height: 16px; color: var(--apwa-brand-300); }
-.apwa-mkt-hero__visual { position: relative; margin-top: 64px; max-width: 1152px; }
+.apwa-mkt-hero__visual { position: relative; margin-top: 64px; max-width: 1152px; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 140px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 140px), transparent); }
 
 /* Device frames */
 .apwa-mkt-frame { position: relative; margin: 0; }
@@ -168,7 +168,7 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { tr
 .apwa-mkt-tabs .apwa-mkt-frame--browser { box-shadow: 0 0 0 1px rgba(15, 27, 45, 0.08), 0 24px 48px -24px rgba(15, 27, 45, 0.35); }
 
 /* App catalog */
-.apwa-mkt-catalog { position: relative; background: radial-gradient(900px 420px at 8% 0%, rgba(44, 141, 172, 0.16), transparent 70%), radial-gradient(800px 420px at 100% 100%, rgba(220, 63, 240, 0.11), transparent 70%), linear-gradient(180deg, #eef7fa 0%, #f5f2fb 100%); border-top: 1px solid var(--apwa-brand-100); border-bottom: 1px solid var(--apwa-gray-200); }
+.apwa-mkt-catalog { position: relative; background: radial-gradient(900px 420px at 8% 45%, rgba(44, 141, 172, 0.12), transparent 70%), radial-gradient(800px 420px at 100% 100%, rgba(220, 63, 240, 0.11), transparent 70%), linear-gradient(180deg, #eef7fa 0%, #f5f2fb 100%); border-bottom: 1px solid var(--apwa-gray-200); }
 .apwa-mkt-catalog .apwa-mkt-head { margin-bottom: 32px; }
 .apwa-mkt-catalog .apwa-mkt-eyebrow { color: var(--apwa-brand-600); }
 .apwa-mkt-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
