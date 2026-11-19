@@ -61,7 +61,7 @@ const PET = { feeNew: 20, feeBack: 10, overnight: (p) => (p >= 3 ? 95 : 85), vis
 
 /* ---------- sample data ---------- */
 const SITTERS = [
-  { id: 'maya', name: 'Test Sitter', color: '#b9862a' },
+  { id: 'maya', name: 'Sitter One', color: '#b9862a' },
   { id: 'jordan', name: 'Sitter Two', color: '#5d7a3a' },
   { id: 'elena', name: 'Sitter Three', color: '#5f7686' },
   { id: 'avery', name: 'Sitter Four', color: '#8a6a86' },
@@ -117,7 +117,7 @@ function seed() {
   jobs.forEach((j) => { j.post = postFor(j); });
   const history = [
     { at: now - 26 * HOUR, who: 'staff', text: `Assigned Sitter Three to Dana L. · ${shortDay(plus(2))}`, job: 'j2' },
-    { at: now - 20 * HOUR, who: 'staff', text: `Assigned Test Sitter to Chris M. · ${shortDay(plus(2))}`, job: 'j3' },
+    { at: now - 20 * HOUR, who: 'staff', text: `Assigned Sitter One to Chris M. · ${shortDay(plus(2))}`, job: 'j3' },
     { at: now - 5 * HOUR, who: 'system', text: 'New pet-sitting request from Priya P.', fam: 'f2' },
     { at: now - 3 * HOUR, who: 'avery', text: `Interested in Taylor H. · ${shortDay(plus(7))}`, job: 'j6' },
     { at: now - 2 * HOUR, who: 'system', text: 'New babysitting request from Sarah K. (5 dates)', fam: 'f1' },
@@ -146,7 +146,7 @@ const req = (id) => db.requests.find((r) => r.id === id);
 const inv = (id) => db.invoices.find((i) => i.id === id);
 const person = (id) => (id === 'staff' ? STAFF : SITTERS.find((s) => s.id === id) || { name: 'Website', color: '#a0a897' });
 const first = (id) => (id === 'staff' ? 'Staff' : person(id).name);
-const ini = (n) => { const w = n.split(/\s+/); const num = { Two: '2', Three: '3', Four: '4' }[w[1]]; return num ? `S${num}` : w.map((p) => p[0]).join('').slice(0, 2).toUpperCase(); };
+const ini = (n) => { const w = n.split(/\s+/); const num = { One: '1', Two: '2', Three: '3', Four: '4' }[w[1]]; return num ? `S${num}` : w.map((p) => p[0]).join('').slice(0, 2).toUpperCase(); };
 const av = (id, cls = '') => {
   if (id === 'staff') return html`<span class="av staff ${cls}" title="Field to Forest staff"><img src="${IMG}f2f-mark.png" alt=""></span>`;
   const p = person(id);
@@ -234,7 +234,7 @@ function needs() {
 /* ---------- short guide: Next, Back or Skip ---------- */
 const COACH = {
   owner: [
-    { t: 'today', tab: 'today', title: 'Today: what needs you', text: 'New requests, sitters who raised a hand and anyone who needs a backup show up here. Tap a tile to see just those.' },
+    { t: 'today', tab: 'today', title: 'Welcome to Field to Forest', text: 'This is a quick look at the booking app. Today shows what needs staff: new requests, sitters who raised a hand and backups. Tap a tile to see just those.' },
     { t: 'tab-requests', tab: 'requests', title: 'Requests from your website', text: 'Review each request, edit what sitters will see, then approve it. You can generate the invoice right from the request.' },
     { t: 'tab-schedule', tab: 'schedule', title: 'Your calendar', text: 'Flip through the weeks or the month to see every babysitting and pet booking, and who is covering it.' },
     { t: 'tab-invoices', tab: 'invoices', title: 'Invoices for Square', text: 'Preview the booking fee and deposits, change anything you need, then send it to Square as a draft.' },
@@ -333,9 +333,9 @@ function viewToday() {
     <p class="sub">${fLong.format(T0)} · ${ns.length ? `${plural(ns.length, 'thing')} ${ns.length === 1 ? 'needs' : 'need'} you` : 'Nothing needs you right now'}</p>
     <div class="tiles" data-coach="today">${TILES.map(tile)}</div>
     <div class="dash">
-      <section><div class="sec"><h2>${label}</h2>${ui.need ? html`<button class="chip-btn" data-act="need-f" data-k="${ui.need}">Show all</button>` : ''}</div>
+      <section><div class="sec-h"><h2>${label}</h2>${ui.need ? html`<button class="chip-btn" data-act="need-f" data-k="${ui.need}">Show all</button>` : ''}</div>
         ${shown.length ? html`<div class="needs">${shown.map(needCard)}</div>` : html`<div class="card allclear"><span class="ic green">${icon('check')}</span><b>All caught up</b><div class="line2">New requests and sitter updates show up here.</div></div>`}</section>
-      <section><div class="sec"><h2>Coming up</h2><button class="chip-btn" data-act="tab" data-tab="schedule">${icon('calendar', 'mini')}Calendar</button></div>
+      <section><div class="sec-h"><h2>Coming up</h2><button class="chip-btn" data-act="tab" data-tab="schedule">${icon('calendar', 'mini')}Calendar</button></div>
         <div class="card">${next.length ? next.map((j) => visitRow(j)) : html`<div class="empty">No visits booked yet.</div>`}</div></section>
     </div>`;
 }
@@ -403,7 +403,7 @@ function viewSchedule() {
       </div>
       <div class="cal-list">
         <div class="filters">${F.map(([k, l]) => html`<button class="${ui.filter === k ? 'on' : ''}" data-act="filter" data-f="${k}">${l}</button>`)}</div>
-        ${c.day ? html`<div class="sec"><h2>${fLong.format(dayOf(c.day))}</h2><button class="chip-btn" data-act="cal-day" data-day="${c.day}">Show all</button></div>` : ''}
+        ${c.day ? html`<div class="sec-h"><h2>${fLong.format(dayOf(c.day))}</h2><button class="chip-btn" data-act="cal-day" data-day="${c.day}">Show all</button></div>` : ''}
         ${groups.length ? groups.map((d) => html`${c.day ? '' : html`<div class="group-day">${dayLabel(d)}${/^(Today|Tomorrow|Yesterday)$/.test(dayLabel(d)) ? `, ${md(d)}` : ''}</div>`}<div class="card">${list.filter((j) => key(j) === d).map((j) => visitRow(j))}</div>`) : html`<div class="card empty">Nothing ${ui.filter === 'all' ? 'booked' : 'here'} ${span1}.</div>`}
       </div>
     </div>`;
@@ -415,9 +415,9 @@ function viewInvoices() {
   const ready = [...new Set([...db.jobs.filter((j) => active(j) && upcoming(j)).map((j) => j.fam), ...db.requests.filter((r) => r.status !== 'approved').map((r) => r.fam)])].filter((fid) => !famInvoice(fid) && !fam(fid).billed && famDates(fid).length);
   return html`<h1>Invoices</h1><p class="sub">Preview each invoice with your fees and deposits, edit it if you need to, then send it to Square as a draft.</p>
     <div class="inv-sum"><div><b>${drafts.length}</b><span>To check</span></div><div><b>${list.length - drafts.length}</b><span>In Square</span></div><div><b>${money(drafts.reduce((t, i) => t + invTotal(i), 0))}</b><span>Waiting to send</span></div></div>
-    <div class="sec"><h2>Invoices</h2></div>
+    <div class="sec-h"><h2>Invoices</h2></div>
     <div class="grid2">${list.length ? list.map((i) => { const f = fam(i.fam); return html`<button class="card inv-row" data-act="open-inv" data-id="${i.id}"><span class="ic ${f.type === 'pet' ? 'sage' : 'green'}">${icon('receipt')}</span><span class="grow"><span class="ttl">${f.name}</span><span class="line2">${typeLabel(f.type)} · ${ago(i.at)}</span></span><span class="amt"><b>${money(invTotal(i))}</b><span class="pill ${invPill(i)}">${invLabel(i)}</span></span></button>`; }) : html`<div class="card empty">No invoices yet.</div>`}</div>
-    ${ready.length ? html`<div class="sec"><h2>Ready to invoice</h2></div><div class="grid2">${ready.map((fid) => { const f = fam(fid); return html`<div class="card inv-row"><span class="ic ${f.type === 'pet' ? 'sage' : 'gold'}">${icon(typeIcon(f.type))}</span><span class="grow"><span class="ttl">${f.name}</span><span class="line2">${typeLabel(f.type)} · ${money(invoiceFor(fid).total)}</span></span>${invBtn(fid)}</div>`; })}</div>` : ''}`;
+    ${ready.length ? html`<div class="sec-h"><h2>Ready to invoice</h2></div><div class="grid2">${ready.map((fid) => { const f = fam(fid); return html`<div class="card inv-row"><span class="ic ${f.type === 'pet' ? 'sage' : 'gold'}">${icon(typeIcon(f.type))}</span><span class="grow"><span class="ttl">${f.name}</span><span class="line2">${typeLabel(f.type)} · ${money(invoiceFor(fid).total)}</span></span>${invBtn(fid)}</div>`; })}</div>` : ''}`;
 }
 
 /* ---------- views: sitter ---------- */
@@ -470,7 +470,7 @@ function sheetReq(r) {
     <textarea rows="${row.post.split('\n').length}" data-input="post" data-id="${r.id}" data-k="${k}" aria-label="Job post for date ${row.n}">${row.post}</textarea></div></div>`);
   const body = html`<p class="muted small top0">${typeLabel(r.type)} · received ${ago(r.at)} from your website form${r.status === 'draft' ? ' · saved as a draft' : ''}</p>
     <div class="inv-mini"><span class="ic sage">${icon('receipt')}</span><span class="grow"><span class="ttl">${i ? `Invoice · ${invLabel(i)}` : 'Invoice'}</span><span class="line2">${c.proposal ? 'Booking fee and pet sitting' : 'Booking fee and deposits'} · ${money(i ? invTotal(i) : c.total)}</span></span>${i ? html`<button class="btn sec sm" data-act="open-inv" data-id="${i.id}">View</button>` : html`<button class="btn sec sm" data-act="invoice" data-id="${r.fam}">Generate invoice</button>`}</div>
-    <div class="sec"><h2>What sitters will see</h2></div>
+    <div class="sec-h"><h2>What sitters will see</h2></div>
     <div class="card pad"><div class="fam-preview">${f.name}</div>${rows}</div>
     <p class="hint">Edit any line. Your version is what goes on the board. Addresses stay short (City: Street).</p>
     <div class="field"><label for="notes">Notes for sitters (kept separate from the job)</label><textarea id="notes" rows="2" data-input="notes" data-id="${r.id}">${r.notes}</textarea></div>
@@ -503,15 +503,15 @@ function sheetJobOwner(j) {
       ${j.allergy ? html`<div><span class="tag">${icon('alert')} Allergy: ${j.allergy}</span></div>` : ''}
       ${j.type === 'pet' ? html`<div class="fact">${icon('users')}<div class="grow row">Meet and greet: <b>${j.mg === 'done' ? 'done' : 'scheduled'}</b>${j.mg !== 'done' ? html`<button class="chip-btn" data-act="mg" data-id="${j.id}">Mark done</button>` : ''}</div></div>` : ''}
     </div>
-    <div class="sec"><h2>Who's covering</h2></div><div>${cover}</div>
-    <div class="sec"><h2>Job post</h2></div><div class="card pad post">${j.post}</div>
+    <div class="sec-h"><h2>Who's covering</h2></div><div>${cover}</div>
+    <div class="sec-h"><h2>Job post</h2></div><div class="card pad post">${j.post}</div>
     <div class="acts mt">
       <button class="btn sec sm" data-act="cal" data-id="${j.id}">${icon('calendar')} Calendar link</button>
       ${i ? html`<button class="btn sec sm" data-act="open-inv" data-id="${i.id}">${icon('receipt')} View invoice</button>` : f.billed ? html`<span class="btn sec sm is-static">${icon('check')} Billed</span>` : html`<button class="btn sec sm" data-act="invoice" data-id="${j.fam}">${icon('receipt')} Generate invoice</button>`}
       ${j.status === 'done' ? '' : j.status === 'closed' ? html`<button class="btn sec sm span2" data-act="reopen" data-id="${j.id}">${icon('refresh')} Reopen date</button>` : html`<button class="btn warn sm span2" data-act="close-job" data-id="${j.id}">Close this date</button>`}
     </div>
     ${privateBox(f, false)}
-    ${hist.length ? html`<div class="sec"><h2>History</h2></div><div class="hist">${hist.map((h) => html`<div>${av(h.who, 'sm')}<span>${h.text}</span><time>${ago(h.at)}</time></div>`)}</div>` : ''}`;
+    ${hist.length ? html`<div class="sec-h"><h2>History</h2></div><div class="hist">${hist.map((h) => html`<div>${av(h.who, 'sm')}<span>${h.text}</span><time>${ago(h.at)}</time></div>`)}</div>` : ''}`;
   return sheetShell(f.name, body, '', `<span class="ic ${j.type === 'pet' ? 'sage' : 'gold'}">${icon(typeIcon(j.type)).s}</span>`);
 }
 function sheetJobSitter(j) {
@@ -569,7 +569,7 @@ function sheetSquare(s) {
 function sheetRole() {
   const opt = (role, id, title, sub) => html`<button class="choice ${db.role === role ? 'on' : ''}" data-act="set-role" data-role="${role}">${av(id, 'lg')}<span class="grow"><span class="ttl">${title}</span><span class="line2">${sub}</span></span>${db.role === role ? icon('check') : ''}</button>`;
   const body = html`${opt('owner', 'staff', 'Staff view', 'Requests, calendar, sitters and invoices')}${opt('sitter', ME, 'Sitter view', 'Open jobs and booked visits, on a sitter’s phone')}
-    <div class="sec"><h2>Demo</h2></div>
+    <div class="sec-h"><h2>Demo</h2></div>
     <button class="menu-item" data-act="activity">${icon('activity')} Activity</button>
     <button class="menu-item" data-act="coach">${icon('sparkles')} Show me around</button>
     <button class="menu-item" data-act="install">${icon('smartphone')} Put it on your home screen</button>
@@ -583,19 +583,13 @@ function sheetActivity() {
 }
 function sheetInstall() {
   return sheetShell('Put it on your home screen', html`<p class="muted top0">It opens full screen like any other app, with the Field to Forest icon.</p>
-    <div class="sec"><h2>iPhone</h2></div><ol class="steps"><li>Open this page in Safari.</li><li>Tap the <b>Share</b> button.</li><li>Tap <b>Add to Home Screen</b>, then <b>Add</b>.</li></ol>
-    <div class="sec"><h2>Android</h2></div><ol class="steps"><li>Open this page in Chrome.</li><li>Tap the <b>⋮</b> menu.</li><li>Tap <b>Add to Home screen</b> or <b>Install app</b>.</li></ol>`);
+    <div class="sec-h"><h2>iPhone</h2></div><ol class="steps"><li>Open this page in Safari.</li><li>Tap the <b>Share</b> button.</li><li>Tap <b>Add to Home Screen</b>, then <b>Add</b>.</li></ol>
+    <div class="sec-h"><h2>Android</h2></div><ol class="steps"><li>Open this page in Chrome.</li><li>Tap the <b>⋮</b> menu.</li><li>Tap <b>Add to Home screen</b> or <b>Install app</b>.</li></ol>`);
 }
 function sheetBackup(j) {
   return sheetShell('Ask for a backup?', html`<p class="top0">Staff will find someone for <b>${fam(j.fam).name} · ${when(j)}</b>. You stay on it until they do.</p>
     <div class="field"><label for="why">Anything staff should know? (optional)</label><textarea id="why" rows="2" placeholder="e.g. I'm sick"></textarea></div>`,
   html`<button class="btn sec" data-act="close">Never mind</button><button class="btn pri" data-act="backup" data-id="${j.id}">Ask for a backup</button>`);
-}
-function sheetWelcome() {
-  return sheetShell('', html`<div class="welcome"><img src="${IMG}f2f-mark.png" alt="Field to Forest"><h2>The Field to Forest booking app</h2>
-    <p class="muted">A working demo for your staff and sitters, with made-up families and sitters.</p>
-    <ul><li>${icon('inbox')} <span>Review requests and approve what sitters see</span></li><li>${icon('calendar')} <span>See every booking by week or month</span></li><li>${icon('receipt')} <span>Preview, edit and send invoices to Square</span></li><li>${icon('smartphone')} <span>Sitters raise their hand from their phones</span></li></ul></div>`,
-  html`<button class="btn sec" data-act="close">Look around</button><button class="btn pri" data-act="coach">Show me around</button>`);
 }
 function renderSheet() {
   const s = ui.sheet;
@@ -606,7 +600,7 @@ function renderSheet() {
   if (s.t === 'sq') return sheetSquare(s);
   if (s.t === 'visit') return sheetVisit(job(s.id));
   if (s.t === 'backup') return sheetBackup(job(s.id));
-  return { role: sheetRole, activity: sheetActivity, install: sheetInstall, welcome: sheetWelcome }[s.t]?.() || '';
+  return { role: sheetRole, activity: sheetActivity, install: sheetInstall }[s.t]?.() || '';
 }
 
 /* ---------- frame ---------- */
@@ -624,7 +618,7 @@ function frame() {
     <header class="top"><div class="brand"><img src="${IMG}f2f-mark.png" alt=""><div><b>Field to Forest</b><small>${owner ? 'Bookings' : 'Sitter app'}<span class="demo-tag">Demo</span></small></div></div><span class="grow"></span>
       ${owner ? html`<button class="icon-btn" data-act="activity" aria-label="Activity">${icon('bell')}${newAct ? raw('<span class="dot"></span>') : ''}</button>` : ''}
       <button class="who" data-act="role" data-coach="who" aria-label="Switch view">${av(owner ? 'staff' : ME, 'sm')}<span>${owner ? 'Staff' : 'Sitter'}<span class="wide-only"> view</span></span>${icon('chevron-down', 'chev')}</button></header>
-    <nav class="tabs" aria-label="Main">${tabs.map(([id, ic, label, badge]) => html`<button class="tab ${cur === id ? 'on' : ''}" data-act="tab" data-tab="${id}" data-coach="tab-${id}" aria-current="${cur === id ? 'page' : 'false'}"><span class="tab-ic">${icon(ic)}${badge ? html`<span class="badge">${badge}</span>` : ''}</span><span class="tab-l">${label}</span></button>`)}
+    <nav class="tabs" aria-label="Main">${tabs.map(([id, ic, label, badge]) => html`<button class="tab ${cur === id ? 'on' : ''}" data-act="tab" data-tab="${id}" data-coach="tab-${id}" aria-current="${cur === id ? 'page' : 'false'}"><span class="tab-ic">${icon(ic)}</span><span class="tab-l">${label}</span>${badge ? html`<span class="badge">${badge}</span>` : ''}</button>`)}
       ${owner ? html`<div class="side-card"><b>Sitter view</b><p>See what your sitters get on their phones.</p><button class="btn sec sm block" data-act="set-role" data-role="sitter">${icon('smartphone')} Open sitter view</button></div>` : ''}</nav>
     <main class="main" id="main">${view}</main>
     ${renderSheet()}
@@ -821,7 +815,7 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('resize', positionCoach);
 window.addEventListener('scroll', positionCoach, { passive: true });
 
-if (!tour.seen) { tour.seen = true; saveTour(); ui.sheet = { t: 'welcome' }; }
+if (!tour.seen) { tour.seen = true; saveTour(); db.role = 'owner'; coach = { set: 'owner', i: 0 }; }
 render();
 
 if ('serviceWorker' in navigator && CFG.swUrl && location.protocol === 'https:') {
