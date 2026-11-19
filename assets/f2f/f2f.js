@@ -242,7 +242,7 @@ function needs() {
 /* ---------- short guide: Next, Back or Skip ---------- */
 const COACH = {
   owner: [
-    { t: 'today', tab: 'today', title: 'Welcome to Field to Forest', text: 'This is a quick look at the booking app. Today shows what needs staff: new requests, sitters who raised a hand and backups. Tap a tile to see just those.' },
+    { t: 'today', tab: 'today', title: 'Welcome to Field to Forest', text: 'This is a quick look at the booking app. Home shows what needs staff: new requests, sitters who raised a hand and backups. Tap a tile to see just those.' },
     { t: 'tab-requests', tab: 'requests', title: 'Requests from your website', text: 'Review each request, edit what sitters will see, then approve it. You can generate the invoice right from the request.' },
     { t: 'tab-schedule', tab: 'schedule', title: 'Your calendar', text: 'Flip through the weeks or the month to see every babysitting and pet booking, and who is covering it.' },
     { t: 'tab-invoices', tab: 'invoices', title: 'Invoices for Square', text: 'Preview the booking fee and deposits, change anything you need, then send it to Square as a draft.' },
@@ -325,7 +325,7 @@ function visitRow(j, showFam = true) {
     ${right}</button>`;
 }
 function greet() { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'; }
-const TILES = [['req', 'inbox', 'gold', 'New requests'], ['sit', 'users', 'gold', 'Need a sitter'], ['int', 'user-plus', 'green', 'Sitters interested'], ['inv', 'receipt', 'sage', 'Invoices to send']];
+const TILES = [['req', 'inbox', 'gold', 'New requests'], ['sit', 'users', 'gold', 'Bookings need a sitter'], ['int', 'user-plus', 'green', 'Sitters interested'], ['inv', 'receipt', 'sage', 'Invoices to send']];
 
 function viewToday() {
   const ns = needs();
@@ -482,7 +482,7 @@ function sheetReq(r) {
     <div class="field"><label for="notes">Notes for sitters (kept separate from the job)</label><textarea id="notes" rows="2" data-input="notes" data-id="${r.id}">${r.notes}</textarea></div>
     ${privateBox(f)}`;
   const n = r.rows.length;
-  const foot = html`${r.status !== 'draft' ? html`<button class="btn sec" data-act="to-draft" data-id="${r.id}">Save as draft</button>` : ''}<button class="btn pri" data-act="approve" data-id="${r.id}">${icon('check')} Approve${r.type === 'pet' ? ' and post' : ` and post ${plural(n, 'date')}`}</button>`;
+  const foot = html`${r.status !== 'draft' ? html`<button class="btn sec" data-act="to-draft" data-id="${r.id}">Save as draft</button>` : ''}<button class="btn pri" data-act="approve" data-id="${r.id}">${icon('check')} ${r.type === 'pet' ? 'Approve and post' : `Approve ${plural(n, 'date')}`}</button>`;
   return sheetShell(f.name, body, foot, `<span class="ic ${r.type === 'pet' ? 'sage' : 'gold'}">${icon(typeIcon(r.type)).s}</span>`);
 }
 
@@ -824,6 +824,14 @@ window.addEventListener('scroll', positionCoach, { passive: true });
 
 if (!tour.seen) { tour.seen = true; saveTour(); db.role = 'owner'; coach = { set: 'owner', i: 0 }; }
 render();
+
+{
+  const sp = document.getElementById('f2f-splash');
+  if (sp) {
+    const wait = Math.max(0, 700 - performance.now());
+    setTimeout(() => { sp.classList.add('out'); setTimeout(() => sp.remove(), 450); }, wait);
+  }
+}
 
 if ('serviceWorker' in navigator && CFG.swUrl && location.protocol === 'https:') {
   navigator.serviceWorker.register(CFG.swUrl, { scope: CFG.basePath }).catch(() => {});
