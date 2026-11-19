@@ -1,11 +1,11 @@
 /**
- * Field to Forest booking app demo. One file, no build step.
+ * Field 2 Forest booking app demo. One file, no build step.
  * Made-up families and sitters, saved in this browser only. Nothing is sent,
  * charged or posted anywhere: Square, calendars and messages are simulated.
  */
 const CFG = window.APWA_CONFIG || {};
 const IMG = CFG.img || '';
-const KEY = 'f2f.demo.v3';
+const KEY = 'f2f.demo.v4';
 const TOUR_KEY = 'f2f.tour.v2';
 
 /* ---------- small helpers ---------- */
@@ -51,7 +51,7 @@ const ago = (ts) => { const s = (Date.now() - ts) / 1000; if (s < 60) return 'Ju
 const HOUR = 3600000;
 const covers = (j, d) => d >= j.date && d <= (j.end_d || j.date);
 
-/* ---------- pricing (Field to Forest's current rules) ---------- */
+/* ---------- pricing (Field 2 Forest's current rules) ---------- */
 const FEES = [40, 60, 80, 100, 120, 140, 160, 180, 200, 200];
 const bookingFee = (n) => (n <= 0 ? 0 : n > 10 ? 200 : FEES[n - 1]);
 const RATE = { 1: 30, 2: 32, 3: 35, 4: 40 };
@@ -67,7 +67,7 @@ const SITTERS = [
   { id: 'avery', name: 'Sitter Four', color: '#8a6a86' },
 ];
 const ME = 'maya';
-const STAFF = { id: 'staff', name: 'Field to Forest staff', color: '#fff' };
+const STAFF = { id: 'staff', name: 'Field 2 Forest staff', color: '#fff' };
 const kidsLine = (k, ages) => `${plural(k, 'kid')} · ${k === 1 ? 'age' : 'ages'} ${ages}`;
 function postFor(r) {
   if (r.type === 'pet') return [`${r.service}${r.end ? ` · ${plural(diffDays(r.date, r.end), 'night')}` : ''}`, r.pets, `📍${r.loc}`].join('\n');
@@ -124,12 +124,12 @@ function seed() {
     { at: now - 40 * 60000, who: 'jordan', text: `Asked for a backup on Parent C · ${shortDay(plus(1))}`, job: 'j1' },
   ];
   const invoices = [{ id: 'i1', fam: 'f4', status: 'draft', at: now - 19 * HOUR }, { id: 'i2', fam: 'f3', status: 'draft', at: now - 25 * HOUR }];
-  return { v: 3, role: 'owner', fams, requests, jobs, invoices, history };
+  return { v: 4, role: 'owner', fams, requests, jobs, invoices, history };
 }
 
 let db;
 try { db = JSON.parse(localStorage.getItem(KEY)); } catch (e) { db = null; }
-if (!db || db.v !== 3) db = seed();
+if (!db || db.v !== 4) db = seed();
 let saveT;
 const save = () => { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { /* private mode: lasts this visit */ } }, 120); };
 
@@ -156,7 +156,7 @@ const FACES = {
 };
 const face = (id) => `<svg viewBox="3 4 34 34" width="100%" height="100%" aria-hidden="true">${FACES[id] || FACES.maya}</svg>`;
 const av = (id, cls = '') => {
-  if (id === 'staff') return html`<span class="av staff ${cls}" title="Field to Forest staff"><img src="${IMG}f2f-mark.png" alt=""></span>`;
+  if (id === 'staff') return html`<span class="av staff ${cls}" title="Field 2 Forest staff"><img src="${IMG}f2f-mark.png" alt=""></span>`;
   const p = person(id);
   return html`<span class="av ${cls}" style="background:${p.color}" title="${p.name}">${p.id ? raw(face(p.id)) : raw(icon('sparkles').s)}</span>`;
 };
@@ -190,7 +190,7 @@ function invoiceFor(fid) {
       const pets = Number((j.pets.match(/\d+/) || [2])[0]);
       if (j.end_d) { const n = diffDays(j.date, j.end_d); lines.push({ label: `Overnight stay — ${md(j.date)} to ${md(j.end_d)}`, sub: `${plural(n, 'night')} × ${money(PET.overnight(pets))} (${plural(pets, 'pet')})`, amt: n * PET.overnight(pets) }); } else { lines.push({ label: `${j.service} — ${shortDay(j.date)}`, sub: `1 visit × ${money(PET.visit(pets))}`, amt: PET.visit(pets) }); }
     });
-    return { title: `Field to Forest — Pet Sitting — ${f.name}`, lines, note: 'Pet-sitting prices come from your public rates. Holiday surcharges and deposit rules can be added before this goes live.', proposal: true, total: lines.reduce((t, l) => t + l.amt, 0) };
+    return { title: `Field 2 Forest — Pet Sitting — ${f.name}`, lines, note: 'Pet-sitting prices come from your public rates. Holiday surcharges and deposit rules can be added before this goes live.', proposal: true, total: lines.reduce((t, l) => t + l.amt, 0) };
   }
   lines.push({ label: `Booking Fee — ${plural(js.length, 'Date')}`, amt: bookingFee(js.length) });
   const tiers = new Set();
@@ -199,7 +199,7 @@ function invoiceFor(fid) {
     lines.push({ label: `Babysitting Deposit — ${shortDay(j.date)}, ${span(j.start, j.end)} · ${plural(j.kids, 'child', 'children')}`, sub: `${h} hrs × ${money(d)}/hr`, amt: h * d });
   });
   const note = `Your sitter is paid directly at the visit. ${[...tiers].sort().map((k) => `${k >= 4 ? '4+' : k} ${k === 1 ? 'child' : 'children'}: ${money(hourly(k))}/hr total, ${money(depRate(k))}/hr deposit paid here, ${money(hourly(k) - depRate(k))}/hr to your sitter.`).join(' ')}`;
-  return { title: `Field to Forest — Babysitting Booking — ${f.name}`, lines, note, proposal: false, total: lines.reduce((t, l) => t + l.amt, 0) };
+  return { title: `Field 2 Forest — Babysitting Booking — ${f.name}`, lines, note, proposal: false, total: lines.reduce((t, l) => t + l.amt, 0) };
 }
 // An invoice keeps its own copy of the lines, so staff can edit it before Square.
 function invData(i) {
@@ -208,7 +208,7 @@ function invData(i) {
     const n = famDates(i.fam).length;
     i.lines = c.lines.map((l) => ({ ...l }));
     i.title = c.title; i.note = c.note; i.proposal = c.proposal;
-    i.msg = `Thank you for booking with Field to Forest! This invoice includes the ${c.proposal ? 'booking fee and pet-sitting services' : `booking fee and childcare deposit for your scheduled booking ${n === 1 ? 'date' : 'dates'}`}.`;
+    i.msg = `Thank you for booking with Field 2 Forest! This invoice includes the ${c.proposal ? 'booking fee and pet-sitting services' : `booking fee and childcare deposit for your scheduled booking ${n === 1 ? 'date' : 'dates'}`}.`;
   }
   return i;
 }
@@ -242,7 +242,7 @@ function needs() {
 /* ---------- short guide: Next, Back or Skip ---------- */
 const COACH = {
   owner: [
-    { t: 'today', tab: 'today', title: 'Welcome to Field to Forest', text: 'This is a quick look at the booking app. Home shows what needs staff: new requests, sitters who raised a hand and backups. Tap a tile to see just those.' },
+    { t: 'today', tab: 'today', title: 'Welcome to Field 2 Forest', text: 'This is a quick look at the booking app. Home shows what needs staff: new requests, sitters who raised a hand and backups. Tap a tile to see just those.' },
     { t: 'tab-requests', tab: 'requests', title: 'Requests from your website', text: 'Review each request, edit what sitters will see, then approve it. You can generate the invoice right from the request.' },
     { t: 'tab-schedule', tab: 'schedule', title: 'Your calendar', text: 'Flip through the weeks or the month to see every babysitting and pet booking, and who is covering it.' },
     { t: 'tab-invoices', tab: 'invoices', title: 'Invoices for Square', text: 'Preview the booking fee and deposits, change anything you need, then send it to Square as a draft.' },
@@ -461,7 +461,7 @@ function viewSitterMine() {
 /* ---------- sheets ---------- */
 function sheetShell(title, body, foot = '', lead = '', wide = false) {
   const back = ui.sheet && ui.sheet.back ? html`<button class="icon-btn" data-act="back" aria-label="Back">${icon('arrow-left')}</button>` : '';
-  return html`<div class="sheet-wrap"><div class="scrim" data-act="close"></div><div class="sheet ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" aria-label="${title || 'Field to Forest'}"><span class="grab"></span>
+  return html`<div class="sheet-wrap"><div class="scrim" data-act="close"></div><div class="sheet ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" aria-label="${title || 'Field 2 Forest'}"><span class="grab"></span>
     <div class="sheet-h">${back}${lead ? raw(lead) : ''}<h2>${title}</h2><button class="icon-btn" data-act="close" aria-label="Close">${icon('x')}</button></div>
     <div class="sheet-b">${body}</div>${foot ? html`<div class="sheet-f">${foot}</div>` : ''}</div></div>`;
 }
@@ -547,7 +547,7 @@ function sheetInvoice(i) {
       <button class="btn ghost sm" data-act="il-add">${icon('plus')} Add a line</button>`
     : i.lines.map((l) => html`<div class="inv-line"><span>${l.label}${l.sub ? html`<small>${l.sub}</small>` : ''}</span><span>${money(Number(l.amt) || 0)}</span></div>`);
   const body = html`${ribbon}
-    <div class="inv ${edit ? 'editing' : ''}"><div class="inv-top"><div class="grow">${edit ? html`<input id="it" class="inp title" data-input="it" value="${i.title}" aria-label="Invoice title">` : html`<h3>${i.title}</h3>`}<div class="muted small">Due in 30 days · For ${f.name}</div></div><img src="${IMG}f2f-mark.png" alt="Field to Forest"></div>
+    <div class="inv ${edit ? 'editing' : ''}"><div class="inv-top"><div class="grow">${edit ? html`<input id="it" class="inp title" data-input="it" value="${i.title}" aria-label="Invoice title">` : html`<h3>${i.title}</h3>`}<div class="muted small">Due in 30 days · For ${f.name}</div></div><img src="${IMG}f2f-mark.png" alt="Field 2 Forest"></div>
       ${edit ? html`<textarea id="im" class="inp msg" rows="3" data-input="im" aria-label="Message to the family">${i.msg}</textarea>` : html`<p class="small muted msg">${i.msg}</p>`}
       ${lines}
       <div class="inv-total"><span>Total due now</span><span data-total>${money(invTotal(i))}</span></div>
@@ -589,7 +589,7 @@ function sheetActivity() {
   return sheetShell('Activity', html`<div class="hist">${list.map((h) => html`<div>${av(h.who, 'sm')}<span><b>${h.who === 'system' ? 'Website' : first(h.who)}</b> · ${h.text}</span><time>${ago(h.at)}</time></div>`)}</div>`);
 }
 function sheetInstall() {
-  return sheetShell('Put it on your home screen', html`<p class="muted top0">It opens full screen like any other app, with the Field to Forest icon.</p>
+  return sheetShell('Put it on your home screen', html`<p class="muted top0">It opens full screen like any other app, with the Field 2 Forest icon.</p>
     <div class="sec-h"><h2>iPhone</h2></div><ol class="steps"><li>Open this page in Safari.</li><li>Tap the <b>Share</b> button.</li><li>Tap <b>Add to Home Screen</b>, then <b>Add</b>.</li></ol>
     <div class="sec-h"><h2>Android</h2></div><ol class="steps"><li>Open this page in Chrome.</li><li>Tap the <b>⋮</b> menu.</li><li>Tap <b>Add to Home screen</b> or <b>Install app</b>.</li></ol>`);
 }
@@ -622,7 +622,7 @@ function frame() {
   const view = owner ? { today: viewToday, requests: viewRequests, schedule: viewSchedule, invoices: viewInvoices }[ui.tab]() : ui.stab === 'mine' ? viewSitterMine() : viewSitterOpen();
   const newAct = db.history.length > (db.seenAct || 0);
   const app = html`<div class="app ${owner ? 'owner' : 'sitter'}">
-    <header class="top"><div class="brand"><img src="${IMG}f2f-mark.png" alt=""><div><b>Field to Forest</b><small>${owner ? 'Bookings' : 'Sitter app'}<span class="demo-tag">Demo</span></small></div></div><span class="grow"></span>
+    <header class="top"><div class="brand"><img src="${IMG}f2f-mark.png" alt=""><div><b>Field 2 Forest</b><small>${owner ? 'Bookings' : 'Sitter app'}<span class="demo-tag">Demo</span></small></div></div><span class="grow"></span>
       ${owner ? html`<button class="icon-btn" data-act="activity" aria-label="Activity">${icon('bell')}${newAct ? raw('<span class="dot"></span>') : ''}</button>` : ''}
       <button class="who" data-act="role" data-coach="who" aria-label="Switch view">${av(owner ? 'staff' : ME, 'sm')}<span>${owner ? 'Staff' : 'Sitter'}<span class="wide-only"> view</span></span>${icon('chevron-down', 'chev')}</button></header>
     <nav class="tabs" aria-label="Main">${tabs.map(([id, ic, label, badge]) => html`<button class="tab ${cur === id ? 'on' : ''}" data-act="tab" data-tab="${id}" data-coach="tab-${id}" aria-current="${cur === id ? 'page' : 'false'}"><span class="tab-ic">${icon(ic)}</span><span class="tab-l">${label}</span>${badge ? html`<span class="badge">${badge}</span>` : ''}</button>`)}
@@ -785,7 +785,7 @@ const A = {
     const end = j.type === 'pet' && j.end_d ? j.end_d : j.date;
     const st = `${j.date.replace(/-/g, '')}T${j.start.replace(':', '')}00`;
     const en = `${end.replace(/-/g, '')}T${(j.end || j.start).replace(':', '')}00`;
-    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Field to Forest: ${fam(j.fam).name} (sample)`)}&dates=${st}/${en}&details=${encodeURIComponent(`${j.post}\n\nSample booking from the Field to Forest demo.`)}&location=${encodeURIComponent(j.loc)}`;
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Field 2 Forest: ${fam(j.fam).name} (sample)`)}&dates=${st}/${en}&details=${encodeURIComponent(`${j.post}\n\nSample booking from the Field 2 Forest demo.`)}&location=${encodeURIComponent(j.loc)}`;
     window.open(url, '_blank', 'noopener');
   },
   activity: () => { db.seenAct = db.history.length; openSheet({ t: 'activity' }); },

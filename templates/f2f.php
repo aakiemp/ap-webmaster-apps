@@ -1,6 +1,6 @@
 <?php
 /**
- * Standalone document for the Field to Forest demo (no theme output).
+ * Standalone document for the Field 2 Forest demo (no theme output).
  *
  * @package APWebmaster\Apps
  *
@@ -20,8 +20,8 @@ defined( 'ABSPATH' ) || exit;
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Field to Forest">
-<title>Field to Forest · Bookings</title>
+<meta name="apple-mobile-web-app-title" content="Field 2 Forest">
+<title>Field 2 Forest · Bookings</title>
 <link rel="manifest" href="<?php echo esc_url( F2f::path() . 'manifest.webmanifest' ); ?>" crossorigin="use-credentials">
 <link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/f2f/img/favicon-64.png' ); ?>" type="image/png">
 <link rel="apple-touch-icon" href="<?php echo esc_url( APWA_URL . 'assets/f2f/img/apple-touch-icon.png' ); ?>">
@@ -46,9 +46,9 @@ defined( 'ABSPATH' ) || exit;
 <script>window.APWA_CONFIG = <?php echo wp_json_encode( $config, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ); ?>;</script>
 </head>
 <body class="f2f">
-<div id="f2f-splash" role="status" aria-label="Loading Field to Forest">
+<div id="f2f-splash" role="status" aria-label="Loading Field 2 Forest">
 	<img src="<?php echo esc_url( APWA_URL . 'assets/f2f/img/f2f-mark.png' ); ?>" alt="" width="112">
-	<b>Field to Forest</b>
+	<b>Field 2 Forest</b>
 	<small>Bookings</small>
 	<i aria-hidden="true"></i>
 </div>
