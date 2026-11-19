@@ -1,6 +1,6 @@
 <?php
 /**
- * Field to Forest client demo at /apps/f2f/: a private, branded booking app
+ * Field 2 Forest client demo at /apps/f2f/: a private, branded booking app
  * demo for one client. It is not listed on the marketplace. Admins can always
  * open it; anyone else needs the private share link (?k=...), which also
  * sets a cookie so the page keeps working after that first visit.
@@ -15,7 +15,7 @@ namespace APWebmaster\Apps;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Routes and page output for the Field to Forest demo.
+ * Routes and page output for the Field 2 Forest demo.
  */
 final class F2f {
 
@@ -163,9 +163,9 @@ final class F2f {
 		$scope = self::path();
 		$img   = APWA_URL . 'assets/f2f/img/';
 		$data  = array(
-			'name'             => 'Field to Forest',
-			'short_name'       => 'Field to Forest',
-			'description'      => 'Bookings, sitters and invoices for Field to Forest (demo).',
+			'name'             => 'Field 2 Forest',
+			'short_name'       => 'Field 2 Forest',
+			'description'      => 'Bookings, sitters and invoices for Field 2 Forest (demo).',
 			'id'               => $scope,
 			'start_url'        => add_query_arg( 'k', self::key(), $scope ),
 			'scope'            => $scope,

@@ -85,7 +85,7 @@ final class Router {
 			return;
 		}
 
-		// Field to Forest client demo: its own private-link gate.
+		// Field 2 Forest client demo: its own private-link gate.
 		if ( 0 === strpos( $route, 'f2f' ) ) {
 			F2f::dispatch( $route );
 			return;

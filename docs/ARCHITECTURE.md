@@ -26,10 +26,10 @@ apps/demo/sw.js                 -> service worker
 apps/demo/                      -> demo dashboard
 apps/demo/<slug>/...            -> demo dashboard, opened on that app
 apps/                           -> marketplace
-apps/f2f/...                    -> Field to Forest client demo (private link)
+apps/f2f/...                    -> Field 2 Forest client demo (private link)
 ```
 
-**Field to Forest demo** (`includes/class-f2f.php`, `templates/f2f.php`,
+**Field 2 Forest demo** (`includes/class-f2f.php`, `templates/f2f.php`,
 `assets/f2f/`): a branded, self-contained booking demo for one client. Not on
 the marketplace. Admins can always open it; anyone else needs the private link
 shown under Settings → AP Webmaster Apps (`?k=` key, then a cookie). Its own
