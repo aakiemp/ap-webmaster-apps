@@ -27,6 +27,7 @@ apps/demo/                      -> demo dashboard
 apps/demo/<slug>/...            -> demo dashboard, opened on that app
 apps/                           -> marketplace
 apps/f2f/...                    -> Field 2 Forest client demo (private link)
+apps/builds/sitter-booking/...  -> same booking app, unbranded (Custom builds on /apps/)
 ```
 
 **Field 2 Forest demo** (`includes/class-f2f.php`, `templates/f2f.php`,
@@ -34,7 +35,12 @@ apps/f2f/...                    -> Field 2 Forest client demo (private link)
 the marketplace. Admins can always open it; anyone else needs the private link
 shown under Settings → AP Webmaster Apps (`?k=` key, then a cookie). Its own
 manifest and service worker are scoped to `/apps/f2f/`. Data lives in
-`localStorage` key `f2f.demo.v1`.
+`localStorage` key `f2f.demo.v4`.
+
+The same code also serves **Sitter Booking** at `/apps/builds/sitter-booking/`,
+shown under Custom builds on `/apps/` and visible like the rest of `/apps/`.
+Each build's name, logo, colors and storage prefix live in `F2f::BUILDS`; add
+an entry there (plus its rewrite path) for the next custom build.
 
 The base `apps` can be changed with the `apwa_base_path` filter. When
 `RULES_VERSION` changes in a deploy, rules are flushed once on the next page

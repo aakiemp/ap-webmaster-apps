@@ -25,7 +25,7 @@ const VERSION = '0.1.0';
  * differs from the stored value, so a deploy that adds routes works without
  * deactivating and reactivating the plugin.
  */
-const RULES_VERSION = '3';
+const RULES_VERSION = '4';
 
 define( 'APWA_FILE', __FILE__ );
 define( 'APWA_DIR', plugin_dir_path( __FILE__ ) );
