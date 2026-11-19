@@ -147,15 +147,14 @@ const inv = (id) => db.invoices.find((i) => i.id === id);
 const person = (id) => (id === 'staff' ? STAFF : SITTERS.find((s) => s.id === id) || { name: 'Website', color: '#a0a897' });
 const first = (id) => (id === 'staff' ? 'Staff' : person(id).name);
 const ini = (n) => { const w = n.split(/\s+/); const num = { One: '1', Two: '2', Three: '3', Four: '4' }[w[1]]; return num ? `S${num}` : w.map((p) => p[0]).join('').slice(0, 2).toUpperCase(); };
-const FACE_BASE = (cy) => `<circle cx="20" cy="${cy}" r="12" fill="#fdf6e6"/>`;
-const FACE_FEAT = (cy) => `<circle cx="16" cy="${cy - 1.5}" r="1.5" fill="#2b2f22"/><circle cx="24" cy="${cy - 1.5}" r="1.5" fill="#2b2f22"/><path d="M15.5 ${cy + 2.5} Q20 ${cy + 7} 24.5 ${cy + 2.5}" fill="none" stroke="#2b2f22" stroke-width="1.7" stroke-linecap="round"/>`;
+const PERSON = (bg, shirt, skin, hairBack, hairTop) => `<rect width="40" height="40" fill="${bg}"/>${hairBack}<path d="M7 41 C7 31.5 12.5 27.5 20 27.5 C27.5 27.5 33 31.5 33 41 Z" fill="${shirt}"/><rect x="17.4" y="21" width="5.2" height="7.5" rx="2.4" fill="${skin}"/><circle cx="20" cy="17" r="7" fill="${skin}"/>${hairTop}`;
 const FACES = {
-  maya: `${FACE_BASE(21)}<circle cx="13.6" cy="24.2" r="1.8" fill="#f0a39a" opacity=".75"/><circle cx="26.4" cy="24.2" r="1.8" fill="#f0a39a" opacity=".75"/>${FACE_FEAT(21)}`,
-  jordan: `${FACE_BASE(23)}${FACE_FEAT(23)}<path d="M8.6 19 Q8.6 7.5 20 7.5 Q31.4 7.5 31.4 19 Z" fill="#2f3b1c"/><rect x="8" y="16.2" width="24" height="3.6" rx="1.8" fill="#d6a23a"/><circle cx="20" cy="7" r="2.4" fill="#d6a23a"/>`,
-  elena: `${FACE_BASE(21)}${FACE_FEAT(21)}<circle cx="15.8" cy="19.5" r="3.3" fill="none" stroke="#2b2f22" stroke-width="1.05"/><circle cx="24.2" cy="19.5" r="3.3" fill="none" stroke="#2b2f22" stroke-width="1.05"/><path d="M19.1 19.3 H20.9" stroke="#2b2f22" stroke-width="1.05"/>`,
-  avery: `${FACE_BASE(22)}${FACE_FEAT(22)}<path d="M27 11.5 L21.8 8 V15 Z" fill="#e98aa6"/><path d="M27 11.5 L32.2 8 V15 Z" fill="#e98aa6"/><circle cx="27" cy="11.5" r="1.9" fill="#d46a8c"/>`,
+  maya: PERSON('#f4e6c6', '#b9862a', '#f0c9a6', '<path d="M11.8 18 Q11.8 8.6 20 8.6 Q28.2 8.6 28.2 18 V27 Q20 29 11.8 27 Z" fill="#4a3426"/>', '<path d="M12.8 17 Q13 9.6 20 9.6 Q27 9.6 27.2 17 Q23 12.4 16.5 13.6 Q14.2 14.6 12.8 17 Z" fill="#4a3426"/>'),
+  jordan: PERSON('#e0e9d4', '#5d7a3a', '#c48d63', '', '<path d="M12.9 16.4 Q12.9 9.4 20 9.4 Q27.1 9.4 27.1 16.4 Q25.4 12.8 20 13 Q14.6 12.8 12.9 16.4 Z" fill="#231c17"/>'),
+  elena: PERSON('#dfe6eb', '#5f7686', '#e7b48e', '', '<circle cx="20" cy="8.6" r="3.4" fill="#6b4428"/><path d="M12.9 16.6 Q12.9 9.8 20 9.8 Q27.1 9.8 27.1 16.6 Q24.6 13 20 13.4 Q15.4 13 12.9 16.6 Z" fill="#6b4428"/>'),
+  avery: PERSON('#ede2eb', '#8a6a86', '#8f5c3d', '', '<g fill="#2a1f19"><circle cx="14.2" cy="13.6" r="3"/><circle cx="17.4" cy="10.6" r="3.2"/><circle cx="21.4" cy="10" r="3.2"/><circle cx="25" cy="12" r="3.1"/><circle cx="26.4" cy="15.4" r="2.4"/><circle cx="13.2" cy="16.4" r="2.2"/></g>'),
 };
-const face = (id) => `<svg viewBox="3 3 34 34" width="100%" height="100%" aria-hidden="true">${FACES[id] || FACES.maya}</svg>`;
+const face = (id) => `<svg viewBox="3 4 34 34" width="100%" height="100%" aria-hidden="true">${FACES[id] || FACES.maya}</svg>`;
 const av = (id, cls = '') => {
   if (id === 'staff') return html`<span class="av staff ${cls}" title="Field to Forest staff"><img src="${IMG}f2f-mark.png" alt=""></span>`;
   const p = person(id);
