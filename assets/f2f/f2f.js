@@ -482,7 +482,7 @@ function sheetReq(r) {
     <div class="field"><label for="notes">Notes for sitters (kept separate from the job)</label><textarea id="notes" rows="2" data-input="notes" data-id="${r.id}">${r.notes}</textarea></div>
     ${privateBox(f)}`;
   const n = r.rows.length;
-  const foot = html`${r.status !== 'draft' ? html`<button class="btn sec" data-act="to-draft" data-id="${r.id}">Save as draft</button>` : ''}<button class="btn pri" data-act="approve" data-id="${r.id}">${icon('check')} Approve${r.type === 'pet' ? ' and post' : ` and post ${plural(n, 'date')}`}</button>`;
+  const foot = html`${r.status !== 'draft' ? html`<button class="btn sec" data-act="to-draft" data-id="${r.id}">Save as draft</button>` : ''}<button class="btn pri" data-act="approve" data-id="${r.id}">${icon('check')} ${r.type === 'pet' ? 'Approve and post' : `Approve ${plural(n, 'date')}`}</button>`;
   return sheetShell(f.name, body, foot, `<span class="ic ${r.type === 'pet' ? 'sage' : 'gold'}">${icon(typeIcon(r.type)).s}</span>`);
 }
 
