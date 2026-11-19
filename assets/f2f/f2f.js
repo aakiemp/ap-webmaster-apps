@@ -5,7 +5,7 @@
  */
 const CFG = window.APWA_CONFIG || {};
 const IMG = CFG.img || '';
-const KEY = 'f2f.demo.v2';
+const KEY = 'f2f.demo.v3';
 const TOUR_KEY = 'f2f.tour.v2';
 
 /* ---------- small helpers ---------- */
@@ -71,21 +71,21 @@ const STAFF = { id: 'staff', name: 'Field to Forest staff', color: '#fff' };
 const kidsLine = (k, ages) => `${plural(k, 'kid')} · ${k === 1 ? 'age' : 'ages'} ${ages}`;
 function postFor(r) {
   if (r.type === 'pet') return [`${r.service}${r.end ? ` · ${plural(diffDays(r.date, r.end), 'night')}` : ''}`, r.pets, `📍${r.loc}`].join('\n');
-  return [kidsLine(r.kids, r.ages), `📍${r.loc}`, r.allergy ? `Allergy: ${r.allergy}` : '', r.event ? `💒 ${r.event}` : ''].filter(Boolean).join('\n');
+  return [kidsLine(r.kids, r.ages), `📍${r.loc}`, r.allergy ? `Allergy: ${r.allergy}` : '', r.care || '', r.event ? `💒 ${r.event}` : ''].filter(Boolean).join('\n');
 }
 
 function seed() {
   const now = Date.now();
   const fams = [
-    { id: 'f1', name: 'Sarah K.', type: 'childcare', returning: false, contact: { phone: '(406) 555-0142', email: 'sarah.k@example.com', address: '118 Birch Hill Rd, Whitefish' }, extra: { adults: 'Both parents out', insurance: 'No' } },
-    { id: 'f2', name: 'Priya P.', type: 'pet', returning: false, contact: { phone: '(406) 555-0177', email: 'priya.p@example.com', address: '42 Cedar Ln, Columbia Falls' }, extra: { vet: 'Valley Animal Clinic (sample)', trained: 'House-trained, spayed/neutered, vaccines current' } },
-    { id: 'f3', name: 'Dana L.', type: 'childcare', returning: true, contact: { phone: '(406) 555-0119', email: 'dana.l@example.com', address: '9 Larch Ct, Kalispell' } },
-    { id: 'f4', name: 'Chris M.', type: 'childcare', returning: true, contact: { phone: '(406) 555-0163', email: 'chris.m@example.com', address: '301 Aspen Way, Whitefish' } },
-    { id: 'f5', name: 'Morgan W.', type: 'pet', returning: true, billed: true, contact: { phone: '(406) 555-0128', email: 'morgan.w@example.com', address: '77 Spruce St, Whitefish' } },
-    { id: 'f6', name: 'Taylor H.', type: 'childcare', returning: true, contact: { phone: '(406) 555-0185', email: 'taylor.h@example.com', address: '15 Juniper Dr, Bigfork' } },
-    { id: 'f7', name: 'Jamie R.', type: 'childcare', returning: true, billed: true, contact: { phone: '(406) 555-0151', email: 'jamie.r@example.com', address: '6 Tamarack Pl, Whitefish' } },
+    { id: 'f1', name: 'Parent A', type: 'childcare', returning: false, contact: { phone: '(555) 555-0101', email: 'parent.a@example.com', address: '123 Main St, Anytown' }, extra: { adults: 'Both parents out', insurance: 'No' } },
+    { id: 'f2', name: 'Parent B', type: 'pet', returning: false, contact: { phone: '(555) 555-0102', email: 'parent.b@example.com', address: '45 Oak Ave, Anytown' }, extra: { vet: 'Anytown Vet Clinic (sample)', trained: 'House-trained, spayed/neutered, vaccines current' } },
+    { id: 'f3', name: 'Parent C', type: 'childcare', returning: true, contact: { phone: '(555) 555-0103', email: 'parent.c@example.com', address: '9 Elm St, Anytown' } },
+    { id: 'f4', name: 'Parent D', type: 'childcare', returning: true, contact: { phone: '(555) 555-0104', email: 'parent.d@example.com', address: '300 Maple Dr, Anytown' } },
+    { id: 'f5', name: 'Parent E', type: 'pet', returning: true, billed: true, contact: { phone: '(555) 555-0105', email: 'parent.e@example.com', address: '77 Pine Rd, Anytown' } },
+    { id: 'f6', name: 'Parent F', type: 'childcare', returning: true, contact: { phone: '(555) 555-0106', email: 'parent.f@example.com', address: '15 Sesame St, Anytown' } },
+    { id: 'f7', name: 'Parent G', type: 'childcare', returning: true, billed: true, contact: { phone: '(555) 555-0107', email: 'parent.g@example.com', address: '6 Cedar Ln, Anytown' } },
   ];
-  const kRow = (n, date, start, end, extra = {}) => ({ n, date, start, end, kids: 2, ages: '4 & 7', loc: 'Whitefish: Birch Hill Rd', allergy: 'peanuts (EpiPen in the kitchen)', ...extra });
+  const kRow = (n, date, start, end, extra = {}) => ({ n, date, start, end, kids: 2, ages: '4 & 7', loc: 'Anytown: Main St', allergy: 'peanuts (EpiPen in the kitchen)', care: 'Bedtime 8 PM · no screens after dinner', ...extra });
   const r1rows = [
     kRow(1, plus(3), '17:00', '21:00'),
     kRow(2, plus(5), '09:00', '13:00'),
@@ -93,43 +93,43 @@ function seed() {
     kRow(4, plus(10), '17:00', '21:00'),
     kRow(5, plus(12), '12:00', '18:00', { kids: 3, ages: '4, 7 & 10 (cousin visiting)', event: 'Wedding' }),
   ].map((r) => ({ ...r, type: 'childcare', post: postFor({ ...r, type: 'childcare' }) }));
-  const petRow = { n: 1, type: 'pet', date: plus(6), end: plus(9), start: '18:00', end_t: '09:00', service: 'Overnight stay', pets: '2 dogs: Biscuit (golden retriever) and Juniper (beagle mix)', loc: 'Columbia Falls: Cedar Ln' };
+  const petRow = { n: 1, type: 'pet', date: plus(6), end: plus(9), start: '18:00', end_t: '09:00', service: 'Overnight stay', pets: '2 dogs: Dog 1 (large) and Dog 2 (small)', loc: 'Anytown: Oak Ave' };
   petRow.post = postFor(petRow);
   const requests = [
     { id: 'r1', fam: 'f1', type: 'childcare', status: 'review', at: now - 2 * HOUR, rows: r1rows, notes: 'Friendly dog in the house. Bedtime is 8 PM. Snacks in the pantry are fine.' },
-    { id: 'r2', fam: 'f2', type: 'pet', status: 'review', at: now - 5 * HOUR, rows: [petRow], notes: 'Feed twice a day. Juniper gets one pill with dinner. Free meet and greet requested.' },
+    { id: 'r2', fam: 'f2', type: 'pet', status: 'review', at: now - 5 * HOUR, rows: [petRow], notes: 'Feed twice a day. The small dog gets one pill with dinner. Free meet and greet requested.' },
   ];
   const J = (o) => ({ interested: [], sitter: null, status: 'open', checks: {}, ...o });
-  const jr = { type: 'childcare', kids: 2, ages: '3 & 8', loc: 'Whitefish: Tamarack Pl' };
+  const jr = { type: 'childcare', kids: 2, ages: '3 & 8', loc: 'Anytown: Cedar Ln', care: 'Bedtime 7:30 PM · vegetarian meals' };
   const jobs = [
-    J({ id: 'j1', fam: 'f3', type: 'childcare', n: 1, date: plus(1), start: '18:00', end: '22:00', kids: 3, ages: '2, 5 & 9', loc: 'Kalispell: Larch Ct', status: 'backup', sitter: 'jordan', backupNote: 'Family emergency, so sorry!' }),
-    J({ id: 'j2', fam: 'f3', type: 'childcare', n: 2, date: plus(2), start: '17:00', end: '23:00', kids: 3, ages: '2, 5 & 9', loc: 'Kalispell: Larch Ct', status: 'assigned', sitter: 'elena' }),
-    J({ id: 'j3', fam: 'f4', type: 'childcare', n: 1, date: plus(2), start: '13:00', end: '17:00', kids: 1, ages: '3', loc: 'Whitefish: Aspen Way', status: 'assigned', sitter: 'maya' }),
-    J({ id: 'j4', fam: 'f4', type: 'childcare', n: 2, date: plus(4), start: '16:00', end: '22:00', kids: 1, ages: '3', loc: 'Whitefish: Aspen Way' }),
-    J({ id: 'j5', fam: 'f5', type: 'pet', n: 2, date: TODAY, start: '12:00', end: '12:30', service: '30-minute drop-in', pets: '2 cats: Pepper and Mochi', loc: 'Whitefish: Spruce St', status: 'assigned', sitter: 'maya', mg: 'done', list: ['Fresh food and water', 'Scoop the litter box', 'Playtime and cuddles', 'Send the family a photo'] }),
-    J({ id: 'j6', fam: 'f6', type: 'childcare', n: 1, date: plus(7), start: '18:00', end: '23:00', kids: 2, ages: '1 & 6', loc: 'Bigfork: Juniper Dr', status: 'interest', interested: [{ id: 'avery', at: now - 3 * HOUR }] }),
+    J({ id: 'j1', fam: 'f3', type: 'childcare', n: 1, date: plus(1), start: '18:00', end: '22:00', kids: 3, ages: '2, 5 & 9', loc: 'Anytown: Elm St', allergy: 'dairy (oat milk in the fridge)', care: 'Bedtimes 7, 8 and 9 PM by age', status: 'backup', sitter: 'jordan', backupNote: 'Family emergency, so sorry!' }),
+    J({ id: 'j2', fam: 'f3', type: 'childcare', n: 2, date: plus(2), start: '17:00', end: '23:00', kids: 3, ages: '2, 5 & 9', loc: 'Anytown: Elm St', allergy: 'dairy (oat milk in the fridge)', care: 'Bedtimes 7, 8 and 9 PM by age', status: 'assigned', sitter: 'elena' }),
+    J({ id: 'j3', fam: 'f4', type: 'childcare', n: 1, date: plus(2), start: '13:00', end: '17:00', kids: 1, ages: '3', loc: 'Anytown: Maple Dr', care: 'Nap at 1 PM · gluten-free snacks only', status: 'assigned', sitter: 'maya' }),
+    J({ id: 'j4', fam: 'f4', type: 'childcare', n: 2, date: plus(4), start: '16:00', end: '22:00', kids: 1, ages: '3', loc: 'Anytown: Maple Dr', care: 'Nap at 1 PM · gluten-free snacks only' }),
+    J({ id: 'j5', fam: 'f5', type: 'pet', n: 2, date: TODAY, start: '12:00', end: '12:30', service: '30-minute drop-in', pets: '2 cats: Cat 1 and Cat 2', loc: 'Anytown: Pine Rd', status: 'assigned', sitter: 'maya', mg: 'done', list: ['Fresh food and water', 'Scoop the litter box', 'Playtime and cuddles', 'Send the family a photo'] }),
+    J({ id: 'j6', fam: 'f6', type: 'childcare', n: 1, date: plus(7), start: '18:00', end: '23:00', kids: 2, ages: '1 & 6', loc: 'Anytown: Sesame St', allergy: 'tree nuts', care: 'Baby bottle at 7 PM · bedtime 8:30 PM', status: 'interest', interested: [{ id: 'avery', at: now - 3 * HOUR }] }),
     J({ id: 'j7', fam: 'f7', n: 1, date: plus(-12), start: '17:00', end: '21:00', status: 'done', sitter: 'avery', ...jr }),
     J({ id: 'j8', fam: 'f7', n: 2, date: plus(-5), start: '18:00', end: '22:00', status: 'done', sitter: 'jordan', ...jr }),
     J({ id: 'j9', fam: 'f7', n: 3, date: plus(16), start: '17:00', end: '22:00', status: 'assigned', sitter: 'avery', ...jr }),
     J({ id: 'j10', fam: 'f7', n: 4, date: plus(20), start: '10:00', end: '15:00', status: 'assigned', sitter: 'jordan', ...jr }),
-    J({ id: 'j11', fam: 'f5', type: 'pet', n: 1, date: plus(-2), start: '12:00', end: '12:30', service: '30-minute drop-in', pets: '2 cats: Pepper and Mochi', loc: 'Whitefish: Spruce St', status: 'done', sitter: 'maya', mg: 'done' }),
+    J({ id: 'j11', fam: 'f5', type: 'pet', n: 1, date: plus(-2), start: '12:00', end: '12:30', service: '30-minute drop-in', pets: '2 cats: Cat 1 and Cat 2', loc: 'Anytown: Pine Rd', status: 'done', sitter: 'maya', mg: 'done' }),
   ];
   jobs.forEach((j) => { j.post = postFor(j); });
   const history = [
-    { at: now - 26 * HOUR, who: 'staff', text: `Assigned Sitter Three to Dana L. · ${shortDay(plus(2))}`, job: 'j2' },
-    { at: now - 20 * HOUR, who: 'staff', text: `Assigned Sitter One to Chris M. · ${shortDay(plus(2))}`, job: 'j3' },
-    { at: now - 5 * HOUR, who: 'system', text: 'New pet-sitting request from Priya P.', fam: 'f2' },
-    { at: now - 3 * HOUR, who: 'avery', text: `Interested in Taylor H. · ${shortDay(plus(7))}`, job: 'j6' },
-    { at: now - 2 * HOUR, who: 'system', text: 'New babysitting request from Sarah K. (5 dates)', fam: 'f1' },
-    { at: now - 40 * 60000, who: 'jordan', text: `Asked for a backup on Dana L. · ${shortDay(plus(1))}`, job: 'j1' },
+    { at: now - 26 * HOUR, who: 'staff', text: `Assigned Sitter Three to Parent C · ${shortDay(plus(2))}`, job: 'j2' },
+    { at: now - 20 * HOUR, who: 'staff', text: `Assigned Sitter One to Parent D · ${shortDay(plus(2))}`, job: 'j3' },
+    { at: now - 5 * HOUR, who: 'system', text: 'New pet-sitting request from Parent B', fam: 'f2' },
+    { at: now - 3 * HOUR, who: 'avery', text: `Interested in Parent F · ${shortDay(plus(7))}`, job: 'j6' },
+    { at: now - 2 * HOUR, who: 'system', text: 'New babysitting request from Parent A (5 dates)', fam: 'f1' },
+    { at: now - 40 * 60000, who: 'jordan', text: `Asked for a backup on Parent C · ${shortDay(plus(1))}`, job: 'j1' },
   ];
   const invoices = [{ id: 'i1', fam: 'f4', status: 'draft', at: now - 19 * HOUR }, { id: 'i2', fam: 'f3', status: 'draft', at: now - 25 * HOUR }];
-  return { v: 2, role: 'owner', fams, requests, jobs, invoices, history };
+  return { v: 3, role: 'owner', fams, requests, jobs, invoices, history };
 }
 
 let db;
 try { db = JSON.parse(localStorage.getItem(KEY)); } catch (e) { db = null; }
-if (!db || db.v !== 2) db = seed();
+if (!db || db.v !== 3) db = seed();
 let saveT;
 const save = () => { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { /* private mode: lasts this visit */ } }, 120); };
 
@@ -500,6 +500,7 @@ function sheetJobOwner(j) {
       <div class="fact">${icon('clock')}<div><b>${j.type === 'pet' && j.end_d ? `${shortDay(j.date)} to ${shortDay(j.end_d)}` : dayLabel(j.date) + (Math.abs(diffDays(TODAY, j.date)) < 2 ? `, ${md(j.date)}` : '')}</b><div class="line2">${j.type === 'pet' && j.end_d ? `${plural(diffDays(j.date, j.end_d), 'night')}, from ${t12(j.start)}` : `${span(j.start, j.end)} · ${hrs(j.start, j.end)} hours`}</div></div></div>
       <div class="fact">${icon(typeIcon(j.type))}<div>${j.type === 'pet' ? j.pets : kidsLine(j.kids, j.ages)}</div></div>
       <div class="fact">${icon('map-pin')}<div>${j.loc}</div></div>
+      ${j.care ? html`<div class="fact">${icon('info')}<div>${j.care}</div></div>` : ''}
       ${j.allergy ? html`<div><span class="tag">${icon('alert')} Allergy: ${j.allergy}</span></div>` : ''}
       ${j.type === 'pet' ? html`<div class="fact">${icon('users')}<div class="grow row">Meet and greet: <b>${j.mg === 'done' ? 'done' : 'scheduled'}</b>${j.mg !== 'done' ? html`<button class="chip-btn" data-act="mg" data-id="${j.id}">Mark done</button>` : ''}</div></div>` : ''}
     </div>
@@ -683,7 +684,7 @@ const A = {
     const r = req(d.id);
     r.status = 'approved';
     r.rows.forEach((row) => {
-      db.jobs.push({ id: uid('j'), fam: r.fam, type: r.type, n: row.n, date: row.date, end_d: row.type === 'pet' ? row.end : undefined, start: row.start, end: row.type === 'pet' ? row.end_t : row.end, kids: row.kids, ages: row.ages, loc: row.loc, allergy: row.allergy, event: row.event, service: row.service, pets: row.pets, post: row.post, notes: r.notes, status: 'open', interested: [], sitter: null, checks: {}, mg: row.type === 'pet' ? 'scheduled' : undefined });
+      db.jobs.push({ id: uid('j'), fam: r.fam, type: r.type, n: row.n, date: row.date, end_d: row.type === 'pet' ? row.end : undefined, start: row.start, end: row.type === 'pet' ? row.end_t : row.end, kids: row.kids, ages: row.ages, loc: row.loc, allergy: row.allergy, care: row.care, event: row.event, service: row.service, pets: row.pets, post: row.post, notes: r.notes, status: 'open', interested: [], sitter: null, checks: {}, mg: row.type === 'pet' ? 'scheduled' : undefined });
     });
     const f = fam(r.fam);
     log('staff', `Approved ${f.name} and posted ${r.type === 'pet' ? 'the stay' : plural(r.rows.length, 'date')} to the job board`, { fam: r.fam });
