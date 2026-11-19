@@ -665,9 +665,32 @@ function openSheet(sheet) { ui.sheet = sheet; ui.more = false; render(); const b
 const backFrom = () => (ui.sheet && (ui.sheet.t === 'req' || ui.sheet.t === 'job') ? ui.sheet : null);
 function setRole(role) {
   db.role = role; ui.sheet = null; window.scrollTo(0, 0);
-  if (role === 'sitter' && !tour.sitter && !coach) { coachStart('sitter'); return; }
+  hideHint();
   render();
+  if (role === 'sitter' && !tour.sitter) { tour.sitter = true; saveTour(); showHint(); return; }
   toast(role === 'sitter' ? 'Now in the sitter view' : 'Back to the staff view');
+}
+/* Small, non-blocking hint by the view switcher (no dimming, nothing to click through). */
+let hintTimer = 0;
+function hideHint() { clearTimeout(hintTimer); document.querySelector('.hint')?.remove(); document.removeEventListener('pointerdown', hideHint, true); window.removeEventListener('resize', placeHint); }
+function placeHint() {
+  const h = document.querySelector('.hint'); const who = document.querySelector('.who');
+  if (!h || !who) return;
+  const r = who.getBoundingClientRect(); const w = h.offsetWidth;
+  const left = Math.max(10, Math.min(window.innerWidth - w - 10, r.right - w));
+  h.style.left = `${left}px`; h.style.top = `${r.bottom + 10}px`;
+  h.style.setProperty('--ax', `${Math.min(w - 18, Math.max(18, r.left + r.width / 2 - left))}px`);
+}
+function showHint() {
+  hideHint();
+  const h = document.createElement('div');
+  h.className = 'hint'; h.setAttribute('role', 'status');
+  h.innerHTML = `${icon('arrow-left').s}<span>Tap here to go back to the staff view</span>`;
+  document.body.appendChild(h); placeHint();
+  requestAnimationFrame(() => h.classList.add('in'));
+  window.addEventListener('resize', placeHint);
+  setTimeout(() => document.addEventListener('pointerdown', hideHint, true), 300);
+  hintTimer = setTimeout(hideHint, 6000);
 }
 const A = {
   tab: (d) => { if (isOwner()) ui.tab = d.tab; else ui.stab = d.tab; ui.sheet = null; window.scrollTo(0, 0); render(); },
@@ -768,7 +791,7 @@ const A = {
   activity: () => { db.seenAct = db.history.length; openSheet({ t: 'activity' }); },
   install: () => openSheet({ t: 'install' }),
   reset: () => { db = seed(); Object.assign(ui, { tab: 'today', seg: 'review', need: null, sheet: null, stab: 'open', edit: false, cal: { mode: 'week', ref: TODAY, day: null } }); coach = null; render(); toast('Fresh sample data loaded'); },
-  coach: () => { tour.seen = true; saveTour(); coachStart(isOwner() ? 'owner' : 'sitter'); },
+  coach: () => { tour.seen = true; saveTour(); if (isOwner()) coachStart('owner'); else { ui.more = false; render(); showHint(); } },
   'coach-next': () => {
     const steps = COACH[coach.set];
     if (coach.i < steps.length - 1) { coach.i += 1; coachGo(); return; }
