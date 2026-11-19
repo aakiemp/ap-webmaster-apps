@@ -85,8 +85,8 @@ final class Router {
 			return;
 		}
 
-		// Field 2 Forest client demo: its own private-link gate.
-		if ( 0 === strpos( $route, 'f2f' ) ) {
+		// Booking app builds (Field 2 Forest, Sitter Booking): their own gate.
+		if ( '' !== F2f::build_of( $route ) ) {
 			F2f::dispatch( $route );
 			return;
 		}

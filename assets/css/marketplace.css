@@ -300,6 +300,23 @@ header.apwa-mkt-nav .apwa-mkt-nav__logo, .apwa-mkt-foot .apwa-mkt-nav__logo { tr
 .apwa-mkt-why__item--support p { color: rgba(255, 255, 255, 0.85); }
 .apwa-mkt-why__item--support::after { content: ""; position: absolute; right: -60px; bottom: -80px; width: 260px; height: 260px; border-radius: 50%; border: 40px solid rgba(255, 255, 255, 0.08); }
 
+/* Custom builds */
+.apwa-mkt-builds { background: #fff; border-bottom: 1px solid var(--apwa-gray-200); }
+.apwa-mkt-build { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 56px; align-items: center; padding: 40px 48px; border: 1px solid rgba(15, 27, 45, 0.08); border-radius: 22px; background: linear-gradient(135deg, #f3f8f8 0%, #fbf7ef 100%); box-shadow: var(--mkt-shadow); }
+.apwa-mkt-build__phone img { display: block; width: 100%; max-width: 260px; height: auto; margin: 0 auto; border: 7px solid #0b1422; border-radius: 34px; background: #0b1422; box-shadow: 0 0 0 1px rgba(15, 27, 45, 0.08), var(--mkt-shadow-lg); }
+.apwa-mkt-build__copy { min-width: 0; }
+.apwa-mkt-build__copy h3 { margin-top: 16px; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; }
+.apwa-mkt-build__lead { margin-top: 8px; font-size: 17px; line-height: 1.55; color: var(--apwa-text-2); }
+.apwa-mkt-build .apwa-mkt-checks--lg { margin-top: 22px; }
+.apwa-mkt-build__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding: 0; list-style: none; }
+.apwa-mkt-build__tags li { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 999px; background: #fff; border: 1px solid var(--apwa-gray-200); color: var(--apwa-gray-600); font-size: 13px; font-weight: 600; }
+.apwa-mkt-build__foot { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+@media (max-width: 767.98px) {
+	.apwa-mkt-build { grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 28px 20px; }
+	.apwa-mkt-build__phone img { max-width: 220px; }
+	.apwa-mkt-build__foot .apwa-mkt-btn { flex: 1 1 auto; justify-content: center; }
+}
+
 /* Mobile showcase */
 .apwa-mkt-mobile { background: var(--mkt-dark); color: #fff; overflow: hidden; }
 .apwa-mkt-mobile__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; }

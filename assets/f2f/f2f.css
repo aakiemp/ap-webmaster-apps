@@ -1,10 +1,10 @@
-/* Field 2 Forest demo. Calm, phone-first, brand colors from Field 2 Forest. */
+/* Booking app demo (Field 2 Forest and the Sitter Booking sample). Calm, phone-first; colors come from the brand variables below. */
 :root {
   --green: #42532b; --green-d: #34421f; --green-l: #eef0e6;
   --sage: #a0a897; --sage-l: #eceee8; --sage-d: #5d6553;
   --gold: #d6a23a; --gold-d: #9a6f17; --gold-l: #faf1dc;
   --red: #b0513a; --red-l: #f8e8e3;
-  --bg: #faf7ef; --card: #fff; --ink: #263019; --muted: #6c7363; --line: #e8e4d8;
+  --bg: #faf7ef; --top-bg: rgba(250, 247, 239, .94); --card: #fff; --ink: #263019; --muted: #6c7363; --line: #e8e4d8;
   --r: 16px; --shadow: 0 1px 2px rgba(38, 48, 25, .06), 0 4px 16px rgba(38, 48, 25, .05);
   --tab-h: 64px; --safe-b: env(safe-area-inset-bottom, 0px);
 }
@@ -27,7 +27,7 @@ a { color: var(--green); }
 
 /* App frame */
 .app { min-height: 100vh; display: flex; flex-direction: column; }
-.top { position: sticky; top: 0; z-index: 20; height: calc(env(safe-area-inset-top, 0px) + 62px); background: rgba(250, 247, 239, .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding: env(safe-area-inset-top, 0px) 16px 0; display: flex; align-items: center; gap: 8px; }
+.top { position: sticky; top: 0; z-index: 20; height: calc(env(safe-area-inset-top, 0px) + 62px); background: var(--top-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding: env(safe-area-inset-top, 0px) 16px 0; display: flex; align-items: center; gap: 8px; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .brand img { width: 38px; height: auto; display: block; }
 .brand b { display: block; font-weight: 700; font-size: 16px; line-height: 1.2; white-space: nowrap; }

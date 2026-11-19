@@ -67,6 +67,7 @@ $apwa_mocks = array(
 
 $apwa_nav = array(
 	'#apps' => __( 'Apps', 'ap-webmaster-apps' ),
+	'#builds' => __( 'Custom builds', 'ap-webmaster-apps' ),
 	'#why'  => __( 'Why AP Webmaster', 'ap-webmaster-apps' ),
 	'#how'  => __( 'How it works', 'ap-webmaster-apps' ),
 	'#faq'  => __( 'FAQ', 'ap-webmaster-apps' ),
@@ -349,6 +350,40 @@ endif;
 					</article>
 					<?php endforeach; ?>
 				</div>
+			</div>
+		</section>
+
+		<section class="apwa-mkt-section apwa-mkt-builds" id="builds" aria-labelledby="apwa-mkt-builds-title">
+			<div class="apwa-mkt-wrap">
+				<div class="apwa-mkt-head">
+					<p class="apwa-mkt-eyebrow"><?php esc_html_e( 'Custom builds', 'ap-webmaster-apps' ); ?></p>
+					<h2 id="apwa-mkt-builds-title" class="apwa-mkt-h2"><?php esc_html_e( 'Apps I\'ve built for specific businesses', 'ap-webmaster-apps' ); ?></h2>
+					<p class="apwa-mkt-sub"><?php esc_html_e( 'Each one is shaped around how one company already works. Try them the same way as the suite.', 'ap-webmaster-apps' ); ?></p>
+				</div>
+				<article class="apwa-mkt-build">
+					<div class="apwa-mkt-build__phone">
+						<img src="<?php echo esc_url( $apwa_img( 'build-sitter-booking.webp' ) ); ?>" width="600" height="1299" alt="<?php esc_attr_e( 'The Sitter Booking app home screen on a phone', 'ap-webmaster-apps' ); ?>" loading="lazy">
+					</div>
+					<div class="apwa-mkt-build__copy">
+						<span class="apwa-mkt-badge apwa-mkt-badge--live"><i></i><?php esc_html_e( 'Live demo', 'ap-webmaster-apps' ); ?></span>
+						<h3><?php esc_html_e( 'Sitter Booking', 'ap-webmaster-apps' ); ?></h3>
+						<p class="apwa-mkt-build__lead"><?php esc_html_e( 'Booking app for a babysitting and pet-sitting company.', 'ap-webmaster-apps' ); ?></p>
+						<ul class="apwa-mkt-checks apwa-mkt-checks--lg">
+							<li><span class="apwa-mkt-checks__dot"><?php echo Renderer::icon( 'check' ); ?></span><span><?php esc_html_e( 'Families request dates, and staff approve and post the jobs', 'ap-webmaster-apps' ); ?></span></li>
+							<li><span class="apwa-mkt-checks__dot"><?php echo Renderer::icon( 'check' ); ?></span><span><?php esc_html_e( 'Sitters raise a hand from their phones, and staff assign', 'ap-webmaster-apps' ); ?></span></li>
+							<li><span class="apwa-mkt-checks__dot"><?php echo Renderer::icon( 'check' ); ?></span><span><?php esc_html_e( 'Invoices made from each booking and sent through Square', 'ap-webmaster-apps' ); ?></span></li>
+						</ul>
+						<ul class="apwa-mkt-build__tags" aria-label="<?php esc_attr_e( 'Features', 'ap-webmaster-apps' ); ?>">
+							<li><?php esc_html_e( 'Bookings', 'ap-webmaster-apps' ); ?></li>
+							<li><?php esc_html_e( 'Sitter accounts', 'ap-webmaster-apps' ); ?></li>
+							<li><?php esc_html_e( 'Square invoices', 'ap-webmaster-apps' ); ?></li>
+						</ul>
+						<div class="apwa-mkt-build__foot">
+							<a class="apwa-mkt-btn apwa-mkt-btn--primary" href="<?php echo esc_url( F2f::url( 'sb' ) ); ?>"><span><?php esc_html_e( 'Try it', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
+							<a class="apwa-mkt-btn apwa-mkt-btn--secondary" href="<?php echo esc_url( add_query_arg( 'app', 'sitter-booking', $inquiry ) ); ?>"><span><?php esc_html_e( 'Get one like it', 'ap-webmaster-apps' ); ?></span></a>
+						</div>
+					</div>
+				</article>
 			</div>
 		</section>
 
