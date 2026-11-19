@@ -147,10 +147,19 @@ const inv = (id) => db.invoices.find((i) => i.id === id);
 const person = (id) => (id === 'staff' ? STAFF : SITTERS.find((s) => s.id === id) || { name: 'Website', color: '#a0a897' });
 const first = (id) => (id === 'staff' ? 'Staff' : person(id).name);
 const ini = (n) => { const w = n.split(/\s+/); const num = { One: '1', Two: '2', Three: '3', Four: '4' }[w[1]]; return num ? `S${num}` : w.map((p) => p[0]).join('').slice(0, 2).toUpperCase(); };
+const FACE_BASE = (cy) => `<circle cx="20" cy="${cy}" r="12" fill="#fdf6e6"/>`;
+const FACE_FEAT = (cy) => `<circle cx="16" cy="${cy - 1.5}" r="1.5" fill="#2b2f22"/><circle cx="24" cy="${cy - 1.5}" r="1.5" fill="#2b2f22"/><path d="M15.5 ${cy + 2.5} Q20 ${cy + 7} 24.5 ${cy + 2.5}" fill="none" stroke="#2b2f22" stroke-width="1.7" stroke-linecap="round"/>`;
+const FACES = {
+  maya: `${FACE_BASE(21)}<circle cx="13.6" cy="24.2" r="1.8" fill="#f0a39a" opacity=".75"/><circle cx="26.4" cy="24.2" r="1.8" fill="#f0a39a" opacity=".75"/>${FACE_FEAT(21)}`,
+  jordan: `${FACE_BASE(23)}${FACE_FEAT(23)}<path d="M8.6 19 Q8.6 7.5 20 7.5 Q31.4 7.5 31.4 19 Z" fill="#2f3b1c"/><rect x="8" y="16.2" width="24" height="3.6" rx="1.8" fill="#d6a23a"/><circle cx="20" cy="7" r="2.4" fill="#d6a23a"/>`,
+  elena: `${FACE_BASE(21)}${FACE_FEAT(21)}<circle cx="15.8" cy="19.5" r="3.3" fill="none" stroke="#2b2f22" stroke-width="1.05"/><circle cx="24.2" cy="19.5" r="3.3" fill="none" stroke="#2b2f22" stroke-width="1.05"/><path d="M19.1 19.3 H20.9" stroke="#2b2f22" stroke-width="1.05"/>`,
+  avery: `${FACE_BASE(22)}${FACE_FEAT(22)}<path d="M27 11.5 L21.8 8 V15 Z" fill="#e98aa6"/><path d="M27 11.5 L32.2 8 V15 Z" fill="#e98aa6"/><circle cx="27" cy="11.5" r="1.9" fill="#d46a8c"/>`,
+};
+const face = (id) => `<svg viewBox="3 3 34 34" width="100%" height="100%" aria-hidden="true">${FACES[id] || FACES.maya}</svg>`;
 const av = (id, cls = '') => {
   if (id === 'staff') return html`<span class="av staff ${cls}" title="Field to Forest staff"><img src="${IMG}f2f-mark.png" alt=""></span>`;
   const p = person(id);
-  return html`<span class="av ${cls}" style="background:${p.color}" title="${p.name}">${p.id ? ini(p.name) : raw(icon('sparkles').s)}</span>`;
+  return html`<span class="av ${cls}" style="background:${p.color}" title="${p.name}">${p.id ? raw(face(p.id)) : raw(icon('sparkles').s)}</span>`;
 };
 const isOwner = () => db.role === 'owner';
 const active = (j) => j.status !== 'closed';
@@ -608,7 +617,7 @@ function frame() {
   const ns = owner ? needs().length : 0;
   const reqN = db.requests.filter((r) => r.status !== 'approved').length;
   const tabs = owner
-    ? [['today', 'home', 'Today', ns], ['requests', 'inbox', 'Requests', reqN], ['schedule', 'calendar', 'Calendar', 0], ['invoices', 'receipt', 'Invoices', 0]]
+    ? [['today', 'home', 'Home', ns], ['requests', 'inbox', 'Requests', reqN], ['schedule', 'calendar', 'Calendar', 0], ['invoices', 'receipt', 'Invoices', 0]]
     : [['open', 'search', 'Open jobs', openForMe().filter((j) => !j.interested.some((i) => i.id === ME)).length], ['mine', 'calendar-check', 'My jobs', 0]];
   const cur = owner ? ui.tab : ui.stab;
   const view = owner ? { today: viewToday, requests: viewRequests, schedule: viewSchedule, invoices: viewInvoices }[ui.tab]() : ui.stab === 'mine' ? viewSitterMine() : viewSitterOpen();
