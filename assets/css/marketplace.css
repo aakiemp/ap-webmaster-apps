@@ -694,3 +694,25 @@ html.apwa-mkt-lock { overflow: hidden; }
 @media (max-width: 520px) { .apwa-mkt-quote__row { grid-template-columns: 1fr; } .apwa-mkt-quote { padding: 18px; } }
 
 .apwa-mkt-card__tag { display: inline-block; margin-left: 6px; padding: 2px 7px; border-radius: 6px; background: var(--apwa-brand-50, #e6f6f6); color: var(--apwa-brand-700, #0b6b6b); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; vertical-align: middle; }
+
+/* Custom-first hero */
+.apwa-mkt-hero--custom { background: var(--mkt-dark); padding-bottom: 96px; }
+.apwa-mkt-hero__grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 56px; align-items: center; max-width: 1152px; }
+.apwa-mkt-hero--custom .apwa-mkt-hero__inner { align-items: flex-start; text-align: left; }
+.apwa-mkt-hero--custom .apwa-mkt-hero__title { margin-top: 0; font-size: clamp(38px, 4.4vw, 62px); }
+.apwa-mkt-hero--custom .apwa-mkt-hero__lead { max-width: 560px; }
+.apwa-mkt-hero--custom .apwa-mkt-hero__actions, .apwa-mkt-hero--custom .apwa-mkt-hero__meta { justify-content: flex-start; }
+.apwa-mkt-hero__build { position: relative; justify-self: center; }
+.apwa-mkt-hero__phone { display: block; width: 260px; border: 7px solid #0b1422; border-radius: 34px; overflow: hidden; background: #0b1422; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), var(--mkt-shadow-lg); }
+.apwa-mkt-hero__phone img { display: block; width: 100%; height: auto; border-radius: 27px; }
+.apwa-mkt-hero__tag { position: absolute; z-index: 1; left: -150px; top: 38px; max-width: 270px; margin: 0; padding: 10px 14px; border-radius: 12px; background: #fff; color: var(--apwa-text-1, #1f2d2f); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); font-size: 14px; line-height: 1.35; }
+.apwa-mkt-hero__tag b { display: block; font-weight: 700; }
+.apwa-mkt-hero__tag span { display: block; margin-top: 2px; color: var(--apwa-text-3, #607174); font-size: 12.5px; }
+@media (max-width: 900px) {
+	.apwa-mkt-hero__grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+}
+@media (max-width: 767.98px) {
+	.apwa-mkt-hero.apwa-mkt-hero--custom { background: var(--mkt-dark); padding-bottom: 56px; }
+	.apwa-mkt-hero__phone { width: 220px; }
+	.apwa-mkt-hero__tag { left: -24px; top: 24px; max-width: 170px; font-size: 13px; }
+}
