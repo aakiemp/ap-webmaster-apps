@@ -241,9 +241,7 @@ const COACH = {
     { t: 'who', tab: 'today', title: 'Try the sitter view', text: 'See what your sitters get on their phones. You can switch back here any time.', cta: 'Show sitter view' },
   ],
   sitter: [
-    { t: 'tab-open', tab: 'open', title: 'Open jobs', text: 'New dates show up here. A sitter taps I’m interested, and staff choose who’s booked.' },
-    { t: 'tab-mine', tab: 'mine', title: 'My jobs', text: 'Booked visits live here, with Add to calendar, a pet visit checklist and a way to ask for a backup.' },
-    { t: 'who', tab: 'open', title: 'Back to the staff view', text: 'Tap here any time to switch back to the staff view.', cta: 'Got it' },
+    { t: 'who', tab: 'open', title: 'This is the sitter view', text: 'It’s what your sitters see on their phones. Tap here at the top right any time to go back to the staff view.', cta: 'Got it' },
   ],
 };
 function coachHtml() {
@@ -252,9 +250,9 @@ function coachHtml() {
   const s = steps[coach.i];
   const last = coach.i === steps.length - 1;
   return html`<div class="coach" role="dialog" aria-modal="true" aria-labelledby="coach-t"><div class="coach-shield"></div><div class="coach-spot" aria-hidden="true"></div>
-    <div class="coach-tip"><div class="coach-head"><span>${coach.set === 'sitter' ? 'Sitter view · ' : ''}${coach.i + 1} of ${steps.length}</span><button data-act="coach-skip">Skip</button></div>
+    <div class="coach-tip">${steps.length > 1 ? html`<div class="coach-head"><span>${coach.i + 1} of ${steps.length}</span><button data-act="coach-skip">Skip</button></div>` : ''}
       <h3 id="coach-t">${s.title}</h3><p>${s.text}</p>
-      <div class="coach-foot"><span class="coach-dots" aria-hidden="true">${steps.map((_, k) => raw(`<i class="${k === coach.i ? 'on' : ''}"></i>`))}</span>
+      <div class="coach-foot"><span class="coach-dots" aria-hidden="true">${steps.length > 1 ? steps.map((_, k) => raw(`<i class="${k === coach.i ? 'on' : ''}"></i>`)) : ''}</span>
         ${coach.i > 0 ? html`<button class="btn sec sm" data-act="coach-back">Back</button>` : ''}<button class="btn pri sm" data-act="coach-next" id="coach-next">${last ? s.cta || 'Done' : 'Next'}</button></div></div></div>`;
 }
 function positionCoach() {
