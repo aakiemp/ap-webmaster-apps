@@ -108,7 +108,7 @@ if ( 'standalone' === $layout ) :
 <meta name="theme-color" content="#0b1422">
 <link rel="icon" href="<?php echo esc_url( APWA_URL . 'assets/icons/favicon-64.png' ); ?>" type="image/png">
 <?php if ( 'contact' !== $apwa_page ) : ?>
-<link rel="preload" as="image" href="<?php echo esc_url( $apwa_img( 'product-dashboard.webp' ) ); ?>">
+<link rel="preload" as="image" href="<?php echo esc_url( $apwa_img( 'build-sitter-booking.webp' ) ); ?>">
 <?php endif; ?>
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/tokens.css' ) ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( Renderer::asset( 'assets/css/marketplace.css' ) ); ?>">
@@ -158,34 +158,31 @@ endif;
 		<?php if ( 'contact' === $apwa_page ) : ?>
 		<?php include __DIR__ . '/contact.php'; ?>
 		<?php else : ?>
-		<section class="apwa-mkt-hero" aria-labelledby="apwa-mkt-hero-title">
-			<div class="apwa-mkt-wrap apwa-mkt-hero__inner">
-				<h1 id="apwa-mkt-hero-title" class="apwa-mkt-hero__title"><?php esc_html_e( 'Business apps built around', 'ap-webmaster-apps' ); ?> <span class="apwa-mkt-accent"><?php esc_html_e( 'the way you work.', 'ap-webmaster-apps' ); ?></span></h1>
-				<p class="apwa-mkt-hero__lead"><?php esc_html_e( 'Customer management, booking, quote follow-up and document tools, customized to your process and installed on your own website. Click through a working demo before you spend a dollar.', 'ap-webmaster-apps' ); ?></p>
-				<div class="apwa-mkt-hero__actions">
-					<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( $demo_url ); ?>"><span><?php esc_html_e( 'Try the live demo', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
-					<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="<?php echo esc_url( $apwa_book ); ?>"><?php echo Renderer::icon( 'calendar' ); ?><span><?php esc_html_e( 'Book a call', 'ap-webmaster-apps' ); ?></span></a>
+		<section class="apwa-mkt-hero apwa-mkt-hero--custom" aria-labelledby="apwa-mkt-hero-title">
+			<div class="apwa-mkt-wrap apwa-mkt-hero__grid">
+				<div class="apwa-mkt-hero__inner">
+					<h1 id="apwa-mkt-hero-title" class="apwa-mkt-hero__title"><?php esc_html_e( 'Apps built around', 'ap-webmaster-apps' ); ?> <span class="apwa-mkt-accent"><?php esc_html_e( 'the way your business works.', 'ap-webmaster-apps' ); ?></span></h1>
+					<p class="apwa-mkt-hero__lead"><?php esc_html_e( 'I build custom apps for small businesses, installed on your own website. Here’s one I made for a babysitting and pet-sitting company. Try it like a customer would.', 'ap-webmaster-apps' ); ?></p>
+					<div class="apwa-mkt-hero__actions">
+						<a class="apwa-mkt-btn apwa-mkt-btn--primary apwa-mkt-btn--lg" href="<?php echo esc_url( F2f::url( 'sb' ) ); ?>"><span><?php esc_html_e( 'Try Sitter Booking', 'ap-webmaster-apps' ); ?></span><?php echo Renderer::icon( 'arrow-right' ); ?></a>
+						<a class="apwa-mkt-btn apwa-mkt-btn--outline apwa-mkt-btn--lg" href="#apps"><span><?php esc_html_e( 'See the standard apps', 'ap-webmaster-apps' ); ?></span></a>
+					</div>
+					<ul class="apwa-mkt-hero__meta">
+						<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'No sign-up', 'ap-webmaster-apps' ); ?></li>
+						<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'Sample data only', 'ap-webmaster-apps' ); ?></li>
+					</ul>
 				</div>
-				<ul class="apwa-mkt-hero__meta">
-					<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'No sign-up', 'ap-webmaster-apps' ); ?></li>
-					<li><?php echo Renderer::icon( 'check' ); ?><?php esc_html_e( 'Sample data only', 'ap-webmaster-apps' ); ?></li>
-				</ul>
-			</div>
-			<div class="apwa-mkt-wrap apwa-mkt-hero__visual">
-				<figure class="apwa-mkt-frame apwa-mkt-frame--browser">
-					<div class="apwa-mkt-frame__bar" aria-hidden="true"><i></i><i></i><i></i><span><?php echo esc_html( wp_parse_url( home_url( '/' ), PHP_URL_HOST ) . '/apps/demo/' ); ?></span></div>
-					<img src="<?php echo esc_url( $apwa_img( 'product-dashboard.webp' ) ); ?>" width="1600" height="1000" alt="<?php esc_attr_e( 'The AP Webmaster Apps demo dashboard', 'ap-webmaster-apps' ); ?>" fetchpriority="high">
-				</figure>
-				<figure class="apwa-mkt-frame apwa-mkt-frame--phone">
-					<img src="<?php echo esc_url( $apwa_img( 'product-phone-pipeline.webp' ) ); ?>" width="600" height="1298" alt="<?php esc_attr_e( 'The sales pipeline on a phone', 'ap-webmaster-apps' ); ?>" loading="lazy">
-				</figure>
+				<div class="apwa-mkt-hero__build">
+					<p class="apwa-mkt-hero__tag"><b><?php esc_html_e( 'Custom build: Sitter Booking', 'ap-webmaster-apps' ); ?></b><span><?php esc_html_e( 'Bookings, Sitter Management, Square invoices', 'ap-webmaster-apps' ); ?></span></p>
+					<a class="apwa-mkt-hero__phone" href="<?php echo esc_url( F2f::url( 'sb' ) ); ?>" aria-label="<?php esc_attr_e( 'Try Sitter Booking', 'ap-webmaster-apps' ); ?>"><img src="<?php echo esc_url( $apwa_img( 'build-sitter-booking.webp' ) ); ?>" width="600" height="1299" alt="<?php esc_attr_e( 'The Sitter Booking app home screen on a phone', 'ap-webmaster-apps' ); ?>" fetchpriority="high"></a>
+				</div>
 			</div>
 		</section>
 
 		<section class="apwa-mkt-section apwa-mkt-catalog" id="apps" aria-labelledby="apwa-mkt-catalog-title">
 			<div class="apwa-mkt-wrap">
 				<div class="apwa-mkt-head">
-					<p class="apwa-mkt-eyebrow"><?php esc_html_e( 'The suite', 'ap-webmaster-apps' ); ?></p>
+					<p class="apwa-mkt-eyebrow"><?php esc_html_e( 'Or start from standard apps', 'ap-webmaster-apps' ); ?></p>
 					<h2 id="apwa-mkt-catalog-title" class="apwa-mkt-h2"><?php esc_html_e( 'A suite of apps that work together', 'ap-webmaster-apps' ); ?></h2>
 					<p class="apwa-mkt-sub"><?php esc_html_e( 'Start with the one that fixes your biggest headache, then add the rest as you grow.', 'ap-webmaster-apps' ); ?></p>
 				</div>
